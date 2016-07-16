@@ -38,6 +38,7 @@
             
             <!-- 任务  -->
             <LinearLayout
+                android:id="@+id/ll_task"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -60,6 +61,7 @@
             
             <!-- 翻译  -->
             <LinearLayout
+                android:id="@+id/ll_translate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -82,6 +84,7 @@
             
             <!-- 结果  -->
             <LinearLayout
+                android:id="@+id/ll_result"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
