@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.qingtian.helptranslation.RegisterActivity"></activity>
+        <activity android:name="com.qingtian.helptranslation.MainMenuActivity"></activity>
     </application>
 
 </manifest>

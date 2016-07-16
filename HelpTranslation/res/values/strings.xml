@@ -16,5 +16,9 @@
     <string name="register_tv_password1">确认密码：</string>
     <string name="register_et_password1">再次输入密码</string>
     <string name="register_bt">确认</string>
+    <string name="task">任务</string>
+    <string name="translate">翻译</string>
+    <string name="slideMenu">侧边栏</string>
+    <string name="result">结果</string>
 
 </resources>

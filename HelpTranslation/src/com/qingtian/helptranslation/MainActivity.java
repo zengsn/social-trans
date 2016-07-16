@@ -59,7 +59,9 @@ public class MainActivity extends BaseActivity {
 			break;
 		case R.id.btn_login:
 			//Toast.makeText(getApplicationContext(), "login success", 0).show();
-			login();
+			//login();
+			Intent intent1=new Intent(MainActivity.this,MainMenuActivity.class);
+			startActivity(intent1);
 		default:
 			break;
 		}
@@ -82,6 +84,8 @@ public class MainActivity extends BaseActivity {
 				public void onSuccess() {
 					// TODO Auto-generated method stub
 					Toast.makeText(getApplicationContext(), "login success", 0).show();
+					Intent intent1=new Intent(MainActivity.this,MainMenuActivity.class);
+					startActivity(intent1);
 				}
 				
 				@Override
