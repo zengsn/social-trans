@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>众包翻译系统</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .jumbotron{
+            margin-top: -20px;
+            position: relative;
+            text-align: center;
+
+        }
+        .masthead{
+            padding:70px 0 80px;
+            margin-bottom: 0;
+            color: #fff;
+        }
+        div{
+            display:block;
+        }
+        .jumbotron:after{
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url("img/background.jpg") repeat center center;
+            opacity: .4;
+        }
+        .jumbotron .container{
+            position: relative;
+            z-index: 2;
+        }
+        .container:after{
+            display: table;
+            line-height: 0;
+            content:'';
+        }
+        .masthead h1{
+            font-size: 120px;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .jumbotron h1{
+            font-weight:bold;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+        }
+        .masthead p{
+            font-size: 40px;
+            font-weight: 200;
+            line-height: 1.25;
+        }
+        .jumbotron p{
+            margin-bottom: 30px;
+        }
+        .masthead .btn{
+            padding: 19px 24px;
+            font-size: 24px;
+            font-weight: 200;
+            color: #fff;
+            border-radius: 6px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 5px rgba(0,0,0,.25);
+            transition: none;
+        }
+        .masthead-links{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .masthead-links li{
+            display: inline;
+            padding: 0 10px;
+            color: rgba(255,255,255,.25);
+            font-size: 20px;
+        }
+        .font-size1{
+            font-size: 20px;
+        }
+        .font-size2{
+            font-size: 18px;
+        }
+
+
+    </style>
+</head>
+<body >
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <button class="navbar-toggle collapse" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <ul class="nav navbar-nav font-size1">
+                <li><a href="#" class="active">首页</a></li>
+            </ul>
+            <div class="navbar-collapse collapse font-size2" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">选项1</a></li>
+                    <li><a href="#">选项2</a></li>
+                    <li><a href="#">选项3</a></li>
+                    <li><a href="#">选项4</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right hidden-sm">
+                    <li><a href="#">关于</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron masthead">
+        <div class="container">
+            <div class="center">
+                <h1 >众包翻译系统</h1>
+                <p>让翻译变得更加简单让翻译变得更加简单让翻译变得更加简单</p>
+
+                <ul class="masthead-links">
+                    <li><a href="#">登录</a></li>
+                    <li><a href="#">注册</a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script type="application/javascript" src="js/jquery-2.1.1.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
