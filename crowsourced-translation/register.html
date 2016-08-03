@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>众包翻译系统</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+   
+    <![endif]-->
+    <style>
+        form{
+            display: block;
+            margin-top: 5em;
+        }
+        .wrapper-lg{
+            width: 420px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <form class="panel-body wrapper-lg" action="/crowsourced-translation/servlet/registerServlet" method="POST">
+            <div class="form-group" style="text-align: left;margin-bottom: 20px">
+                <input style="box-shadow: none" name="email" type="email" placeholder="注册邮箱"
+                   class="form-control" >
+            </div>
+            <div class="form-group" style="text-align: left;margin-bottom: 20px">
+                <input style="box-shadow: none" name="password" type="password" placeholder="密码"
+                       class="form-control" >
+            </div>
+            <div class="form-group" style="text-align: left;margin-bottom: 20px">
+                <input style="box-shadow: none" name="passwordConfirm" type="password" placeholder="确认密码"
+                       class="form-control" >
+            </div>
+            
+			 <input type="submit" name="btn" class="btn btn-default btn-block" style="height:42px;line-height:30px;background:
+            #1ea2e9;border:1px solid #1ea2e9 color:#fff;font-size:18px" value="注  册">
+           
+            <p class="text-muted text-center" style="line-height:40px;margin:0px"><small>已有账号？</small>
+                <a href="">
+                    <span style="color:#1ea2e9">立即登录</span>
+                </a>
+            </p>
+        </form>
+        
+    </center>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script type="application/javascript" src="js/jquery-2.1.1.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
