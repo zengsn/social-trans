@@ -69,6 +69,7 @@
        
      
     </table>
+    <!-- 这里需要传入一个id，才可以对数据库进行修改 -->
     <s:hidden name="user.id"/>
     <div class="tc mt20">
         <input type="submit" class="btnB2" value="保存" />

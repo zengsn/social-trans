@@ -7,9 +7,7 @@
     <script type="text/javascript">
       	//全选、全反选
 		function doSelectAll(){
-			// jquery 1.6 前
-			//$("input[name=selectedRow]").attr("checked", $("#selAll").is(":checked"));
-			//prop jquery 1.6+建议使用
+			
 			$("input[name=selectedRow]").prop("checked", $("#selAll").is(":checked"));		
 		}
       	//新增
@@ -27,13 +25,30 @@
       	}
       	//删除
       	function doDelete(id){
-      		document.forms[0].action = "${basePath}nsfw/user_delete.action?user.id=" + id;
-      		document.forms[0].submit();
+      		//传入用户id进行删除
+      		var isDeleted=confirm("你确定要删除吗？");
+      		if(isDeleted){
+      			//document.write("删除成功");
+      			document.forms[0].action = "${basePath}/user_delete.action?user.id=" + id;
+      			document.forms[0].submit();
+      		}
+      		
       	}
       	//批量删除
       	function doDeleteAll(){
-      		document.forms[0].action = "${basePath}nsfw/user_deleteSelected.action";
-      		document.forms[0].submit();
+      		var isDeleted=confirm("你确定要删除吗？");
+      		if(isDeleted){
+      			document.forms[0].action = "${basePath}/user_deleteSelected.action";
+      			document.forms[0].submit();
+      		}
+      	}
+      	
+      	function doExportExcel(){
+      		alert("正在开发");
+      	}
+      	
+      	function doImportExcel(){
+      		alert("正在开发");
       	}
     </script>
 </head>
