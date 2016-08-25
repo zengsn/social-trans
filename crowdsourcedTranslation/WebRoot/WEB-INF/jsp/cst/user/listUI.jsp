@@ -21,7 +21,8 @@
       	}
       	//编辑
       	function doEdit(id){
-      		document.forms[0].action = "${basePath}nsfw/user_editUI.action?user.id=" + id;
+      		//编辑需要根据id来查找用户
+      		document.forms[0].action = "${basePath}/user_editUI.action?user.id=" + id;
       		document.forms[0].submit();
       	}
       	//删除
