@@ -30,7 +30,7 @@
 	</bean>
     
     
-    <import resource="classpath:com/qingtian/*/config/*-spring.xml" />
+   
     
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -44,9 +44,19 @@
 		</property>
 		<property name="mappingLocations">
 			<list>
-				
+				<value>classpath:com/cst/dao/user/entity/*.hbm.xml</value>
 				<value>classpath:com/qingtian/test/entity/*.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
+	
+	<!-- 引入Spring的外部配置文件 -->
+	
+	 <import resource="classpath:com/qingtian/*/config/*-spring.xml" />
+	<import resource="classpath:com/cst/dao/user/config/user-spring.xml"/>  
+	
+	  <!-- 所有业务dao的parent -->
+    <bean id="baseDao" abstract="true">
+    	<property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
 </beans>

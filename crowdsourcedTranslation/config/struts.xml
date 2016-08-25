@@ -13,6 +13,7 @@
 	<!-- 把主题配置成simple -->
 	<constant name="struts.ui.theme" value="simple" />
 	
-	<include file="com/qingtian/test/config/test-struts.xml"/>
-
+	
+	<include file="com/qingtian/test/config/test-struts.xml"></include>
+	<include file="com/cst/dao/user/config/user-struts.xml"></include>
 </struts>
