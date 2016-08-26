@@ -16,9 +16,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@Override
 	public List<User> findUserByAccountAndId(String account, String id) {
 		String sql = "FROM User WHERE account = ?";
-		//判断id是否存在，可能是增加页面来得。
+		//判断id是否存在。若是增加页面跳转，则不存在id
 		if (StringUtils.isNotBlank(id)) {
-			sql += " AND id!=?";
+			sql += " AND id !=?";
 		}
 		Query query = getSession().createQuery(sql);
 		query.setParameter(0, account);

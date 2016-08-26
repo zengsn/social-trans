@@ -5,6 +5,9 @@
     <title>用户管理</title>
     <script type="text/javascript" src="${basePath }js/datepicker/WdatePicker.js"></script>
     <script type="text/javascript">
+    		//帐号是否唯一
+    	var result=false;
+    
     	//校验帐号的唯一性
     	function doVerify(){
     		//1、获取帐号
@@ -13,20 +16,31 @@
     			//2、校验 
     			$.ajax({
     				url:"${basePath}user_verifyAccount.action",
-    				data: {"user.account": account},
+    				data: {"user.account": account,"user.id": "${user.id}"},
     				type: "post",
-    				async: false,//非异步
+    				async: false,//设置为非异步，不然result的逻辑执行不了
     				success: function(msg){
     					if("true" != msg){
     						//帐号已经存在
     						alert("帐号已经存在。请使用其它帐号！");
     						//定焦
     						$("#account").focus();
-    						
-    					} 
+    						result=false;
+    					} else{
+    						result=true;
+    					}
     				}
     			});
     		}
+    	}
+    	
+    	
+    	function doSubmit(){
+    		doVerify();
+    		if(result){
+    			document.forms[0].submit();
+    		}
+    	
     	}
     </script>
 </head>
@@ -98,7 +112,7 @@
     <!-- 这里需要传入一个id，才可以对数据库进行修改 -->
     <s:hidden name="user.id"/>
     <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" />
+        <input type="button" class="btnB2" value="保存"  onclick="doSubmit()"/>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
     </div>
