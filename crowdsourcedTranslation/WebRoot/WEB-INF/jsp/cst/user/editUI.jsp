@@ -4,6 +4,31 @@
     <%@include file="/common/header.jsp"%>
     <title>用户管理</title>
     <script type="text/javascript" src="${basePath }js/datepicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+    	//校验帐号的唯一性
+    	function doVerify(){
+    		//1、获取帐号
+    		var account = $("#account").val();
+    		if(account != ""){
+    			//2、校验 
+    			$.ajax({
+    				url:"${basePath}user_verifyAccount.action",
+    				data: {"user.account": account},
+    				type: "post",
+    				async: false,//非异步
+    				success: function(msg){
+    					if("true" != msg){
+    						//帐号已经存在
+    						alert("帐号已经存在。请使用其它帐号！");
+    						//定焦
+    						$("#account").focus();
+    						
+    					} 
+    				}
+    			});
+    		}
+    	}
+    </script>
 </head>
 <body class="rightBody">
 <form id="form" name="form" action="${basePath }user_edit.action" method="post" enctype="multipart/form-data">
@@ -19,7 +44,7 @@
         </tr>
         <tr>
             <td class="tdBg" width="200px">帐号：</td>
-            <td><s:textfield name="user.account" /></td>
+            <td><s:textfield id="account" name="user.account" onchange="doVerify()"/></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">密码：</td>

@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.cst.dao.user.entity.User;
@@ -116,6 +119,32 @@ public class UserAction extends ActionSupport {
 		}
 		return "list";
 	}
+	
+	//校验用户帐号唯一
+		public void verifyAccount(){
+			try {
+				//1、获取帐号
+				//user.getAccount().equals(' ') && user.getAccount() != null
+				if(user != null && StringUtils.isNotBlank(user.getAccount())){
+					//2、根据帐号到数据库中校验是否存在该帐号对应的用户
+					List<User> list = userService.findUserByAccountAndId(user.getAccount(),user.getId());
+					String strResult = "true";
+					if(list != null && list.size() > 0){
+						//说明该帐号已经存在
+						strResult = "false";
+					}
+					
+					//输出
+					HttpServletResponse response = ServletActionContext.getResponse();
+					response.setContentType("text/html");
+					ServletOutputStream outputStream = response.getOutputStream();
+					outputStream.write(strResult.getBytes());
+					outputStream.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	
 	public List<User> getUserList() {
 		return userList;

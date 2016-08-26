@@ -47,4 +47,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.findObjects();
 	}
 
+	@Override
+	public List<User> findUserByAccountAndId(String account, String id) {
+		// TODO Auto-generated method stub
+		return userDao.findUserByAccountAndId(account,id);
+	}
+
 }

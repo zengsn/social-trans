@@ -17,4 +17,12 @@ public interface UserService {
 	public User findObjectById(Serializable id);
 	//查找列表
 	public List<User> findObjects();
+	
+	/**
+	 * 根据用户的帐号和id来查询用户
+	 * @param account 帐号
+	 * @param id id
+	 * @return 用户列表
+	 */
+	public List<User> findUserByAccountAndId(String account, String id);
 }
