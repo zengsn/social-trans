@@ -1,6 +1,7 @@
 package com.cst.dao.user.service.impl;
 
 import java.io.Serializable;
+import java.rmi.ServerException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -42,8 +43,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findObjects() {
-		// TODO Auto-generated method stub
+	public List<User> findObjects() throws ServerException{
+		try {
+			//int i=1/0;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ServerException("service³ö´í"+e.getMessage());
+		}
+		
 		return userDao.findObjects();
 	}
 

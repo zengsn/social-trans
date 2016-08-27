@@ -15,7 +15,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> findUserByAccountAndId(String account, String id) {
-		String sql = "FROM User WHERE account = ?";
+		String sql = "FROM user WHERE account = ?";
 		//判断id是否存在。若是增加页面跳转，则不存在id
 		if (StringUtils.isNotBlank(id)) {
 			sql += " AND id !=?";

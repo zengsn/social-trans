@@ -1,6 +1,7 @@
 package com.cst.dao.user.action;
 
 import java.io.File;
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,17 +13,19 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
+import com.cst.dao.core.action.BaseAction;
+import com.cst.dao.core.execption.ActionException;
 import com.cst.dao.user.entity.User;
 import com.cst.dao.user.service.UserService;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class UserAction extends ActionSupport {
+public class UserAction extends BaseAction {
 	
 	@Resource
 	private UserService userService;
 	private List<User> userList;//用户列表
 	private User user;
-	private String[] selectedRow;//删除多选
+
 	
 	private File headImage;//用户头像
 	private String headImageFileName;//头像名
@@ -31,8 +34,13 @@ public class UserAction extends ActionSupport {
 	
 	//跳转的页面用字符来表示
 	//列表页面
-	public String listUI(){
-		userList = userService.findObjects();
+	public String listUI() throws Exception{
+		try {
+			userList = userService.findObjects();
+		} catch (ServerException e) {
+			// TODO Auto-generated catch block
+			throw new Exception(e.getMessage());
+		}
 		return "listUI";
 	}
 	//跳转到新增页面
@@ -159,12 +167,7 @@ public class UserAction extends ActionSupport {
 		this.user = user;
 	}
 	
-	public String[] getSelectedRow() {
-		return selectedRow;
-	}
-	public void setSelectedRow(String[] selectedRow) {
-		this.selectedRow = selectedRow;
-	}
+
 	
 	public File getHeadImage() {
 		return headImage;

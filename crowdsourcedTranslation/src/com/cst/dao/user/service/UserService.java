@@ -1,6 +1,7 @@
 package com.cst.dao.user.service;
 
 import java.io.Serializable;
+import java.rmi.ServerException;
 import java.util.List;
 
 import com.cst.dao.user.entity.User;
@@ -16,7 +17,7 @@ public interface UserService {
 	//根据id查找
 	public User findObjectById(Serializable id);
 	//查找列表
-	public List<User> findObjects();
+	public List<User> findObjects() throws ServerException;
 	
 	/**
 	 * 根据用户的帐号和id来查询用户
