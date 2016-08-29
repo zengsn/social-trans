@@ -33,7 +33,10 @@
 	</package>
 	
 	
-	<!-- 引入外部资源 -->
+	<!-- 引入测试的资源 -->
 	<include file="com/qingtian/test/config/test-struts.xml"></include>
+	<!-- 引入用户管理的资源 -->
 	<include file="com/cst/dao/user/config/user-struts.xml"></include>
+	<!-- 引入角色管理的资源 -->
+	<include file="com/cst/dao/role/config/role-struts.xml"></include>
 </struts>

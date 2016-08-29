@@ -18,7 +18,9 @@ public class User implements Serializable {
 	
 	
 	
-	
+	//角色状态
+	public static String USER_STATE_VALID = "1";//有效
+	public static String USER_STATE_INVALID = "0";//无效
 	
 
 

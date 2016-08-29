@@ -44,16 +44,18 @@
 		</property>
 		<property name="mappingLocations">
 			<list>
-				<value>classpath:com/cst/dao/user/entity/*.hbm.xml</value>
+				<value>classpath:com/cst/dao/*/entity/*.hbm.xml</value>
 				<value>classpath:com/qingtian/test/entity/*.hbm.xml</value>
+			
 			</list>
 		</property>
 	</bean>
 	
 	<!-- 引入Spring的外部配置文件 -->
 	
-	 <import resource="classpath:com/qingtian/*/config/*-spring.xml" />
-	<import resource="classpath:com/cst/dao/user/config/user-spring.xml"/>  
+	 <import resource="classpath:com/qingtian/*/config/test-spring.xml" />
+	<import resource="classpath:com/cst/dao/user/config/user-spring.xml"/>
+	 <import resource="classpath:com/cst/dao/role/config/role-spring.xml"/>  
 	
 	  <!-- 所有业务dao的parent -->
     <bean id="baseDao" abstract="true">
