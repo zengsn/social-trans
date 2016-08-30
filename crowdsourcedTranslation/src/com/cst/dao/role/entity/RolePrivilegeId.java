@@ -54,6 +54,7 @@ public class RolePrivilegeId implements Serializable {
 		this.code = code;
 	}
 	public RolePrivilegeId() {
+		
 	}
 	
 	

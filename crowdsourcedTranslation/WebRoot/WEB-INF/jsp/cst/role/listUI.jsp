@@ -64,9 +64,13 @@
                        		<s:iterator value="roleList" status="st">
                              <tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if> >
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='roleId'/>"/></td>
-                                <td align="center">  </td>
+                                <td align="center"> <s:property value="name"/> </td>
                                 <td align="center">
-                                		
+                                	<!-- 在权限集合里循环取值 -->
+                                	<s:iterator value="rolePrivileges">
+                                		<!-- 取出角色权限表中的值，将其转换为权限集合中对应的中文 -->
+                                		<s:property value="#privilegeMap[id.code]"/>
+                                	</s:iterator>	
                                 </td>
                                 <td align="center" ><s:property value="state==1?'有效':'无效'"/></td>
                                 <td align="center">

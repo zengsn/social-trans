@@ -13,10 +13,10 @@ import com.cst.dao.role.service.RoleService;
 
 @Service("roleService")
 public class RoleServiceImpl implements RoleService {
-	
+
 	@Resource
 	private RoleDao roleDao;
-	
+
 	@Override
 	public void save(Role role) {
 		// TODO Auto-generated method stub
@@ -26,6 +26,9 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public void update(Role role) {
 		// TODO Auto-generated method stub
+		// 1、删除该角色对于的所有权限
+		roleDao.deleteRolePrivilegeByRoleId(role.getRoleId());
+		// 2、更新角色及权限
 		roleDao.update(role);
 	}
 

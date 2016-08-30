@@ -14,6 +14,7 @@
 		<property name="state" type="java.lang.String">
 			<column name="state" length="1" />
 		</property>
+		<!-- 设置懒加载lazy为false，这样rolePrivileges才能加载成功 -->
 		<set name="rolePrivileges" inverse="true" lazy="false" cascade="save-update,delete">
 			<key>
 				<column name="role_id"></column>

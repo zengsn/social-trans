@@ -19,7 +19,7 @@
         <tr>
             <td class="tdBg" width="200px">角色权限：</td>
             <td>
-            	
+            	<s:checkboxlist list="#privilegeMap" name="privilegeIds"></s:checkboxlist>
             </td>
         </tr>
         <tr>
