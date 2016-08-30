@@ -26,4 +26,10 @@ public interface UserService {
 	 * @return 用户列表
 	 */
 	public List<User> findUserByAccountAndId(String account, String id);
+	
+	//保存用户及其对应的角色
+	public void saveUserAndRole(User user, String... roleIds);
+	//保存用户及其对应的角色
+	public void updateUserAndRole(User user, String... roleIds);
+	
 }

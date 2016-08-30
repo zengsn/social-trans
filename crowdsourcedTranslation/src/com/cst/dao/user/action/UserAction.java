@@ -15,20 +15,26 @@ import org.apache.struts2.ServletActionContext;
 
 import com.cst.dao.core.action.BaseAction;
 import com.cst.dao.core.execption.ActionException;
+import com.cst.dao.role.service.RoleService;
 import com.cst.dao.user.entity.User;
 import com.cst.dao.user.service.UserService;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends BaseAction {
 	
 	@Resource
 	private UserService userService;
+	@Resource
+	private RoleService roleService;
 	private List<User> userList;//用户列表
 	private User user;
 
 	
 	private File headImage;//用户头像
 	private String headImageFileName;//头像名
+	
+	private String[] userRoleIds;
 	
 
 	
@@ -45,6 +51,8 @@ public class UserAction extends BaseAction {
 	}
 	//跳转到新增页面
 	public String addUI(){
+		//加载角色列表
+		ActionContext.getContext().getContextMap().put("roleList", roleService.findObjects());
 		return "addUI";
 	}
 	//保存新增
@@ -68,7 +76,7 @@ public class UserAction extends BaseAction {
 					//2、设置用户头像路径
 					user.setHeadImage("user/" + fileName);
 				}
-				userService.save(user);
+				userService.saveUserAndRole(user, userRoleIds);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +111,7 @@ public class UserAction extends BaseAction {
 					//2、设置用户头像路径
 					user.setHeadImage("user/" + fileName);
 				}
-				userService.update(user);
+				userService.updateUserAndRole(user, userRoleIds);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -181,4 +189,12 @@ public class UserAction extends BaseAction {
 	public void setHeadImageFileName(String headImageFileName) {
 		this.headImageFileName = headImageFileName;
 	}
+	public String[] getUserRoleIds() {
+		return userRoleIds;
+	}
+	public void setUserRoleIds(String[] userRoleIds) {
+		this.userRoleIds = userRoleIds;
+	}
+	
+	
 }

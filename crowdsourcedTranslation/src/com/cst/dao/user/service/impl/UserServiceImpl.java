@@ -59,5 +59,19 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.findUserByAccountAndId(account,id);
 	}
+	
+	//保存用户及其对应的角色
+	@Override
+	public void saveUserAndRole(User user, String... roleIds) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	//保存用户及其对应的角色
+	@Override
+	public void updateUserAndRole(User user, String... roleIds) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
