@@ -8,8 +8,17 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+
+
+
+
+
+
+import com.cst.dao.role.entity.Role;
 import com.cst.dao.user.dao.UserDao;
 import com.cst.dao.user.entity.User;
+import com.cst.dao.user.entity.UserRole;
+import com.cst.dao.user.entity.UserRoleId;
 import com.cst.dao.user.service.UserService;
 
 @Service("userService")
@@ -64,14 +73,36 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void saveUserAndRole(User user, String... roleIds) {
 		// TODO Auto-generated method stub
-		
+		//1、保存用户
+				save(user);
+				//2、保存用户对应的角色
+				if(roleIds != null){
+					for(String roleId: roleIds){
+						userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+					}
+				}
 	}
 	
 	//保存用户及其对应的角色
 	@Override
 	public void updateUserAndRole(User user, String... roleIds) {
 		// TODO Auto-generated method stub
-		
+		//1、根据用户删除该用户的所有角色
+				userDao.deleteUserRoleByUserId(user.getId());
+				//2、更新用户
+				update(user);
+				//3、保存用户对应的角色
+				if(roleIds != null){
+					for(String roleId: roleIds){
+						userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+					}
+				}
+	}
+
+	@Override
+	public List<UserRole> getUserRolesByUserId(String id) {
+		// TODO Auto-generated method stub
+		return userDao.getUserRolesByUserId(id);
 	}
 
 }

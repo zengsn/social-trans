@@ -5,6 +5,7 @@ import java.rmi.ServerException;
 import java.util.List;
 
 import com.cst.dao.user.entity.User;
+import com.cst.dao.user.entity.UserRole;
 
 public interface UserService {
 	
@@ -31,5 +32,8 @@ public interface UserService {
 	public void saveUserAndRole(User user, String... roleIds);
 	//保存用户及其对应的角色
 	public void updateUserAndRole(User user, String... roleIds);
+	
+	public List<UserRole> getUserRolesByUserId(String id);
+	
 	
 }

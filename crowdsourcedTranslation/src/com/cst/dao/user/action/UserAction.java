@@ -13,10 +13,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
+
+
+
 import com.cst.dao.core.action.BaseAction;
 import com.cst.dao.core.execption.ActionException;
 import com.cst.dao.role.service.RoleService;
 import com.cst.dao.user.entity.User;
+import com.cst.dao.user.entity.UserRole;
 import com.cst.dao.user.service.UserService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -85,8 +89,18 @@ public class UserAction extends BaseAction {
 	}
 	//跳转到编辑页面
 	public String editUI(){
+		//加载角色列表
+		ActionContext.getContext().getContextMap().put("roleList", roleService.findObjects());
 		if (user != null && user.getId() != null) {
 			user = userService.findObjectById(user.getId());
+			//处理角色回显
+			List<UserRole> list = userService.getUserRolesByUserId(user.getId());
+			if(list != null && list.size() > 0){
+				userRoleIds = new String[list.size()];
+				for(int i = 0; i < list.size(); i++){
+					userRoleIds[i] = list.get(i).getId().getRole().getRoleId();
+				}
+			}
 		}
 		return "editUI";
 	}
