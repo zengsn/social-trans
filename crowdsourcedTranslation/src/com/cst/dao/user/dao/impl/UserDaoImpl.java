@@ -49,4 +49,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		return query.list();
 	}
 
+	@Override
+	public List<User> findUsersByAcccountAndPass(String account, String password) {
+		Query query = getSession().createQuery("FROM User WHERE account=? AND password=?");
+		query.setParameter(0, account);
+		query.setParameter(1, password);
+		return query.list();
+	}
+
 }

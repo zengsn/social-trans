@@ -31,13 +31,13 @@ body {
 .main2{
     width:100%;
     height:485px;
-    background-color: #1871b5;
+    background-color: #101010;
 }
 .content{
     width:1002px;
     height:485px;
     margin:0px auto;
-    background:url(../images/login/bg2.png) no-repeat;
+    background:url(../images/login/bg4.png) no-repeat;
 }
 .youbian{
     width:300px;

@@ -34,6 +34,8 @@ public interface UserService {
 	public void updateUserAndRole(User user, String... roleIds);
 	
 	public List<UserRole> getUserRolesByUserId(String id);
+	//根据帐号密码来查找用户
+	public List<User> findUserByAccountAndPass(String account, String password);
 	
 	
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 
+
 import com.cst.dao.role.entity.Role;
 import com.cst.dao.user.dao.UserDao;
 import com.cst.dao.user.entity.User;
@@ -103,6 +104,11 @@ public class UserServiceImpl implements UserService {
 	public List<UserRole> getUserRolesByUserId(String id) {
 		// TODO Auto-generated method stub
 		return userDao.getUserRolesByUserId(id);
+	}
+
+	@Override
+	public List<User> findUserByAccountAndPass(String account, String password) {
+		return userDao.findUsersByAcccountAndPass(account, password);
 	}
 
 }

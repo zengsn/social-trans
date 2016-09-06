@@ -18,4 +18,6 @@ public interface UserDao extends BaseDao<User> {
 
 	public List<UserRole> getUserRolesByUserId(String id);
 
+	public List<User> findUsersByAcccountAndPass(String account, String password);
+
 }

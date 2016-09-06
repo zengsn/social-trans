@@ -41,4 +41,6 @@
 	<include file="com/cst/dao/role/config/role-struts.xml"></include>
 	<!-- 引入后台管理界面 -->
 	<include file="com/cst/dao/home/config/home-struts.xml"></include>
+	<!-- 引入登录界面 -->
+	<include file="com/cst/dao/login/config/login-struts.xml"></include>
 </struts>
