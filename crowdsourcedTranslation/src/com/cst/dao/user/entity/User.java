@@ -1,6 +1,7 @@
 package com.cst.dao.user.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class User implements Serializable {
 	
@@ -15,6 +16,9 @@ public class User implements Serializable {
 	private String realName;//真实姓名
 	private String identityCard;//身份证
 	private Boolean gender;//性别
+	
+	private List<UserRole> userRoles;
+	
 	
 	
 	
@@ -124,6 +128,13 @@ public class User implements Serializable {
 		this.identityCard = identityCard;
 	}
 	
-	
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
 	
 }

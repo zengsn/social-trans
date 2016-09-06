@@ -61,4 +61,7 @@
     <bean id="baseDao" abstract="true">
     	<property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
+    
+     <!-- 权限鉴定类 -->
+    <bean id="permissionCheck" class="com.cst.dao.core.permission.impl.PermissionCheckImpl"></bean>
 </beans>

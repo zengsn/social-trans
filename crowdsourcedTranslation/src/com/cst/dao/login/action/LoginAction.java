@@ -46,6 +46,7 @@ public class LoginAction extends ActionSupport {
 						//2.1、登录成功
 						User user = list.get(0);
 						//2.1.1、根据用户id查询该用户的所有角色
+						user.setUserRoles(userService.getUserRolesByUserId(user.getId()));
 						//2.1.2、将用户信息保存到session中
 						ServletActionContext.getRequest().getSession().setAttribute(Constant.USER, user);
 						//2.1.3、将用户登录记录到日志文件
