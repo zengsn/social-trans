@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+<dubbo:application name="dubbo-user-consumer" owner="programmer" organization="dubbox"/>
+
+<!-- dubbo:registry address="multicast://127.0.0.1:1234"/ -->
+<!--<dubbo:registry address="zookeeper://128.128.128.10:2181" />-->
+<dubbo:registry address="zookeeper://222.17.107.53:2181" timeout="60000" client="zkclient" />
+
+<dubbo:protocol name="thrift2"/>
+
+
+<!-- 权限 -->
+<dubbo:reference id="permissionService"  interface="com.hc.thrift.api.Permission.PermissionService$Iface" timeout="1000000"  check="false" async="false"/>
+
+<!-- 角色 -->
+<dubbo:reference id="roleService" interface="com.hc.thrift.api.Role.RoleService$Iface" timeout="1000000"   check="false" async="false"/>
+
+<!--角色权限-->
+<dubbo:reference id="rolePermissionService" interface="com.hc.thrift.api.RolePermission.RolePermissionService$Iface" timeout="1000000"   check="false" async="false"/>
+
+<!--用户 -->
+<dubbo:reference id="userRpcService" interface="com.hc.thrift.api.User.UserService$Iface" timeout="1000000"   check="false" async="false"/>
+
+<!--用户角色 -->
+<dubbo:reference id="userRoleService"  interface="com.hc.thrift.api.UserRole.UserRoleService$Iface" timeout="1000000" check="false" async="false"/>
+
+<!--组织 -->
+<dubbo:reference id="organizationService"	interface="com.hc.thrift.api.Organization.OrganizationService$Iface" timeout="1000000" check="false" async="false"/>
+
+<!--分布式登陆 -->
+<dubbo:reference id="distributedLoginService"  interface="com.hc.thrift.api.DistributedLogin.DistributedLoginService$Iface" timeout="1000000" check="false" async="false"/>
+
+<!--全局参数 -->
+<dubbo:reference id="appConfigService"  interface="com.hc.thrift.api.AppConfig.AppConfigService$Iface" timeout="1000000" check="false" async="false"/>
+
+<!--索引 -->
+<dubbo:reference id="dictCatalogService"  interface="com.hc.thrift.api.DictCatalog.DictCatalogService$Iface" timeout="1000000" check="false" async="false"/>
+
+<!--字典 -->
+<dubbo:reference id="dictDataService"  interface="com.hc.thrift.api.DictData.DictDataService$Iface" timeout="1000000" check="false" async="false"/>
+
+</beans>

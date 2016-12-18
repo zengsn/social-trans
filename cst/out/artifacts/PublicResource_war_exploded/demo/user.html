@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="UTF-8"/>
+    <title>监管情况（产权交易/国土产权与矿业权交易）</title>
+
+
+    <meta name="description" content="overview &amp; stats"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- page specific plugin styles -->
+    <!--引入EasyUi的库-->
+    <link rel="stylesheet" type="text/css" href="../js/easyui/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/easyui/themes/icon.css"/>
+    <link rel="stylesheet" href="../assets/css/ui.jqgrid.min.css" />
+
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/easyui/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../js/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
+    <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
+    <script type="text/javascript" src="../js/commonJs/commonValidation.js"></script>
+    <!-- inline styles related to this page -->
+
+    <script src="../assets/js/jquery.jqGrid.min.js"></script>
+    <script src="../assets/js/grid.locale-cn.js"></script>
+    <script src="../js/commonJs/common.js"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="../assets/js/html5shiv.min.js"></script>
+    <script src="../assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <link rel="stylesheet" href="../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <style>
+        .red {
+            color: red;
+            font-size: 10px;
+        }
+
+        .labelBorder {
+            padding: 8px;
+            border: 1px solid #96c2f1;
+            background: #eff7ff;
+            width: 157px
+        }
+    </style>
+
+</head>
+
+<body>
+<div>
+    <h1>This is the easyUI demo</h1>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+       onclick="javascript:addUser()">添加新用户</a>
+    </br>
+    <input type="radio" name="gender" value="男" checked><label>男</label>
+    <input type="radio" name="gender" value="女"><label>女</label>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search"
+       onclick="javascript:selectByGender()">查询</a>
+
+
+    <div id="UI_GRID_DIV" style="margin: 5px 0 0 0;padding: 0 0 0 0;">
+        <table id="ui_gridDataTable"></table>
+    </div>
+
+
+    <div id="dialog_modal" title="My Dialog" style="width:888px;height:444px;"
+         buttons="#dialog_madal_button" hidden>
+        <div style="margin-top: 50px">
+            <form id="ff1" method="post">
+                <table align="center">
+
+                    <tr>
+                        <td align="right">用户名:</td>
+                        <td><input type="=text" id="username"
+                                   name="username" class="easyui-validatebox"
+                                   data-options="required:true"></td>
+                        <td align="right">性别:</td>
+                        <td> <input type="radio" name="gender" value="男" checked><label>男</label>
+                            <input type="radio" name="gender" value="女"><label>女</label>
+                        </td>
+                        <!--<td><input type="=text" id="gender"-->
+                                   <!--name="gender" class="easyui-validatebox"-->
+                                   <!--data-options="required:true">-->
+                        <!--</td>-->
+                    </tr>
+                    <tr>
+                        <td align="right">年龄:</td>
+                        <td><input type="=text" id="age"
+                                   name="age" class="easyui-validatebox"
+                                   data-options="required:true"></td>
+                        <td align="right">角色:</td>
+                        <td><input type="=text" id="role"
+                                   name="role" class="easyui-validatebox"
+                                   data-options="required:true">
+                        </td>
+                    </tr>
+
+                </table>
+
+            </form>
+        </div>
+    </div>
+
+    <!--弹出框按钮 -->
+    <div id="dialog_madal_button" hidden>
+        <table cellpadding="0" cellspacing="0" style="width:100%">
+            <tr>
+                <td style="text-align:right">
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+                       onclick="javascript:doSubmit1()">提交</a>
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel"
+                       onclick="javascript:$('#dialog_modal').dialog('close')">关闭</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="table" id="jqgrid_table">
+        </table>
+        <div id="common_jqgrid_pager"></div>
+    </div>
+
+
+</div>
+
+
+<script>
+
+    var ui_maskUi = false;
+    var ui_doNow = false;
+    var ui_isSave = false;
+    var ui_gridPager = false;
+    var ui_nowRecord = {};
+    var ui_pageNumber = 1;
+    var ui_gridPageSize = 50;
+    var ui_allGridData = {
+        total: 0,
+        rows: []
+    };
+
+
+    var appCommon = $.C_getCommon("appCommon");
+    var commonUtils = $.C_getCommon("commonUtils");
+
+    /**
+     * 列表定义
+     */
+    var ui_grid_defined = {
+        title: "",
+        url: null,
+        queryParams: null,
+        singleSelect: true,
+        remoteSort: false,
+        pagination: true,
+        width: 1000,
+        height: 500,
+        autoRowHeight: false,
+        pageNumber: 1,
+        pageSize: 10,
+        loadMsg: '正在加载数据，请稍候......',
+        rownumbers: true,
+        sortName: 'uploadDate',
+        sortOrder: 'desc',
+
+        columns: [[{
+            field: 'id',
+            title: 'id',
+            checkbox: true
+        }, {
+            field: 'username',
+            title: '用户名',
+            align: 'center',
+            width: 100
+        }, {
+            field: 'gender',
+            title: '性别',
+            align: 'center',
+            width: 100
+        }, {
+            field: 'age',
+            title: '年龄',
+            align: 'center',
+            width: 100
+        }, {
+            field: 'role',
+            title: '角色',
+            width: 100
+        }
+        ]],
+        onClickRow: function (rindex, rdata) {
+            ui_doNow = "modi";
+            ui_isSave = true;
+            ui_nowRecord = rdata;
+            //openEdit();
+        }
+    };
+
+
+    /**
+     *jquery 页面初始化
+     */
+    $(document).ready(function () {
+        //初始化表单
+        initGrids();
+        doSearch();
+    });
+
+
+    function initGrids() {
+        $('#ui_gridDataTable').datagrid(ui_grid_defined);
+        ui_gridPager = $('#ui_gridDataTable').datagrid('getPager');
+        ui_gridPager.pagination({
+            showPageList: true,
+            onBeforeRefresh: function (ui_pageNumber, pageSize) {
+                doSearch();
+                //$('#ui_gridDataTable').reload();
+            },
+            onSelectPage: function (ui_pageNumber, pageSize) {
+                $('#ui_gridDataTable').datagrid('loadData', appCommon.getPageData(ui_pageNumber, ui_gridPageSize, ui_allGridData));
+            },
+            onRefresh: function (ui_pageNumber, pageSize) {
+                initGrid();
+                $('#ui_gridDataTable').datagrid('loadData', appCommon.getPageData(ui_pageNumber, ui_gridPageSize, ui_allGridData));
+            },
+            onChangePageSize: function (pageSize) {
+                ui_gridPageSize = pageSize;
+            }
+        });
+        $('#ui_gridDataTable').datagrid("load");
+    }
+
+
+    function doSearch() {
+        //路径
+//        var selectUrl_ = "/" + PROJECT_NAME + "/user/list.do";
+        var url = "/user/list.do"
+        //参数
+        var params = {};
+        ui_allGridData = appCommon.getPagingSearchDataWithAsync("ui_gridDataTable", url, params, ui_gridPageSize);
+    }
+
+    function addUser() {
+        $('#dialog_modal').removeAttr("hidden");
+        $('#dialog_modal').dialog({
+            title: '弹出框',
+            modal: true,
+            onOpen: function () {
+
+            }
+        });
+    }
+
+    function selectByGender() {
+
+        var gender = $("input[name='gender']:checked").val();
+//        alert(gender);
+        var url = "/user/selectByGender.do";
+        //参数
+        var params = {
+            'gender': gender
+        };
+        ui_allGridData = appCommon.getPagingSearchDataWithAsync("ui_gridDataTable", url, params, ui_gridPageSize);
+    }
+
+
+
+    function doSubmit1() {
+        //ff1为table名
+        $('#ff1').form('submit', {
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (data) {
+                //获取dialog_modal下的数据
+                var params = formToJsonstr('dialog_modal');
+//                for (var i in params) {
+//                    alert(params[i]);
+//                }
+                var insertUrl_ = "/user/addUser.do";
+                $.ajax({
+                    url: insertUrl_,
+                    data: params,
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#dialog_modal').dialog('close');
+                        doSearch();
+
+                    },
+                    error: function () {
+                        alert("异常");
+                    }
+                });
+            }
+        });
+
+    }
+
+    function doSearch() {
+        var url = "/user/list.do"
+        //参数
+        var params = {};
+        ajaxFunction(
+                url,
+                params,
+                function(result) {
+                    if (result.success) {
+                        $("#jqgrid_table").GridUnload();
+                        $("#jqgrid_table").jqGrid(
+                                {
+                                    data : result.data,
+                                    datatype : "local",
+                                    height : 393,
+                                    colModel : [
+                                        {
+                                            "name" : "id",
+                                            "label" : "id"
+                                        },
+                                        {
+                                            "name" : "username",
+                                            "label" : "姓名"
+                                        },
+                                        {
+                                            "name" : "gender",
+                                            "label" : "性别"
+                                        },
+                                        {
+                                            "name" : "age",
+                                            "label" : "年龄"
+                                        },
+                                        {
+                                            "name" : "role",
+                                            "label" : "角色"
+                                        },
+                                        {
+                                            "name" : "fnDiv",
+                                            "label" : "功能",
+                                            "formatter" : function(
+                                                    value, options,
+                                                    rowData) {
+                                                return "<div style='margin-left: 8px;'>"
+                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+                                                        + JSON
+                                                                .stringify(rowData)
+                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
+                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick='delConfirm("
+                                                        + rowData.id
+                                                        + ")' data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
+                                                ;
+                                            }
+                                        } ],
+                                    viewrecords : true,
+                                    rowNum : 10,
+                                    rowList : [ 10, 20, 30 ],
+                                    pager : "#common_jqgrid_pager",
+                                    altRows : true,
+                                    multiselect : false,
+                                    multiboxonly : true,
+                                    rownumbers : true,
+                                    autowidth : true,
+                                    loadComplete : function() {
+                                        var table = this;
+                                        setTimeout(function() {
+                                            // styleCheckbox(table);
+                                            // updateActionIcons(table);
+                                            updatePagerIcons(table);
+                                            // enableTooltips(table);
+                                        }, 0);
+                                    }
+                                });
+                    }
+
+                });
+
+
+    }
+
+
+
+
+</script>
+</body>
+</html>

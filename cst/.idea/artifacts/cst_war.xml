@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cst:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="GovCarSys.war">
+      <element id="artifact" artifact-name="cst:war exploded" />
+    </root>
+  </artifact>
+</component>

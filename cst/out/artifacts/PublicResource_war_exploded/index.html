@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>惠州市公务车调度系统</title>
+
+<meta name="description" content="overview &amp; stats" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<!-- page specific plugin styles -->
+<link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="assets/css/datepicker.min.css" />
+<link rel="stylesheet" href="assets/css/ui.jqgrid.min.css" />
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css" />
+<!-- page specific plugin styles -->
+<!-- text fonts -->
+<link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css" />
+
+<!-- ace styles -->
+<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+<!--[if lte IE 9]>
+			<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+<!-- inline styles related to this page -->
+
+<!-- ace settings handler -->
+<script src="assets/js/ace-extra.min.js"></script>
+
+<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+<style type="text/css">
+ul {
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+li {
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.topleft {
+	height: 88px;
+	/*background: url(img/bg/topleft.jpg) no-repeat;*/
+	background: url(img/bg/top_left.png) no-repeat;
+	float: left;
+	width: 320px;
+}
+
+.topleft img {
+	margin-top: 12px;
+}
+
+.topright {
+	height: 88px;
+	/*background: url(img/bg/topright.jpg) no-repeat right;*/
+	/**background: url(img/bg/top_right.png) no-repeat right;**/
+	float: right;
+}
+
+.topright ul {
+	padding-top: 15px;
+	float: right;
+	padding-right: 12px;
+}
+
+.topright ul li {
+	float: left;
+	padding-left: 9px;
+	padding-right: 9px;
+	/*background: url(img/bg/line.gif) no-repeat right;*/
+}
+
+.topright ul li:last-child {
+	background: none;
+}
+
+.topright ul li a {
+	font-size: 13px;
+	color: #e9f2f7;
+}
+
+.topright ul li a:hover {
+	color: #fff;
+}
+
+.topright ul li span {
+	margin-top: 2px;
+	float: left;
+	padding-right: 3px;
+}
+
+.user {
+	height: 30px;
+	background: url(img/bg/ub1.png) repeat-x;
+	clear: both;
+	margin-top: 10px;
+	float: right;
+	margin-right: 12px;
+	border-radius: 30px;
+	behavior: url(js/PIE.htc);
+	white-space: nowrap;
+	position: relative;
+}
+
+.user span {
+	display: inline-block;
+	padding-right: 10px;
+	background: url(img/bg/user.png) no-repeat 15px 10px;
+	line-height: 30px;
+	font-size: 14px;
+	color: #b8ceda;
+	padding-left: 20px;
+	padding-left: 35px;
+}
+
+.user b {
+	display: inline-block;
+	width: 20px;
+	height: 18px;
+	background: url(img/bg/msg.png);
+	text-align: center;
+	font-weight: normal;
+	color: #fff;
+	font-size: 14px;
+	margin-right: 13px;
+	margin-top: 7px;
+	line-height: 18px;
+}
+
+.user i {
+	display: inline-block;
+	margin-right: 5px;
+	font-style: normal;
+	line-height: 30px;
+	font-size: 14px;
+	color: #b8ceda;
+}
+
+.close-tab {
+	font-size: 10px;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	padding-left: 25px;
+	z-index: 100;
+	cursor: hand;
+	cursor: pointer;
+	color: #94A6B0;
+	display: none;
+}
+
+.topbar-collapse {
+	float: right;
+}
+
+.iframeClass {
+	z-index: 1;
+	visibility: inherit;
+	width: 100%;
+	frameborder: 'no';
+	border: 0;
+	marginwidth: 0;
+	marginheight: 0;
+	scrolling-x: 'no';
+	scrolling-y: auto;
+	allowtransparency: true;
+}
+
+.tab-content {
+	border-bottom-color: white;
+}
+
+#leftMenu li {
+	background-color: #f1f8fc;
+}
+
+.no-skin .nav-list>li .submenu>li>a {
+	background-color: #f1f8fc;
+}
+
+.sidebar:before {
+	background-color: rgb(241, 248, 252);
+}
+
+.nav-list li>a:focus {
+	background-color: rgb(107, 198, 120);
+}
+
+.no-skin .nav-list>li>a {
+	background-color: rgb(241, 248, 252);
+}
+
+.menu_select {
+	background-color: rgb(107, 198, 120) !important;
+	color: white !important;
+}
+
+.tab-content {
+	background-color: rgb(223, 232, 246) !important;;
+}
+</style>
+</head>
+
+<body class="no-skin" style="background-color:white;">
+	<div id="navbar" class="navbar top-left" style="background:url(img/bg/top_bg.png) repeat-x;height: 88px">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<div class="navbar-container" id="navbar-container" style="padding-left: 0px;padding-right: 0px;">
+			<!--<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>  -->
+
+			<div class="navbar-header topleft pull-left">
+				<a href="index.html"> <img src="img/bg/logo.png" style="height: 71px" title="系统首页" />
+				</a>
+			</div>
+
+			<div class="topright">
+				<ul>
+					<li><span>
+							<img src="img/help.png" title="帮助" class="helpimg"> <a href="#">帮助</a>
+						</span></li>
+					<li><span>
+							<a href="#">关于</a>
+						</span></li>
+					<li><span>
+							<a href="login.html" target="_parent">退出</a>
+						</span></li>
+				</ul>
+				<div class="user">
+
+					<span>
+						欢迎您，<a style="color: red" id="system_username"></a>
+					</span>
+					<!--  <i>消息</i>
+					<b>5</b>-->
+				</div>
+			</div>
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<div id="sidebar" class="sidebar                  responsive">
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'fixed')
+				} catch (e) {
+				}
+			</script>
+
+
+			<ul class="nav nav-list" id="leftMenu">
+				<li style="background:url(img/bg/left_top.png) repeat-x;height:35px;border:0px; color:#fff;font-size:14px;line-height:40px;">
+					<!-- <span style="background:url(img/bg/leftico.png) no-repeat;margin-left:8px; margin-top:10px;margin-right:8px; width:20px; height:21px;float:left;">
+				    </span> --> <i class="menu-icon fa fa-list-ul" style="margin-left: 15px;" aria-hidden="true"></i> 系统功能
+				</li>
+			</ul>
+			<!-- /.nav-list -->
+
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'collapsed')
+				} catch (e) {
+				}
+			</script>
+		</div>
+
+		<div class="main-content">
+			<div class="main-content-inner" id="tabs">
+
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a></li>
+
+
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="home">
+						<div style="">欢迎 来到公务车管理系统</div>
+					</div>
+
+				</div>
+
+
+
+
+				<!-- /.row -->
+
+			</div>
+			<!-- /.page-content -->
+		</div>
+	</div>
+	<!-- /.main-content -->
+
+	<!-- <div class="footer">
+		<div class="footer-inner">
+			<div class="footer-content">
+				<span class="bigger-120"> 技术支持:广东和诚信息技术有限公司 &copy; 2015-2016 </span>
+
+				&nbsp; &nbsp;
+				<span class="action-buttons">
+					<a href="#"> <i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+					</a> <a href="#"> <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+					</a> <a href="#"> <i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+					</a>
+				</span>
+			</div>
+		</div>
+	</div>
+ -->
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+	</a>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="assets/js/jquery.2.1.1.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="assets/js/jquery.1.11.1.min.js"></script>
+<![endif]-->
+
+	<!--[if !IE]> -->
+	<script type="text/javascript">
+		window.jQuery
+				|| document.write("<script src='assets/js/jquery.min.js'>"
+						+ "<"+"/script>");
+	</script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+	<script type="text/javascript">
+		if ('ontouchstart' in document.documentElement)
+			document
+					.write("<script src='assets/js/jquery.mobile.custom.min.js'>"
+							+ "<"+"/script>");
+
+		function initiFrameHeight() {
+			var height = $(document).height();
+		}
+		var menus = [ {
+				"id" : "1",
+				"menu_name" : "车辆使用",
+				"url" : "",
+				"iconCls" : "fa fa-car",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "1"
+			}, {
+				"id" : "2",
+				"menu_name" : "车辆信息",
+				"url" : "",
+				"iconCls" : "fa  fa-taxi",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "2"
+			}, {
+				"id" : "3",
+				"menu_name" : "车队驾驶员管理",
+				"url" : "",
+				"iconCls" : "fa fa-users",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "3"
+			}, {
+				"id" : "4",
+				"menu_name" : "日常管理",
+				"url" : "",
+				"iconCls" : "fa fa-cubes",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "1"
+			}, {
+				"id" : "6",
+				"menu_name" : "温馨提示",
+				"url" : "",
+				"iconCls" : "fa fa-road",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "1"
+			}, {
+				"id" : "7",
+				"menu_name" : "用户评价",
+				"url" : "",
+				"iconCls" : "fa fa-check-square-o",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "7"
+			}, {
+				"id" : "10",
+				"menu_name" : "系统设置",
+				"url" : "",
+				"iconCls" : "fa fa-cog",
+				"parentId" : "0",
+				"level" : "0",
+				"sort" : "1"
+			}, {
+				"id" : "11",
+				"menu_name" : "车辆申请",
+				"url" : "cheliangshiyong/cheliangshenqing.html",
+				"iconCls" : "icon",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "12",
+				"menu_name" : "部门审批",
+				"url" : "cheliangshiyong/bumenshenpi.html",
+				"iconCls" : "img/menu/2/bmsp.png",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "13",
+				"menu_name" : "车辆调度",
+				"url" : "cheliangshiyong/cheliangdiaodu.html",
+				"iconCls" : "img/menu/2/cldd.png",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "14",
+				"menu_name" : "已审批查询",
+				"url" : "cheliangshiyong/yishenpichaxun.html",
+				"iconCls" : "img/menu/2/yspcx.png",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "15",
+				"menu_name" : "车辆登记",
+				"url" : "cheliangxinxi/cheliangdengji.html",
+				"iconCls" : "img/menu/2/cldj.png",
+				"parentId" : "2",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "16",
+				"menu_name" : "车辆调动",
+				"url" : "cheliangxinxi/cheliangdiaodong.html",
+				"iconCls" : "img/menu/2/cldj.png",
+				"parentId" : "2",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "17",
+				"menu_name" : "车辆处置",
+				"url" : "cheliangxinxi/cheliangchuzhi.html",
+				"iconCls" : "img/menu/2/clcz.png",
+				"parentId" : "2",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "19",
+				"menu_name" : "驾驶员信息",
+				"url" : "cheduijiashiyuanguanli/jiashiyuanxinxi.html",
+				"iconCls" : "img/menu/2/xcdjsygl.png",
+				"parentId" : "3",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "21",
+				"menu_name" : "角色管理",
+				"url" : "system/jueseguanli.html",
+				"iconCls" : "img/menu/2/qxgl.png",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "22",
+				"menu_name" : "用户管理",
+				"url" : "system/yonghuguanli.html",
+				"iconCls" : "img/menu/2/qxgl.png",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "24",
+				"menu_name" : "字典管理",
+				"url" : "system/zidianweihu.html",
+				"iconCls" : "img/menu/2/wxjl.png",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "26",
+				"menu_name" : "我的申请",
+				"url" : "cheliangshiyong/wodeshenqing.html",
+				"iconCls" : "img/menu/cldd.png",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "27",
+				"menu_name" : "待还车列表",
+				"url" : "cheliangshiyong/daihuancheliebiao.html",
+				"iconCls" : "",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "28",
+				"menu_name" : "用户评价",
+				"url" : "cheliangpingjia/yonghupingjia.html",
+				"iconCls" : "img/menu/2/jsypj.png",
+				"parentId" : "7",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "29",
+				"menu_name" : "评价查看",
+				"url" : "cheliangpingjia/pingjiachakan.html",
+				"iconCls" : "",
+				"parentId" : "7",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "30",
+				"menu_name" : "已调度查询",
+				"url" : "cheliangshiyong/yidiaoduchaxun.html",
+				"iconCls" : "img/menu/2/bmsp.png",
+				"parentId" : "1",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "40",
+				"menu_name" : "加油记录",
+				"url" : "daily/jiayoujilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "41",
+				"menu_name" : "维修记录",
+				"url" : "daily/weixiujilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "42",
+				"menu_name" : "规费管理",
+				"url" : "daily/guifeiguanli.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "43",
+				"menu_name" : "年检记录",
+				"url" : "daily/nianjianjilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "44",
+				"menu_name" : "保险记录",
+				"url" : "daily/baoxianjilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "45",
+				"menu_name" : "违章记录",
+				"url" : "daily/weizhangjilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "46",
+				"menu_name" : "事故记录",
+				"url" : "daily/shigujilu.html",
+				"iconCls" : "",
+				"parentId" : "4",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "48",
+				"menu_name" : "还车提示",
+				"url" : "wenxintishi/huanchetishi.html",
+				"iconCls" : "",
+				"parentId" : "6",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "49",
+				"menu_name" : "借调提示",
+				"url" : "wenxintishi/jiediaotishi.html",
+				"iconCls" : "",
+				"parentId" : "6",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "50",
+				"menu_name" : "保险提示",
+				"url" : "wenxintishi/baoxiantishi.html",
+				"iconCls" : "",
+				"parentId" : "6",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "51",
+				"menu_name" : "年审提示",
+				"url" : "wenxintishi/nianshentishi.html",
+				"iconCls" : "",
+				"parentId" : "6",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "52",
+				"menu_name" : "系统配置",
+				"url" : "system/xitongpeizhixinxiguanli.html",
+				"iconCls" : "",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "53",
+				"menu_name" : "车队管理",
+				"url" : "cheduijiashiyuanguanli/cheduixinxiguanli.html",
+				"iconCls" : "",
+				"parentId" : "3",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "54",
+				"menu_name" : "菜单权限",
+				"url" : "system/caidanquanxian.html",
+				"iconCls" : "",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "0"
+			}, {
+				"id" : "55",
+				"menu_name" : "红黄牌预警设置",
+				"url" : "system/redyellowwarning.html",
+				"iconCls" : "",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "1"
+			}, {
+				"id" : "56",
+				"menu_name" : "用户密码修改",
+				"url" : "system/yonghumimaxiugai.html",
+				"iconCls" : "",
+				"parentId" : "10",
+				"level" : "1",
+				"sort" : "1"
+			} ];
+		//初始化iframe 高度
+		$(function() {
+
+			if (bool) {
+				initMenu();
+				$('#tabs').addtabs({
+					monitor : '.nav-list'
+				});
+			}
+
+		});
+
+
+
+
+
+
+		function initMenu() {
+			var url = "/" + PROJECT_NAME + "/menu/list.do";
+			ajaxFunction(url, {}, function(data) {
+				if (data) {
+					var menuTpl = spellMenu(data.data);
+					$("#leftMenu").append(menuTpl);
+				}
+			});
+		}
+
+		var tempPermission = {};
+		function spellMenu(data) {
+			var menus = data;
+			var menusObj = {};
+			var parentMenu = [];
+			var childMenu = {};
+			for (var i = 0; i < menus.length; i++) {
+				var menu = menus[i];
+				//权限控制
+//				if (!tempPermission[menu.id]) {
+//					continue;
+//				}
+				if (menu.level == "0") {
+					//放到父级菜单临时列表
+					parentMenu.push(menu);
+				} else if (menu.level == "1") {
+
+					if (!childMenu[menu.parentId]) {
+						childMenu[menu.parentId] = [];
+					}
+					childMenu[menu.parentId].push(menu);
+				}
+
+			}
+			//draw
+			var menuTpl = '';
+			for (var i = 0; i < parentMenu.length; i++) {
+				var parentItem = parentMenu[i];
+				var icon = parentItem.iconCls;
+				var itemText = parentItem.menu_name;
+				var isOpen = "false";
+
+				var itemTplBegin = '<li class=" repeat-x;">'
+						+ '<a href="#" class="dropdown-toggle" onclick="pMenuClick(this)">'
+						+ '<i class="menu-icon fa '+icon+'"></i>'
+						+ '<span class="menu-text">' + itemText + '</span>'
+						+ '<b class="arrow fa fa-angle-down"></b>' + '</a>'
+						+ '<b class="arrow"></b>';
+				var childs = childMenu[parentItem.id] == undefined ? []
+						: childMenu[parentItem.id];
+				var childTpl = '<ul class="submenu">';
+
+				for (var j = 0; j < childs.length; j++) {
+					var child = childs[j];
+					var childitemText = child.menu_name;
+					var childitemImg = child.iconCls;
+					var href = child.url;
+					childTpl += '<li class=""><a href="javascript:void(0)" data-addtab="'
+							+ childitemText
+							+ '" url="'
+							+ href
+							+ '"> <i class="menu-icon fa fa-caret-right"></i>'
+							+ childitemText + '</a> <b class="arrow"></b></li>'
+
+				}
+				childTpl += '</ul>';
+				menuTpl += itemTplBegin + childTpl + '</li>'
+
+			}
+			return menuTpl;
+		}
+
+
+
+		function pMenuClick(dom) {
+			var $menuDiv = $(dom).parent();
+			var isOpen = $menuDiv.hasClass("open");
+			if (isOpen) {
+				$(dom).removeClass("menu_select");
+			} else {
+				$(".menu_select").each(function(dom) {
+					$(this).removeClass("menu_select");
+				})
+				$(dom).addClass("menu_select");
+			}
+		}
+	</script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="assets/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/js/jquery.jqGrid.min.js"></script>
+	<script src="assets/js/grid.locale-en.js"></script>
+	<!-- page specific plugin scripts -->
+
+	<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+	<!-- ace scripts -->
+	<script src="assets/js/ace-elements.min.js"></script>
+	<script src="assets/js/ace.min.js"></script>
+	<script src="js/common/bootstrp-tab.js"></script>
+
+
+
+</body>
+</html>
