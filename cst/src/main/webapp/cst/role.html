@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>用户管理界面</title>
+    <title>角色管理界面</title>
 
     <meta name="description" content="overview &amp; stats"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -69,7 +69,6 @@
     <!--<link rel="stylesheet" href="../assets/js/vendor/bootstrap/css/bootstrap.css"/>-->
     <!--<link rel="stylesheet" href="../assets/js/dist/css/bootstrapValidator.css"/>-->
 
-
     <script src="../assets/js/bootstrap.min.js"></script>
     <!-- page specific plugin scripts -->
     <script src="../assets/js/bootstrap-datepicker.min.js"></script>
@@ -92,14 +91,16 @@
     <script type="text/javascript" src="../js/commonJs/common.js"></script>
     <script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
     <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
+
     <!--表单验证-->
     <script type="text/javascript" src="../assets/js/dist/js/bootstrapValidator.js"></script>
 </head>
 <body class="no-skip">
+
     <div class="page-content">
         <div class="page-header">
             <h1>
-                用户信息 <small> <i class="ace-icon fa fa-angle-double-right"></i>
+                角色信息 <small> <i class="ace-icon fa fa-angle-double-right"></i>
             </small>
             </h1>
         </div>
@@ -116,16 +117,17 @@
                 </div>
                 <!--</br>-->
                 <div style="padding-top: 5px">
-                    <table class="table" id="user_table" >
+                    <table class="table" id="role_table" >
                     </table>
-                    <div id="common_user_pager"></div>
+                    <div id="common_role_pager"></div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!--新增用户界面-->
+
+    <!--新增角色界面-->
     <div tabindex="-1" class="modal fade in" id="add-modal" aria-hidden="false" style="padding-right: 17px; display:none">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -142,51 +144,27 @@
 
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="add_username">用户帐号:</label>
+                                            <label class="control-label" for="add_rolename">角色名称:</label>
                                         </td>
                                         <td>
-                                            <input id="add_username" name="username" type="text" style="width:168px" onchange="doVerify()">
+                                            <input id="add_rolename" name="rolename" type="text" style="width:168px" >
                                         </td>
                                         <td align="right">
-                                            <label class="no-padding-right" for="add_password">密码:</label>
+                                            <label class="no-padding-right" for="add_code" >角色代码:</label>
                                         </td>
                                         <td>
-                                            <input id="add_password" name="password" type="password" style="width:168px" >
+                                            <input id="add_code" name="code" type="text" style="width:168px" onchange="doVerify($('#add_code'))">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="add_nickname">用户名:</label>
-                                        </td>
-
-                                        <td>
-                                            <input id="add_nickname" name="nickname" type="text"  style="width:168px" >
-                                        </td>
-
-                                        <td align="right">
-                                            <label class="no-padding-right" for="add_email">邮箱:</label>
-                                        </td>
-
-                                        <td>
-                                            <input id="add_email" name="email" type="text" style="width:168px" >
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td align="right">
-                                            <label class="no-padding-right" for="add_phoneNumber">手机号码:</label>
+                                            <label class="control-label" for="add_description">说明:</label>
                                         </td>
                                         <td>
-                                            <input id="add_phoneNumber" name="phoneNumber" type="text" style="width:168px" >
-                                        </td>
-
-                                        <td align="right">
-                                            <label class="cno-padding-right" for="add_role">角色:</label>
-                                        </td>
-                                        <td>
-                                            <input id="add_role" name="role" type="text" style="width:168px" >
+                                            <input id="add_description" name="description" type="text" style="width:168px" >
                                         </td>
                                     </tr>
+                                   
                                 </table>
 
                             </form>
@@ -215,7 +193,7 @@
                     <button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>
                     <h3 class="smaller lighter blue no-margin">修改窗口</h3>
                 </div>
-                <input type="hidden" name="userId">
+                <input type="hidden" name="id">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12">
@@ -224,38 +202,24 @@
 
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="username">用户帐号:</label>
+                                            <label class="control-label" for="update_rolename">角色名称:</label>
                                         </td>
                                         <td>
-                                            <input id="username" name="username" type="text" style="width:168px" disabled>
+                                            <input id="update_rolename" name="rolename" type="text" style="width:168px" >
                                         </td>
                                         <td align="right">
-                                            <label class="control-label" for="nickname">用户名:</label>
+                                            <label class="control-label" for="update_code">角色代码:</label>
                                         </td>
                                         <td>
-                                            <input id="nickname" name="nickname" type="text" required="required" style="width:168px" >
+                                            <input id="update_code" name="code" type="text"  style="width:168px" onchange="doVerify($('#update_code')) ">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="right">
-                                            <label class="no-padding-right" for="email">邮箱:</label>
+                                            <label class="no-padding-right" for="update_description">说明:</label>
                                         </td>
                                         <td>
-                                            <input id="email" name="email" type="text" style="width:168px" >
-                                        </td>
-                                        <td align="right">
-                                            <label class="no-padding-right" for="phoneNumber">手机号码:</label>
-                                        </td>
-                                        <td>
-                                            <input id="phoneNumber" name="phoneNumber" type="text" style="width:168px" >
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">
-                                            <label class="cno-padding-right" for="role">角色:</label>
-                                        </td>
-                                        <td>
-                                            <input id="role" name="role" type="text" style="width:168px" disabled>
+                                            <input id="update_description" name="description" type="text" style="width:168px" >
                                         </td>
                                     </tr>
                                 </table>
@@ -284,64 +248,63 @@
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script>
 
-
         var verify_result = false;
-
-
 
         /*页面初始化调用*/
         $(document).ready(function () {
             doSearch();
-
         });
 
 
-
-        /*查询所有用户*/
+        /*查询所有角色*/
         function doSearch() {
-            var selectAllUrl_ = "/" + PROJECT_NAME + "/User/selectAll.do";
-//            var selectAllUrl_ = "/User/selectAll.do";
+            var selectAllUrl_ = "/" + PROJECT_NAME + "/Role/selectAll.do";
 
             ajaxFunction(
                     selectAllUrl_,
                     null,
                     function(result) {
                         if (result.success) {
-                            $("#user_table").GridUnload();
-                            $("#user_table").jqGrid(
+                            $("#role_table").GridUnload();
+                            $("#role_table").jqGrid(
                                     {
                                         data : result.data,
                                         datatype : "local",
                                         height : 250,
                                         colModel : [
                                             {
-                                                "name" : "userId",
-                                                "label" : "用户id",
+                                                "name" : "id",
+                                                "label" : "id",
                                                 "hidden":true
                                             },
                                             {
-                                                "name" : "username",
-                                                "label" : "用户帐号"
+                                                "name" : "rolename",
+                                                "label" : "角色名称"
                                             },
                                             {
-                                                "name" : "nickname",
-                                                "label" : "用户名"
+                                                "name" : "code",
+                                                "label" : "角色代码"
                                             },
                                             {
-                                                "name" : "email",
-                                                "label" : "邮箱"
-                                            },
-                                            {
-                                                "name" : "phoneNumber",
-                                                "label" : "手机号码"
-                                            },
-                                            {
-                                                "name" : "role",
-                                                "label" : "角色"
+                                                "name" : "description",
+                                                "label" : "说明"
                                             },
                                             {
                                                 "name" : "fnDiv",
@@ -355,7 +318,7 @@
                                                                     .stringify(rowData)
                                                             + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
                                                             + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
-                                                            + rowData.userId
+                                                            + rowData.id
                                                             + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
                                                     ;
 
@@ -364,7 +327,7 @@
                                         viewrecords : true,
                                         rowNum : 10,
                                         rowList : [ 10, 20, 30 ],
-                                        pager : "#common_user_pager",
+                                        pager : "#common_role_pager",
                                         altRows : true,
                                         multiselect : false,
                                         multiboxonly : true,
@@ -387,6 +350,80 @@
 
         }
 
+
+
+
+        /*添加角色*/
+        function addFn() {
+
+            //提交前先进行帐号唯一行验证
+            doVerify();
+            if(verify_result){
+                var params = {};
+                params = formToJsonstr('add-modal');
+                var addFnUrl_ = "/" + PROJECT_NAME + "/Role/addRole.do";
+//                var addFnUrl_ = "/User/addUser.do";
+                ajaxFunction(addFnUrl_, params,
+                        function(result) {
+                            if(result.success){
+                                bootbox.alert("新增角色成功");
+                                doSearch();
+                                closeAddWin();
+                            }else {
+                                bootbox.alert("新增角色失败");
+                                closeAddWin();
+                            }
+
+                        }
+                );
+            }
+
+        }
+
+        /*关闭新增角色界面*/
+        function closeAddWin() {
+            $("#add-modal").modal('hide');
+            //数据清空
+            reset_add($('#add-modal'));
+        }
+
+        /*添加角色模块信息重置*/
+        function reset_add($dom) {
+            //textarea select
+            $dom.find(":input").each(function() {
+                var $this = $(this);
+                var name = $this.attr("name");
+                $this.val("");
+            });
+        }
+
+        /*校验角色代码唯一性*/
+        function doVerify($dom) {
+
+            //获取角色代码
+//            var code = $("#add_code").val();
+            var code = $dom.val();
+            var params = {
+                code:code
+            };
+            var doVerifyUrl_ = "/" + PROJECT_NAME + "/Role/verifyAccount.do";
+//            var doVerifyUrl_ = "/User/verifyAccount.do";
+            //ajax设置为同步，去后台验证
+            ajaxFunction(doVerifyUrl_,params,
+                    function (result) {
+                        //帐号已存在
+                        if(result.success){
+                            //定焦
+                            $dom.focus();
+                            verify_result = false;
+                            bootbox.alert("该角色代码已存在");
+                        }else {
+                            verify_result = true;
+                        }
+                    }
+                    ,false);
+        }
+
         /*打开修改界面*/
         function openUpdateWin(rowData) {
             $("#update-modal").modal('show');
@@ -399,13 +436,6 @@
             $("#update-modal").modal('hide');
         }
 
-        /*关闭新增用户界面*/
-        function closeAddWin() {
-            $("#add-modal").modal('hide');
-            //数据清空
-            reset_add($('#add-modal'));
-        }
-
         /*修改界面数据初始化*/
         function update_init($dom, data) {
             //textarea select
@@ -416,23 +446,12 @@
             });
         }
 
-        /*添加用户模块信息重置*/
-        function reset_add($dom) {
-            //textarea select
-            $dom.find(":input").each(function() {
-                var $this = $(this);
-                var name = $this.attr("name");
-                $this.val("");
-            });
-        }
-
-
         /*修改用户资料*/
         function updateFn() {
             var params = {};
             /*从update-modal获取数据*/
             params = formToJsonstr('update-modal');
-            var updateFnUrl_ = "/" + PROJECT_NAME + "/User/updateUser.do";
+            var updateFnUrl_ = "/" + PROJECT_NAME + "/Role/updateRole.do";
 //            var updateFnUrl_ = "/User/updateUser.do"
 
             ajaxFunction(updateFnUrl_, params,
@@ -450,7 +469,7 @@
                     })
         }
 
-        /*删除选中用户*/
+        /*删除选中角色*/
         function delConfirm(rowDataId) {
             bootbox.confirm("确定要删除此条数据么？", function(result) {
                 if (result == true) {
@@ -459,11 +478,11 @@
             });
         }
 
-        /*删除用户*/
+        /*删除角色*/
         function deleteFn(rowDataId) {
             var params = {};
-            params.userId = rowDataId;
-            var deleteFnUrl_ = "/" + PROJECT_NAME + "/User/deleteUserById.do";
+            params.id = rowDataId;
+            var deleteFnUrl_ = "/" + PROJECT_NAME + "/Role/deleteRoleById.do";
 //            var deleteFnUrl_ = "/User/deleteUserById.do";
             ajaxFunction(deleteFnUrl_, params,
                     function(result) {
@@ -477,61 +496,10 @@
             );
         }
 
-        /*添加用户*/
-        function addFn() {
-
-            //提交前先进行帐号唯一行验证
-            doVerify();
-            if(verify_result){
-                var params = {};
-                params = formToJsonstr('add-modal');
-                var addFnUrl_ = "/" + PROJECT_NAME + "/User/addUser.do";
-//                var addFnUrl_ = "/User/addUser.do";
-                ajaxFunction(addFnUrl_, params,
-                        function(result) {
-                            if(result.success){
-                                bootbox.alert("新增用户成功");
-                                doSearch();
-                                closeAddWin();
-                            }else {
-                                bootbox.alert("新增用户失败");
-                                closeAddWin();
-                            }
-
-                        }
-                );
-            }
-
-        }
-
-        /*校验帐号唯一性*/
-        function doVerify() {
-            //获取用户帐号
-            var username = $("#add_username").val();
-            var params = {
-                username:username
-            };
-            var doVerifyUrl_ = "/" + PROJECT_NAME + "/User/verifyAccount.do";
-//            var doVerifyUrl_ = "/User/verifyAccount.do";
-            //ajax设置为同步，去后台验证
-            ajaxFunction(doVerifyUrl_,params,
-                    function (result) {
-                        //帐号已存在
-                        if(result.success){
-                            //定焦
-                            $("#username").focus();
-                            verify_result = false;
-                            bootbox.alert("该帐号已存在");
-                        }else {
-                            verify_result = true;
-                        }
-                    }
-            ,false);
-        }
-
-
-
     </script>
+
+
+
 
 </body>
 

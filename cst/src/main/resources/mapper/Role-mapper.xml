@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="Role">
+    
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <select id="selectAll"  parameterType="Role" resultType="Role">
+        select id,code,rolename,description,disabled from P_role
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="id !='' and id !=null">
+                    and `id` = #{id}
+            </if>
+
+            <if test="code !='' and code !=null">
+                    and `code` = #{code}
+            </if>
+
+            <if test="rolename !='' and rolename !=null">
+                    and `rolename` = #{rolename}
+            </if>
+
+            <if test="description !='' and description !=null">
+                    and `description` = #{description}
+            </if>
+
+            <if test="disabled !='' and disabled !=null">
+                    and `disabled` = #{disabled}
+            </if>
+
+        </trim>
+    </select>
+
+    
+    <insert id="insert" parameterType="Role">
+        INSERT INTO P_role
+        (id,code,rolename,description)
+        VALUES
+        (#{id},#{code},#{rolename},#{description})
+    </insert>
+
+    <select id="verifyAccount" parameterType="Role" resultType="Role">
+        select * from P_role WHERE code = #{code}
+
+    </select>
+
+    <update id="updateById" parameterType="Role">
+        update P_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id !='' and id !=null">
+                `id` = #{id},
+            </if><if test="code !='' and code !=null">
+                `code` = #{code},
+            </if><if test="rolename !='' and rolename !=null">
+                `rolename` = #{rolename},
+            </if><if test="description !='' and description !=null">
+                `description` = #{description},
+            </if><if test="disabled !='' and disabled !=null">
+                `disabled` = #{disabled},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <update id="deleteRoleById" parameterType="Role">
+        update P_role set disabled = 0
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.util.HashMap">
+        DELETE FROM P_role where id=#{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        DELETE FROM P_role where id in
+        <foreach item="idItem" collection="list" open="(" separator="," close=")">
+            #{idItem}
+        </foreach>
+    </delete>
+</mapper>

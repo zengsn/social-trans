@@ -30,6 +30,8 @@ public class UserService {
      * @return
      */
     public List<User> selectAll(User user){
+        //只查找存在的用户
+        user.setDisabled("1");
         List<User> userList = null;
         userList = sqlSession.selectList("User.selectAll",user);
         return userList;
@@ -47,14 +49,14 @@ public class UserService {
     }
 
     /**
-     * 根据id删除用户
+     * 根据id删除用户（逻辑删除）
      * @param userId
      * @return
      */
     public Boolean deleteUserById(String userId){
         User user = new User();
         user.setUserId(userId);
-        int result = sqlSession.delete("User.deleteUserById",user);
+        int result = sqlSession.update("User.deleteUserById",user);
         return result>0? true:false;
     }
 
@@ -69,6 +71,24 @@ public class UserService {
         user.setUserId(userId);
         int result = sqlSession.insert("User.addUser",user);
         return result>0? true:false;
+    }
+
+    /**
+     * 校验用户帐号唯一性
+     * @param username
+     * @return
+     */
+    public Boolean verifyAccount(String username){
+        User user = new User();
+        user.setUsername(username);
+        List<User> list = sqlSession.selectList("User.verifyAccount",user);
+        if(list!= null && list.size()>0){
+            //帐号不唯一
+            return true;
+        }else {
+            //帐号唯一
+            return false;
+        }
     }
 
 

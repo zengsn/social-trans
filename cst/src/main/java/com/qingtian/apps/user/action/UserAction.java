@@ -151,4 +151,29 @@ public class UserAction {
         }
     }
 
+    /**
+     * 验证用户帐号唯一性
+     * @param username
+     * @return
+     */
+    @RequestMapping("verifyAccount.do")
+    public String verifyAccount(String username){
+
+        //验证帐号非空
+        if(username == null || "".equals(username)){
+            logger.error("UserAction ------- updateUser : username 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"username为空");
+        }
+
+
+        Boolean Vresult = userService.verifyAccount(username);
+        if(Vresult){
+            //帐号已存在
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"帐号唯一");
+        }else {
+            //帐号不存在
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"帐号不存在");
+        }
+    }
+
 }

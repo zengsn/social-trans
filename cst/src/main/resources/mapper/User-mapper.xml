@@ -34,6 +34,10 @@
             <if test="role !='' and role !=null">
                     and `role` = #{role}
             </if>
+
+            <if test="disabled !='' and disabled !=null">
+                and `disabled` = #{disabled}
+            </if>
             
         </trim>
     </select>
@@ -59,8 +63,14 @@
         where userId=#{userId}
     </update>
 
-    <delete id="deleteUserById" parameterType="User">
-        DELETE FROM P_user where userId=#{userId}
+    <update id="deleteUserById" parameterType="User">
+        update P_user set disabled = 0
+        where userId = #{userId}
+    </update>
+
+    <delete id="deleteUserById1" parameterType="User">
+        delete from P_user where
+        userId=#{userId}
     </delete>
 
     <insert id="addUser" parameterType="User">
@@ -130,5 +140,9 @@
         </trim>
         )
     </insert>
+
+    <select id="verifyAccount" parameterType="User" resultType="User">
+        select * from P_user WHERE username = #{username}
+    </select>
 
 </mapper>

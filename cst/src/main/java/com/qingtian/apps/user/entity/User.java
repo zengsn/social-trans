@@ -42,6 +42,11 @@ public class User implements Serializable{
     private String role;
 
     /**
+     *数据的有效性，'1'有效，'0'无效 用于逻辑删除
+     */
+    private String disabled;
+
+    /**
      * 获取属性 
      * @param userId
      */
@@ -146,4 +151,19 @@ public class User implements Serializable{
         return role;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getDisabled() {
+        return disabled;
+    }
+
+    /**
+     *
+     * @return disabled
+     */
+    public void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
 }
