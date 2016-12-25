@@ -147,7 +147,11 @@
                                             <label class="control-label" for="add_rolename">角色名称:</label>
                                         </td>
                                         <td>
-                                            <input id="add_rolename" name="rolename" type="text" style="width:168px" >
+                                            <select  id="add_rolename" name="rolename" style="width:168px">
+                                                <option value="普通用户">普通用户</option>
+                                                <option value="超级用户">超级用户</option>
+                                            </select>
+                                            <!--<input id="add_rolename" name="rolename" type="text" style="width:168px" >-->
                                         </td>
                                         <td align="right">
                                             <label class="no-padding-right" for="add_code" >角色代码:</label>
@@ -163,6 +167,23 @@
                                         <td>
                                             <input id="add_description" name="description" type="text" style="width:168px" >
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <label class="control-label" >权限:</label>
+                                        </td>
+                                        <!--<td >-->
+                                            <!--<div class="checkbox">-->
+                                                <!--<label>-->
+                                                    <!--<input name="pname" type="checkbox" class="ace" value="用户管理"/>-->
+                                                    <!--<span class="lbl"> 用户管理</span>-->
+                                                <!--</label>-->
+                                                <!--<label>-->
+                                                    <!--<input name="pname" type="checkbox" class="ace" value="角色管理"/>-->
+                                                    <!--<span class="lbl"> 角色管理</span>-->
+                                                <!--</label>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
                                     </tr>
                                    
                                 </table>
@@ -357,26 +378,31 @@
         function addFn() {
 
             //提交前先进行帐号唯一行验证
-            doVerify();
+            doVerify($('#add_code'));
             if(verify_result){
                 var params = {};
                 params = formToJsonstr('add-modal');
-                var addFnUrl_ = "/" + PROJECT_NAME + "/Role/addRole.do";
-//                var addFnUrl_ = "/User/addUser.do";
-                ajaxFunction(addFnUrl_, params,
-                        function(result) {
-                            if(result.success){
-                                bootbox.alert("新增角色成功");
-                                doSearch();
-                                closeAddWin();
-                            }else {
-                                bootbox.alert("新增角色失败");
-                                closeAddWin();
-                            }
-
-                        }
-                );
+                for(var i in params){
+                    alert(params[i]);
+                }
             }
+//
+//                var addFnUrl_ = "/" + PROJECT_NAME + "/Role/addRole.do";
+////                var addFnUrl_ = "/User/addUser.do";
+//                ajaxFunction(addFnUrl_, params,
+//                        function(result) {
+//                            if(result.success){
+//                                bootbox.alert("新增角色成功");
+//                                doSearch();
+//                                closeAddWin();
+//                            }else {
+//                                bootbox.alert("新增角色失败");
+//                                closeAddWin();
+//                            }
+//
+//                        }
+//                );
+//            }
 
         }
 
@@ -448,25 +474,30 @@
 
         /*修改用户资料*/
         function updateFn() {
-            var params = {};
-            /*从update-modal获取数据*/
-            params = formToJsonstr('update-modal');
-            var updateFnUrl_ = "/" + PROJECT_NAME + "/Role/updateRole.do";
+
+            doVerify($('#update_code'));
+            if(verify_result){
+                var params = {};
+                /*从update-modal获取数据*/
+                params = formToJsonstr('update-modal');
+                var updateFnUrl_ = "/" + PROJECT_NAME + "/Role/updateRole.do";
 //            var updateFnUrl_ = "/User/updateUser.do"
 
-            ajaxFunction(updateFnUrl_, params,
-                    function(result) {
-                        if(result.success){
-                            bootbox.alert("修改成功");
-                            closeUpdateWin();
-                            doSearch();
-                        }else{
-                            bootbox.alert("修改失败:");
-                            closeUpdateWin();
-                        }
+                ajaxFunction(updateFnUrl_, params,
+                        function(result) {
+                            if(result.success){
+                                bootbox.alert("修改成功");
+                                closeUpdateWin();
+                                doSearch();
+                            }else{
+                                bootbox.alert("修改失败:");
+                                closeUpdateWin();
+                            }
 
 
-                    })
+                        })
+            }
+
         }
 
         /*删除选中角色*/

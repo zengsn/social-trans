@@ -3,7 +3,6 @@ package com.qingtian.apps.role.action;
 import com.github.pagehelper.StringUtil;
 import com.qingtian.apps.role.entity.Role;
 import com.qingtian.apps.role.service.RoleService;
-import com.sun.tools.javac.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
