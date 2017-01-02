@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>众包翻译系统登录界面</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/login/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/login/css/form-elements.css">
+    <link rel="stylesheet" href="assets/login/css/style.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+
+    <!-- Favicon and touch icons -->
+    <!--<link rel="shortcut icon" href="assets/login/ico/favicon.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144"-->
+          <!--href="assets/login/ico/apple-touch-icon-144-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="114x114"-->
+          <!--href="assets/login/ico/apple-touch-icon-114-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/login/ico/apple-touch-icon-72-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" href="assets/login/ico/apple-touch-icon-57-precomposed.png">-->
+
+    <!-- Javascript -->
+    <script src="assets/login/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/login/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/login/js/jquery.backstretch.min.js"></script>
+    <!--<script src="assets/login/js/scripts.js"></script>-->
+
+
+    <script type="text/javascript" src="js/commonJs/common.js"></script>
+    <script type="text/javascript" src="js/commonJs/appCommon.js"></script>
+    <script type="text/javascript" src="js/commonJs/commonUtils.js"></script>
+
+
+    <!--[if lt IE 10]>
+    <script src="assets/login/js/placeholder.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body background="assets/login/img/backgrounds/bg.jpg" onkeydown="on_login()">
+<div >
+    <img src="" height="100%" width="100%"/>
+    <div class="top-content">
+
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <h1><strong>Hey,It's the</strong> Login in</h1>
+                        <div class="description">
+                            <p>
+                                Welcome come to crowdsourced-translation <a href=""><strong>AMAZING</strong></a>,
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>Login to the platform</h3>
+                                <p>Enter your username and password to log on:</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="fa fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form" action="" method="post" class="login-form">
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">Username</label>
+                                    <input type="text" name="username" placeholder="Username..."
+                                           class="form-username form-control" id="username"
+                                           />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Password</label>
+                                    <input type="password" name="password" placeholder="Password..."
+                                           class="form-password form-control"
+                                           id="password"/>
+                                </div>
+                                <button type="submit" class="btn" name="" onclick="login();return false;">Sign in!</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Top content -->
+
+
+<script>
+    /*页面初始化调用*/
+    $(document).ready(function () {
+//        $('#imageBackground').height($(window).height());
+//        $("#imageBackground").width($(window).width());
+
+    });
+
+    function login() {
+        var params = {};
+        params.username = $("#username").val();
+        params.password = $("#password").val();
+        var selectUrl_ = "/" + PROJECT_NAME + "/User/login.do";
+        ajaxFunction(selectUrl_, params, function (result) {
+            if (result.success) {
+                window.location = "index.html"
+            } else {
+                alert("用户名或密码错误");
+//                        layer.msg("用户名或密码错误",{time:1000});
+            }
+        },false);
+
+
+    }
+
+    /*键盘敲enter也能执行登录*/
+    function on_login() {
+        if (event.keyCode == 13) {
+            if (document.all('loginin') != null) {
+                document.all('loginin').click();
+            }
+        }
+    }
+</script>
+</body>
+
+</html>

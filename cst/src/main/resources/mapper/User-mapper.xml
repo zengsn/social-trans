@@ -145,4 +145,7 @@
         select * from P_user WHERE username = #{username}
     </select>
 
+    <select id="login" parameterType="User" resultType="User">
+        select * FROM P_user WHERE username = #{username} AND password = #{password}
+    </select>
 </mapper>

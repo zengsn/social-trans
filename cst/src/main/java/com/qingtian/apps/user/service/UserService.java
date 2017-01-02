@@ -91,5 +91,27 @@ public class UserService {
         }
     }
 
+    /**
+     * 登录验证
+     * @param username
+     * @param password
+     * @return
+     */
+    public User login(String username,String password){
+        User reUser = new User();
+        try{
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            reUser = sqlSession.selectOne("User.login",user);
+            return reUser;
+        }catch (Exception e){
+            return null;
+        }
+
+
+
+    }
+
 
 }
