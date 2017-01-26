@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="../assets/css/jquery-ui.min.css"/>
-    <link rel="stylesheet" href="../assets/css/datepicker.min.css"/>
+    <!--<link rel="stylesheet" href="../assets/css/datepicker.min.css"/>-->
+    <link rel="stylesheet" href="../assets/css/bootstrap-datetimepicker.min.css"/>
     <link rel="stylesheet" href="../assets/css/ui.jqgrid.min.css"/>
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css"/>
@@ -55,14 +56,14 @@
     <script type="text/javascript">
         window.jQuery
         || document.write("<script src='assets/js/jquery.min.js'>"
-                + "<"+"/script>");
+                + "<" + "/script>");
     </script>
 
     <!-- <![endif]-->
 
     <!--[if IE]>
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
+        window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>" + "<" + "/script>");
     </script>
     <![endif]-->
 
@@ -78,6 +79,7 @@
 
 
     <script src="../assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="../js/locales/bootstrap-datetimepicker.fr.js"></script>
     <script src="../assets/js/bootbox.min.js"></script>
 
 
@@ -93,28 +95,24 @@
     <script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
     <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
 
-    <!--表单验证-->
-    <script type="text/javascript" src="../assets/js/dist/js/bootstrapValidator.js"></script>
 </head>
 <body>
 
+<!--<div class="input-append date" id="datetimepicker" data-date="12-02-2012" data-date-format="dd-mm-yyyy">-->
+<!--<input class="span2" size="16" type="text" value="12-02-2012">-->
+<!--<span class="add-on"><i class="icon-th"></i></span>-->
+<!--</div>-->
 
+<div class="input-append date form_datetime">
+    <input size="16" type="text" value="" readonly>
+    <span class="add-on"><i class="icon-th"></i></span>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script type="text/javascript">
+    $(".form_datetime").datetimepicker({
+        format: "dd MM yyyy - hh:ii"
+    });
+</script>
 
 
 </body>

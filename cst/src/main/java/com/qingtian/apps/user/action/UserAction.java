@@ -1,6 +1,5 @@
 package com.qingtian.apps.user.action;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.qingtian.apps.user.entity.User;
 import com.qingtian.apps.user.service.UserService;
 import com.qingtian.utils.StringUtils;
@@ -8,10 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.workSpace.utils.CookieUtils;
 import org.workSpace.utils.JsonUtils;
 
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -179,7 +181,7 @@ public class UserAction {
     }
 
     @RequestMapping("login.do")
-    public String login(String username,String password){
+    public String login(String username, String password, HttpServletRequest request, HttpServletResponse response){
 
         //验证用户名是否为空
         if(StringUtils.isEmpty(username)){
@@ -195,6 +197,8 @@ public class UserAction {
 
         User user = userService.login(username,password);
         if(user!= null){
+            CookieUtils.addCookie(response,"userId",user.getUserId());
+            CookieUtils.addCookie(response,"nickname",user.getNickname());
             //该用户存在
             return JsonUtils.genUpdateDataReturnJsonStr(true,"登录成功");
         }else {

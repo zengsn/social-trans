@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -27,7 +28,7 @@ public class FileService {
 
     public Boolean insertFile(FileInfo fileInfo, InputStream in) throws Exception {
 
-
+        Calendar.getInstance();
         //获取上传基路径，从配置文件中获取
         String path = "E:" + separator + "UpAndDown";
         //按年月日来生成文件夹

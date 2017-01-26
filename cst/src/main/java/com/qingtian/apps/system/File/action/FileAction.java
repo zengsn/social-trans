@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("FileAction")
 public class FileAction {
+
 
     //获取类名
     private  String className = this.getClass().getName();
@@ -41,6 +43,7 @@ public class FileAction {
         try {
             //获取解析器
             CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+
             //解析请求
             if (multipartResolver.isMultipart(request)) {
                 MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
