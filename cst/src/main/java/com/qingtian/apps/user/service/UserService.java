@@ -113,5 +113,60 @@ public class UserService {
 
     }
 
+    /**
+     * 注册用户
+     */
+    public Boolean register(String account,String password){
+        User user = new User();
+        user.setUserId(new RandomGUID().toString());
+        user.setAccount(account);
+        user.setPassword(password);
+        int result = 0;
+        try{
+            result = sqlSession.insert("User.register",user);
+            return result>0? true:false;
+        }catch (Exception e){
+            logger.error("UserService ------- register : 操作由于异常而失败"+e.getStackTrace());
+            return false;
+        }
+    }
+
+    /**
+     * 校验用户帐号唯一性
+     * @param account
+     * @return
+     */
+    public Boolean verifyAccount1(String account){
+        User user = new User();
+        user.setAccount(account);
+        List<User> list = sqlSession.selectList("User.verifyAccount1",user);
+        if(list!= null && list.size()>0){
+            //帐号不唯一
+            return true;
+        }else {
+            //帐号唯一
+            return false;
+        }
+    }
+
+    /**
+     * 登录验证
+     * @param account
+     * @param password
+     * @return
+     */
+    public User login1(String account,String password){
+        User reUser = new User();
+        try{
+            User user = new User();
+            user.setPassword(password);
+            user.setAccount(account);
+            reUser = sqlSession.selectOne("User.login1",user);
+            return reUser;
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 
 }

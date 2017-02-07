@@ -644,3 +644,77 @@ var national = [ "汉族", "壮族", "满族", "回族", "苗族", "维吾尔族
 function initNational() {
 
 }
+
+
+/*重置数据*/
+function reset($dom) {
+	//textarea select
+	$dom.find(":input").each(function () {
+		var $this = $(this);
+		var name = $this.attr("name");
+		$this.val("");
+	});
+}
+
+/*数据初始化*/
+function update_init($dom, data) {
+	//textarea select
+	$dom.find(":input").each(function() {
+		var $this = $(this);
+		var name = $this.attr("name");
+		$this.val(data[name])
+	});
+}
+
+//判断两个值是否相等
+cmp = function( x, y ) {
+// If both x and y are null or undefined and exactly the same
+	if ( x === y ) {
+		return true;
+	}
+
+// If they are not strictly equal, they both need to be Objects
+	if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) {
+		return false;
+	}
+
+//They must have the exact same prototype chain,the closest we can do is
+//test the constructor.
+	if ( x.constructor !== y.constructor ) {
+		return false;
+	}
+
+	for ( var p in x ) {
+		//Inherited properties were tested using x.constructor === y.constructor
+		if ( x.hasOwnProperty( p ) ) {
+			// Allows comparing x[ p ] and y[ p ] when set to undefined
+			if ( ! y.hasOwnProperty( p ) ) {
+				return false;
+			}
+
+			// If they have the same strict value or identity then they are equal
+			if ( x[ p ] === y[ p ] ) {
+				continue;
+			}
+
+			// Numbers, Strings, Functions, Booleans must be strictly equal
+			if ( typeof( x[ p ] ) !== "object" ) {
+				return false;
+			}
+
+			// Objects and Arrays must be tested recursively
+			if ( ! Object.equals( x[ p ], y[ p ] ) ) {
+				return false;
+			}
+		}
+	}
+
+	for ( p in y ) {
+		// allows x[ p ] to be set to undefined
+		if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) {
+			return false;
+		}
+	}
+	return true;
+};
+

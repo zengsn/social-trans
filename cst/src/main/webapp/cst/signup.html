@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="login-bg">
+<head>
+    <title>众包翻译服务平台</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- bootstrap -->
+    <link href="../assets/login/css/bootstrap/bootstrap.css" rel="stylesheet"/>
+    <link href="../assets/login/css/bootstrap/bootstrap-responsive.css" rel="stylesheet"/>
+    <link href="../assets/login/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet"/>
+
+    <!-- confirm -->
+    <link rel="stylesheet" href="../assets/login/css/jquery-confirm.min.css"/>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">-->
+    <!-- global styles -->
+    <link rel="stylesheet" type="text/css" href="../assets/login/css/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="../assets/login/css/elements.css"/>
+    <link rel="stylesheet" type="text/css" href="../assets/login/css/icons.css"/>
+
+    <!-- libraries -->
+    <link rel="stylesheet" type="text/css" href="../assets/login/css/lib/font-awesome.css"/>
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="../assets/login/css/compiled/signup.css" type="text/css" media="screen"/>
+
+    <!-- open sans font -->
+    <link href='http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<div class="header">
+    <a href="index.html">
+        <img src="../assets/login/img/logo.png" class="logo"/>
+    </a>
+</div>
+<div class="row-fluid login-wrapper">
+    <div class="box">
+        <div id="register_modal" class="content-wrap">
+            <h6>Sign Up</h6>
+            <input class="span12" type="text" placeholder="E-mail address" id="account" name="account" onchange="doVerify()"/>
+            <input class="span12" type="password" placeholder="Password" id="password" name="password"/>
+            <input class="span12" type="password" placeholder="Confirm Password" id="cpassword" name="cpassword"/>
+            <div class="action">
+                <a class="btn-glow primary signup register">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="span4 already">
+        <p>Already have an account?</p>
+        <a href="../signin.html">Sign in</a>
+    </div>
+
+</div>
+
+<!-- scripts -->
+<script src="../assets/js/jquery.2.1.1.min.js"></script>
+<script src="../assets/login/js/jquery-latest.js"></script>
+<script src="../assets/login/js/bootstrap.min.js"></script>
+<script src="../assets/login/js/theme.js"></script>
+<script type="text/javascript" src="../js/commonJs/common.js"></script>
+<script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
+<script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
+<script type="text/javascript" src="../assets/js/bootbox.min.js"></script>
+<!--<script type="text/javascript" src="../assets/js/bootstrapValidator.min.js"></script>-->
+
+<script>
+    /*帐号唯一性标识*/
+    var verify_result = false;
+
+    /*注册*/
+    $('.register').on('click', function () {
+
+        var account = $("#account").val();
+        var password = $("#password").val();
+        var cpassword = $("#cpassword").val();
+
+        //帐号密码为空
+        if(account == "" || password == "" || cpassword == "" ){
+            bootbox.alert("帐号密码不能为空");
+            return false;
+        }
+        //密码不相同
+        if(password!=cpassword){
+            bootbox.alert("密码不一致");
+            return false;
+        }
+
+        var url = "/" + PROJECT_NAME + "/User/register.do";
+        var params = {
+            account: account,
+            password: password
+        }
+
+        if(verify_result){
+            ajaxFunction(url, params, function (result) {
+                bootbox.alert(result.mgs);
+                reset($('#register_modal'));
+            });
+        }else{
+            bootbox.alert("该帐号已存在");
+        }
+
+    });
+
+    /*校验帐号唯一性*/
+    function doVerify() {
+        //获取用户帐号
+        var account = $("#account").val();
+        var params = {
+            account:account
+        };
+        var doVerifyUrl_ = "/" + PROJECT_NAME + "/User/verifyAccount1.do";
+        //ajax设置为同步，去后台验证
+        ajaxFunction(doVerifyUrl_,params,
+                function (result) {
+                    //帐号已存在
+                    if(result.success){
+                        verify_result = false;
+                        bootbox.alert("该帐号已存在");
+                    }else {
+                        verify_result = true;
+                    }
+                }
+                ,false);
+    }
+
+
+</script>
+</body>
+</html>

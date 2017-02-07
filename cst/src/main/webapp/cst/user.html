@@ -142,10 +142,10 @@
 
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="add_username">用户帐号:</label>
+                                            <label class="control-label" for="add_account">用户帐号:</label>
                                         </td>
                                         <td>
-                                            <input id="add_username" name="username" type="text" style="width:168px" onchange="doVerify()">
+                                            <input id="add_account" name="account" type="text" style="width:168px" onchange="doVerify()">
                                         </td>
                                         <td align="right">
                                             <label class="no-padding-right" for="add_password">密码:</label>
@@ -156,29 +156,30 @@
                                     </tr>
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="add_nickname">用户名:</label>
+                                            <label class="control-label" for="add_username">用户名:</label>
                                         </td>
 
                                         <td>
-                                            <input id="add_nickname" name="nickname" type="text"  style="width:168px" >
+                                            <input id="add_username" name="username" type="text"  style="width:168px" >
                                         </td>
 
-                                        <td align="right">
-                                            <label class="no-padding-right" for="add_email">邮箱:</label>
-                                        </td>
-
-                                        <td>
-                                            <input id="add_email" name="email" type="text" style="width:168px" >
-                                        </td>
-
-                                    </tr>
-                                    <tr>
                                         <td align="right">
                                             <label class="no-padding-right" for="add_phoneNumber">手机号码:</label>
                                         </td>
                                         <td>
                                             <input id="add_phoneNumber" name="phoneNumber" type="text" style="width:168px" >
                                         </td>
+                                        <!--<td align="right">-->
+                                            <!--<label class="no-padding-right" for="add_email">邮箱:</label>-->
+                                        <!--</td>-->
+
+                                        <!--<td>-->
+                                            <!--<input id="add_email" name="email" type="text" style="width:168px" >-->
+                                        <!--</td>-->
+
+                                    </tr>
+                                    <tr>
+
 
                                         <td align="right">
                                             <label class="cno-padding-right" for="add_role">角色:</label>
@@ -224,33 +225,25 @@
 
                                     <tr>
                                         <td align="right">
-                                            <label class="control-label" for="username">用户帐号:</label>
+                                            <label class="control-label" for="account">用户帐号:</label>
                                         </td>
                                         <td>
-                                            <input id="username" name="username" type="text" style="width:168px" disabled>
+                                            <input id="account" name="account" type="text" style="width:168px" disabled>
                                         </td>
                                         <td align="right">
-                                            <label class="control-label" for="nickname">用户名:</label>
+                                            <label class="control-label" for="username">用户名:</label>
                                         </td>
                                         <td>
-                                            <input id="nickname" name="nickname" type="text" required="required" style="width:168px" >
+                                            <input id="username" name="username" type="text" required="required" style="width:168px" >
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="right">
-                                            <label class="no-padding-right" for="email">邮箱:</label>
-                                        </td>
-                                        <td>
-                                            <input id="email" name="email" type="text" style="width:168px" >
-                                        </td>
                                         <td align="right">
                                             <label class="no-padding-right" for="phoneNumber">手机号码:</label>
                                         </td>
                                         <td>
                                             <input id="phoneNumber" name="phoneNumber" type="text" style="width:168px" >
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <td align="right">
                                             <label class="cno-padding-right" for="role">角色:</label>
                                         </td>
@@ -258,6 +251,7 @@
                                             <input id="role" name="role" type="text" style="width:168px" disabled>
                                         </td>
                                     </tr>
+
                                 </table>
 
                             </form>
@@ -324,16 +318,12 @@
                                                 "hidden":true
                                             },
                                             {
-                                                "name" : "username",
+                                                "name" : "account",
                                                 "label" : "用户帐号"
                                             },
                                             {
-                                                "name" : "nickname",
+                                                "name" : "username",
                                                 "label" : "用户名"
-                                            },
-                                            {
-                                                "name" : "email",
-                                                "label" : "邮箱"
                                             },
                                             {
                                                 "name" : "phoneNumber",
@@ -507,11 +497,11 @@
         /*校验帐号唯一性*/
         function doVerify() {
             //获取用户帐号
-            var username = $("#add_username").val();
+            var account = $("#add_account").val();
             var params = {
-                username:username
+                account:account
             };
-            var doVerifyUrl_ = "/" + PROJECT_NAME + "/User/verifyAccount.do";
+            var doVerifyUrl_ = "/" + PROJECT_NAME + "/User/verifyAccount1.do";
 //            var doVerifyUrl_ = "/User/verifyAccount.do";
             //ajax设置为同步，去后台验证
             ajaxFunction(doVerifyUrl_,params,
@@ -519,7 +509,6 @@
                         //帐号已存在
                         if(result.success){
                             //定焦
-                            $("#username").focus();
                             verify_result = false;
                             bootbox.alert("该帐号已存在");
                         }else {

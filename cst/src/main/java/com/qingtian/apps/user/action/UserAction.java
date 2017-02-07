@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/12/18.
+ * Created by machao on 2016/12/18.
  */
 @RestController
 @RequestMapping("User")
@@ -121,10 +121,10 @@ public class UserAction {
     public String addUser(User user){
 
         //验证帐号非空
-        String username = user.getUsername();
-        if(username == null || "".equals(username)){
-            logger.error("UserAction ------- updateUser : username 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"username为空");
+        String account = user.getAccount();
+        if(account == null || "".equals(account)){
+            logger.error("UserAction ------- addUser : account为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"account为空");
         }
 
         //验证密码非空
@@ -142,9 +142,9 @@ public class UserAction {
         }
 
         //如果用户名为空，则让其为用户帐号
-        String nickname = user.getNickname();
-        if(nickname == null || "".equals(nickname)){
-            user.setNickname(username);
+        String username = user.getUsername();
+        if(username == null || "".equals(username)){
+            user.setUsername(username);
         }
 
         Boolean isSuccess = userService.addUser(user);
@@ -188,7 +188,6 @@ public class UserAction {
             logger.error("UserAction ------- login : username 为空");
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"username为空");
         }
-
         //验证密码是否为空
         if(StringUtils.isEmpty(password)){
             logger.error("UserAction ------- login : password 为空");
@@ -208,4 +207,77 @@ public class UserAction {
 
     }
 
+    @RequestMapping("/register.do")
+    public String register(String account,String password){
+
+        //验证帐号是否为空
+        if(StringUtils.isEmpty(account)){
+            logger.error("UserAction ------- register : account 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"account为空");
+        }
+
+        //验证密码是否为空
+        if(StringUtils.isEmpty(password)){
+            logger.error("UserAction ------- register : password 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"password为空");
+        }
+
+        Boolean isSuccess = userService.register(account,password);
+        if(isSuccess){
+            return  JsonUtils.genUpdateDataReturnJsonStr(true,"注册成功");
+        }else{
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"注册失败");
+        }
+    }
+
+    /**
+     * 验证用户帐号唯一性
+     * @param account
+     * @return
+     */
+    @RequestMapping("verifyAccount1.do")
+    public String verifyAccount1(String account){
+
+        //验证帐号非空
+        if(account == null || "".equals(account)){
+            logger.error("UserAction ------- updateUser : account 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"account为空");
+        }
+
+
+        Boolean Vresult = userService.verifyAccount1(account);
+        if(Vresult){
+            //帐号已存在
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"帐号唯一");
+        }else {
+            //帐号不存在
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"帐号不存在");
+        }
+    }
+
+    @RequestMapping("login1.do")
+    public String login1(String account, String password, HttpServletRequest request, HttpServletResponse response){
+
+        //验证账号是否为空
+        if(StringUtils.isEmpty(account)){
+            logger.error("UserAction ------- login : account 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"account为空");
+        }
+        //验证密码是否为空
+        if(StringUtils.isEmpty(password)){
+            logger.error("UserAction ------- login : password 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"password为空");
+        }
+
+        User user = userService.login1(account,password);
+        if(user!= null){
+
+            //该用户存在
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"登录成功");
+        }else {
+            //用户不存在
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"登录失败");
+        }
+
+    }
 }

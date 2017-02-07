@@ -2,43 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd" >
 
 <mapper namespace="User">
-    
+
 
     <select id="selectAll" parameterType="User" resultType="User">
-        select userId,username,password,nickname,email,phoneNumber,role from P_user
+        select userId,username,password,nickname,email,phoneNumber,role,account from P_user
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="userId !='' and userId !=null">
-                    and `userId` = #{userId}
+                and `userId` = #{userId}
             </if>
-            
+
             <if test="username !='' and username !=null">
-                    and `username` = #{username}
+                and `username` = #{username}
             </if>
-            
+
             <if test="password !='' and password !=null">
-                    and `password` = #{password}
+                and `password` = #{password}
             </if>
-            
+
             <if test="nickname !='' and nickname !=null">
-                    and `nickname` = #{nickname}
+                and `nickname` = #{nickname}
             </if>
-            
+
             <if test="email !='' and email !=null">
-                    and `email` = #{email}
+                and `email` = #{email}
             </if>
-            
+
             <if test="phoneNumber !='' and phoneNumber !=null">
-                    and `phoneNumber` = #{phoneNumber}
+                and `phoneNumber` = #{phoneNumber}
             </if>
-            
+
             <if test="role !='' and role !=null">
-                    and `role` = #{role}
+                and `role` = #{role}
             </if>
 
             <if test="disabled !='' and disabled !=null">
                 and `disabled` = #{disabled}
             </if>
-            
+
         </trim>
     </select>
 
@@ -103,6 +103,9 @@
             <if test="role != null and role != ''">
                 role,
             </if>
+            <if test="account != null and account != ''">
+                account,
+            </if>
         </trim>
         )
         values(
@@ -137,6 +140,10 @@
                 #{role},
             </if>
 
+            <if test="account != null and account!= ''">
+                #{account},
+            </if>
+
         </trim>
         )
     </insert>
@@ -145,7 +152,24 @@
         select * from P_user WHERE username = #{username}
     </select>
 
+    <select id="verifyAccount1" parameterType="User" resultType="User">
+        select * from P_user WHERE account = #{account}
+    </select>
+
+
     <select id="login" parameterType="User" resultType="User">
         select * FROM P_user WHERE username = #{username} AND password = #{password}
     </select>
+
+    <select id="login1" parameterType="User" resultType="User">
+        select * FROM P_user WHERE account = #{account} AND password = #{password}
+    </select>
+
+    <!--<insert id="register" parameterType="User">-->
+    <!--insert into P_user(userId,account,password) VALUES #{userId},#{account},#{password}-->
+    <!--</insert>-->
+
+    <insert id="register" parameterType="User">
+        insert into P_user(userId,account,password) VALUES (#{userId},#{account},#{password});
+    </insert>
 </mapper>

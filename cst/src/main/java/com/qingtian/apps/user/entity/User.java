@@ -6,6 +6,17 @@ import org.apache.ibatis.type.Alias;
 public class User implements Serializable{
     private static final long serialVersionUID = 1L;
 
+
+    private String account;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
     /**
      *
      */
