@@ -187,11 +187,22 @@
 
                                 </tr>
                                 <tr>
+                                    <!--<td align="right">-->
+                                        <!--<label class="cno-padding-right" for="add_finishedTime">任务截至时间:</label>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<input id="add_finishedTime" name="finishedTime" type="text" style="width:168px">-->
+                                    <!--</td>-->
                                     <td align="right">
-                                        <label class="cno-padding-right" for="add_finishedTime">任务截至时间:</label>
+                                        <label class="no-padding-right" for="add_finishedTime">任务截至时间:</label>
                                     </td>
                                     <td>
-                                        <input id="add_finishedTime" name="finishedTime" type="text" style="width:168px">
+											<span class="input-group">
+												<input class="datetime" id="add_finishedTime" name="finishedTime" type="text" style="width: 128px">
+													<span class="input-group-addon" style="width: 0">
+														<i class="fa fa-calendar bigger-110"></i>
+													</span>
+											</span>
                                     </td>
                                 </tr>
                             </table>
@@ -266,6 +277,17 @@
                                     <td>
                                         <input id="role" name="role" type="text" style="width:168px" disabled>
                                     </td>
+                                    <td align="right">
+                                        <label class="no-padding-right" for="add_birth_ymd">出生日期:</label>
+                                    </td>
+                                    <td>
+											<span class="input-group">
+												<input class="datetime" id="add_birth_ymd" name="birth_ymd" type="text" style="width: 128px">
+													<span class="input-group-addon" style="width: 0">
+														<i class="fa fa-calendar bigger-110"></i>
+													</span>
+											</span>
+                                    </td>
                                 </tr>
                             </table>
 
@@ -297,8 +319,22 @@
     /*页面初始化调用*/
     $(document).ready(function () {
         doSearch();
-
+        initDateTimeModule();
     });
+
+    function initDateTimeModule() {
+        $('.datetime').datepicker({
+            autoclose : true,
+            todayHighlight : true,
+            format : 'yyyy-mm-dd'
+        })
+
+        $('.datetime').each(function() {
+            $(this).next().on(ace.click_event, function() {
+                $(this).prev().focus();
+            });
+        })
+    }
     
     function openAdd() {
         var userId = getCookieValue("userId");
