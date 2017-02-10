@@ -5,7 +5,7 @@
 
 
     <select id="selectAll" parameterType="User" resultType="User">
-        select userId,username,password,nickname,email,phoneNumber,role,account from P_user
+        select userId,username,password,phoneNumber,role,account from P_user
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="userId !='' and userId !=null">
                 and `userId` = #{userId}
@@ -48,17 +48,18 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="username !='' and username !=null">
                 `username` = #{username},
-            </if><if test="password !='' and password !=null">
-            `password` = #{password},
-        </if><if test="nickname !='' and nickname !=null">
-            `nickname` = #{nickname},
-        </if><if test="email !='' and email !=null">
-            `email` = #{email},
-        </if><if test="phoneNumber !='' and phoneNumber !=null">
-            `phoneNumber` = #{phoneNumber},
-        </if><if test="role !='' and role !=null">
-            `role` = #{role},
-        </if>
+            </if>
+            <if test="password !='' and password !=null">
+                `password` = #{password},
+            </if>
+
+            <if test="phoneNumber !='' and phoneNumber !=null">
+                `phoneNumber` = #{phoneNumber},
+            </if>
+
+            <if test="role !='' and role !=null">
+                `role` = #{role},
+            </if>
         </trim>
         where userId=#{userId}
     </update>
@@ -88,14 +89,6 @@
                 password,
             </if>
 
-            <if test="nickname != null and nickname != ''">
-                nickname,
-            </if>
-
-            <if test="email != null and email != ''">
-                email,
-            </if>
-
             <if test="phoneNumber != null and phoneNumber != ''">
                 phoneNumber,
             </if>
@@ -103,9 +96,11 @@
             <if test="role != null and role != ''">
                 role,
             </if>
+
             <if test="account != null and account != ''">
                 account,
             </if>
+            createTime,
         </trim>
         )
         values(
@@ -124,14 +119,6 @@
                 #{password},
             </if>
 
-            <if test="nickname != null and nickname != ''">
-                #{nickname},
-            </if>
-
-            <if test="email != null and email != ''">
-                #{email},
-            </if>
-
             <if test="phoneNumber != null and phoneNumber != ''">
                 #{phoneNumber},
             </if>
@@ -143,33 +130,34 @@
             <if test="account != null and account!= ''">
                 #{account},
             </if>
-
+            NOW(),
         </trim>
         )
     </insert>
 
-    <select id="verifyAccount" parameterType="User" resultType="User">
-        select * from P_user WHERE username = #{username}
-    </select>
+    <!--<select id="verifyAccount" parameterType="User" resultType="User">-->
+        <!--select * from P_user WHERE username = #{username}-->
+    <!--</select>-->
 
-    <select id="verifyAccount1" parameterType="User" resultType="User">
+    <select id="verifyAccount" parameterType="User" resultType="User">
         select * from P_user WHERE account = #{account}
     </select>
 
 
+    <!--<select id="login" parameterType="User" resultType="User">-->
+        <!--select * FROM P_user WHERE username = #{username} AND password = #{password}-->
+    <!--</select>-->
+
     <select id="login" parameterType="User" resultType="User">
-        select * FROM P_user WHERE username = #{username} AND password = #{password}
+        select * FROM P_user WHERE account = #{account} AND password = #{password} AND disabled =#{disabled}
     </select>
 
-    <select id="login1" parameterType="User" resultType="User">
-        select * FROM P_user WHERE account = #{account} AND password = #{password}
-    </select>
-
-    <!--<insert id="register" parameterType="User">-->
-    <!--insert into P_user(userId,account,password) VALUES #{userId},#{account},#{password}-->
-    <!--</insert>-->
 
     <insert id="register" parameterType="User">
         insert into P_user(userId,account,password) VALUES (#{userId},#{account},#{password});
     </insert>
+
+    <select id="selectById" parameterType="User" resultType="User">
+        select * FROM P_user WHERE userId = #{userId} AND disabled =#{disabled}
+    </select>
 </mapper>

@@ -57,29 +57,21 @@ public class UserAction {
 
         }
 
-        //验证帐号非空
-        String nickName = user.getNickname();
-        if(nickName == null || "".equals(nickName)){
-            logger.error("UserAction ------- updateUser : nickName 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"nickName为空");
+        //验证用户名非空
+        String userName = user.getUsername();
+        if(userName == null || "".equals(userName)){
+            logger.error("UserAction ------- updateUser : userName 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"userName为空");
 
         }
 
-        //验证邮箱非空
-        String email = user.getEmail();
-        if(email == null || "".equals(email)){
-            logger.error("UserAction ------- updateUser : email 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"email为空");
-
-        }
 
         //验证手机号码非空
-        String phoneNumber = user.getPhoneNumber();
-        if(phoneNumber == null || "".equals(phoneNumber)){
-            logger.error("UserAction ------- updateUser : phoneNumber 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"phoneNumber为空");
-
-        }
+//        String phoneNumber = user.getPhoneNumber();
+//        if(phoneNumber == null || "".equals(phoneNumber)){
+//            logger.error("UserAction ------- updateUser : phoneNumber 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"phoneNumber为空");
+//        }
 
         Boolean isSuccess = userService.updateUser(user);
         if(isSuccess){
@@ -155,57 +147,6 @@ public class UserAction {
         }
     }
 
-    /**
-     * 验证用户帐号唯一性
-     * @param username
-     * @return
-     */
-    @RequestMapping("verifyAccount.do")
-    public String verifyAccount(String username){
-
-        //验证帐号非空
-        if(username == null || "".equals(username)){
-            logger.error("UserAction ------- updateUser : username 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"username为空");
-        }
-
-
-        Boolean Vresult = userService.verifyAccount(username);
-        if(Vresult){
-            //帐号已存在
-            return JsonUtils.genUpdateDataReturnJsonStr(true,"帐号唯一");
-        }else {
-            //帐号不存在
-            return JsonUtils.genUpdateDataReturnJsonStr(false,"帐号不存在");
-        }
-    }
-
-    @RequestMapping("login.do")
-    public String login(String username, String password, HttpServletRequest request, HttpServletResponse response){
-
-        //验证用户名是否为空
-        if(StringUtils.isEmpty(username)){
-            logger.error("UserAction ------- login : username 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"username为空");
-        }
-        //验证密码是否为空
-        if(StringUtils.isEmpty(password)){
-            logger.error("UserAction ------- login : password 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"password为空");
-        }
-
-        User user = userService.login(username,password);
-        if(user!= null){
-            CookieUtils.addCookie(response,"userId",user.getUserId());
-            CookieUtils.addCookie(response,"nickname",user.getNickname());
-            //该用户存在
-            return JsonUtils.genUpdateDataReturnJsonStr(true,"登录成功");
-        }else {
-            //用户不存在
-            return JsonUtils.genUpdateDataReturnJsonStr(false,"登录失败");
-        }
-
-    }
 
     @RequestMapping("/register.do")
     public String register(String account,String password){
@@ -235,7 +176,7 @@ public class UserAction {
      * @param account
      * @return
      */
-    @RequestMapping("verifyAccount1.do")
+    @RequestMapping("verifyAccount.do")
     public String verifyAccount1(String account){
 
         //验证帐号非空
@@ -245,7 +186,7 @@ public class UserAction {
         }
 
 
-        Boolean Vresult = userService.verifyAccount1(account);
+        Boolean Vresult = userService.verifyAccount(account);
         if(Vresult){
             //帐号已存在
             return JsonUtils.genUpdateDataReturnJsonStr(true,"帐号唯一");
@@ -255,8 +196,8 @@ public class UserAction {
         }
     }
 
-    @RequestMapping("login1.do")
-    public String login1(String account, String password, HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping("login.do")
+    public String login(String account, String password, HttpServletRequest request, HttpServletResponse response){
 
         //验证账号是否为空
         if(StringUtils.isEmpty(account)){
@@ -269,14 +210,39 @@ public class UserAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"password为空");
         }
 
-        User user = userService.login1(account,password);
+        User user = userService.login(account,password);
         if(user!= null){
-
+            //设置用户信息
+            CookieUtils.addCookie(response,"userId",user.getUserId());
             //该用户存在
             return JsonUtils.genUpdateDataReturnJsonStr(true,"登录成功");
         }else {
             //用户不存在
             return JsonUtils.genUpdateDataReturnJsonStr(false,"登录失败");
+        }
+
+    }
+
+    /**
+     * 根据userId来查询用户信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping("selectById.do")
+    public String selectById(String userId){
+        //验证userId非空
+        if(StringUtils.isEmpty(userId)){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"userId不存在");
+        }
+        try{
+            User user = userService.selectById(userId);
+            if(user!=null){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",user);
+            }else{
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"查询失败");
+            }
+        }catch (Exception e){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常失败"+e.getStackTrace());
         }
 
     }

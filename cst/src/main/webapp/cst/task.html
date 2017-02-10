@@ -338,9 +338,19 @@
     
     function openAdd() {
         var userId = getCookieValue("userId");
-        var nickname = getCookieValue("nickname");
         $('#add_submitterId').val(userId);
-        $('#add_submitter').val(nickname);
+        var selectUrl_ = "/" + PROJECT_NAME+"/User/selectById.do";
+        var params = {
+            userId:userId
+        }
+        ajaxFunction(selectUrl_,params,function(data){
+            if(data.success){
+//                console.log(data.data.username);
+                $('#add_submitter').val(data.data.username);
+            }else{
+                $('#add_submitter').val();
+            }
+        },false);
         $("#add-modal").modal('show');
     }
 
@@ -573,22 +583,21 @@
                 , false);
     }
 
-    $('#add_finishedTime').datetimepicker({
-        language: 'zh-CN',
-        autoclose: 1,
-        format: 'yyyy:MM:dd',
-        weekStart: 5,
-        startDate: '2014:12:15',
-        endDate: '2014:12:28',
-        startView: 1,
-        minView: 2,
-        todayBtn: 1,
-        todayHighlight: 1,
-        keyboardNavigation: 1,
-        minuteStep: 6,
-        showMeridian: 1,
-        forceParse: 0
-    });
+//    $('#add_finishedTime').datetimepicker({
+//        language: 'zh-CN',
+//        autoclose: 1,
+//        format: 'yyyy:MM:dd',
+//        weekStart: 5,
+//        startDate: '2014:12:15',
+//        endDate: '2014:12:28',
+//        startView: 1,
+//        minView: 2,
+//        todayBtn: 1,
+//        todayHighlight: 1,
+//        keyboardNavigation: 1,
+//        minuteStep: 6,
+//        showMeridian: 1,
+//    });
 
 
 </script>

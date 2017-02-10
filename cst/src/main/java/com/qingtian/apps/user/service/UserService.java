@@ -2,6 +2,7 @@ package com.qingtian.apps.user.service;
 
 
 import com.qingtian.apps.user.entity.User;
+import com.qingtian.utils.Constant;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,10 @@ public class UserService {
     //引入数据库操作sql
     @Autowired
     private SqlSessionTemplate sqlSession;
+
+    private String validString = Constant.VALID;
+    private String inValidString = Constant.IN_VALID;
+
 
     /**
      * 查询出全部用户
@@ -73,23 +78,23 @@ public class UserService {
         return result>0? true:false;
     }
 
-    /**
-     * 校验用户帐号唯一性
-     * @param username
-     * @return
-     */
-    public Boolean verifyAccount(String username){
-        User user = new User();
-        user.setUsername(username);
-        List<User> list = sqlSession.selectList("User.verifyAccount",user);
-        if(list!= null && list.size()>0){
-            //帐号不唯一
-            return true;
-        }else {
-            //帐号唯一
-            return false;
-        }
-    }
+//    /**
+//     * 校验用户帐号唯一性
+//     * @param username
+//     * @return
+//     */
+//    public Boolean verifyAccount(String username){
+//        User user = new User();
+//        user.setUsername(username);
+//        List<User> list = sqlSession.selectList("User.verifyAccount",user);
+//        if(list!= null && list.size()>0){
+//            //帐号不唯一
+//            return true;
+//        }else {
+//            //帐号唯一
+//            return false;
+//        }
+//    }
 
     /**
      * 登录验证
@@ -97,21 +102,21 @@ public class UserService {
      * @param password
      * @return
      */
-    public User login(String username,String password){
-        User reUser = new User();
-        try{
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password);
-            reUser = sqlSession.selectOne("User.login",user);
-            return reUser;
-        }catch (Exception e){
-            return null;
-        }
-
-
-
-    }
+//    public User login(String username,String password){
+//        User reUser = new User();
+//        try{
+//            User user = new User();
+//            user.setUsername(username);
+//            user.setPassword(password);
+//            reUser = sqlSession.selectOne("User.login",user);
+//            return reUser;
+//        }catch (Exception e){
+//            return null;
+//        }
+//
+//
+//
+//    }
 
     /**
      * 注册用户
@@ -136,10 +141,10 @@ public class UserService {
      * @param account
      * @return
      */
-    public Boolean verifyAccount1(String account){
+    public Boolean verifyAccount(String account){
         User user = new User();
         user.setAccount(account);
-        List<User> list = sqlSession.selectList("User.verifyAccount1",user);
+        List<User> list = sqlSession.selectList("User.verifyAccount",user);
         if(list!= null && list.size()>0){
             //帐号不唯一
             return true;
@@ -155,13 +160,15 @@ public class UserService {
      * @param password
      * @return
      */
-    public User login1(String account,String password){
+    public User login(String account,String password){
         User reUser = new User();
         try{
             User user = new User();
             user.setPassword(password);
             user.setAccount(account);
-            reUser = sqlSession.selectOne("User.login1",user);
+            //数据有效性
+            user.setDisabled(validString);
+            reUser = sqlSession.selectOne("User.login",user);
             return reUser;
         }catch (Exception e){
             return null;
@@ -169,4 +176,17 @@ public class UserService {
 
     }
 
+    /**
+     * 根据userId来查询用户信息
+     * @param userId
+     * @return
+     */
+    public User selectById(String userId)throws Exception{
+        User user = new User();
+        user.setUserId(userId);
+        user.setDisabled(validString);
+        User reUser = new User();
+        reUser = sqlSession.selectOne("User.selectById",user);
+        return reUser;
+    }
 }
