@@ -40,63 +40,63 @@ disablebackspace();
  * 表格方法 封装 params{ // 表头 head :[{name:"字段名称",tilte:"表头显示的值"}], //数据
  * data:[{},{},{}], //行格式化 format:{ 字段对应的key:格式化的方法 } }
  */
-$.fn.init_table = function(opt) {
-	var head = {
-		"head" : [],
-		"data" : [],
-		"format" : {
-
-		},
-		rowOnClick : function(data, tables, tr) {
-
-		}
-
-	}
-	var colModel = [];
-	var colNames = [];
-	for (var i = 0; i < opt.head.length; i++) {
-		var model = {};
-		var head = opt.head;
-		var format = opt.format;
-		model.name = head[i].name;
-		model.index = head[i].name;
-		if (typeof format[head[i].name] == "function") {
-			model.formatter = format[head[i].name];
-		}
-		colModel.push(model);
-		colNames.push(head[i].title);
-	}
-
-	var $this = $(this);
-	var $pager = $('<div id="common_jqgrid_pager"></div>').insertAfter($this);
-	var $jqgrid = $this.jqGrid({
-		data : opt.data,
-		datatype : "local",
-		height : 393,
-		colNames : colNames,
-		colModel : colModel,
-		viewrecords : true,
-		rowNum : 10,
-		rowList : [ 10, 20, 30 ],
-		pager : "#common_jqgrid_pager",
-		altRows : true,
-		multiselect : false,
-		multiboxonly : true,
-		rownumbers : true,
-		autowidth : true,
-		loadComplete : function() {
-			var table = this;
-			setTimeout(function() {
-				// styleCheckbox(table);
-
-				// updateActionIcons(table);
-				updatePagerIcons(table);
-				// enableTooltips(table);
-			}, 0);
-		},
-	});
-
-}
+// $.fn.init_table = function(opt) {
+// 	var head = {
+// 		"head" : [],
+// 		"data" : [],
+// 		"format" : {
+//
+// 		},
+// 		rowOnClick : function(data, tables, tr) {
+//
+// 		}
+//
+// 	}
+// 	var colModel = [];
+// 	var colNames = [];
+// 	for (var i = 0; i < opt.head.length; i++) {
+// 		var model = {};
+// 		var head = opt.head;
+// 		var format = opt.format;
+// 		model.name = head[i].name;
+// 		model.index = head[i].name;
+// 		if (typeof format[head[i].name] == "function") {
+// 			model.formatter = format[head[i].name];
+// 		}
+// 		colModel.push(model);
+// 		colNames.push(head[i].title);
+// 	}
+//
+// 	var $this = $(this);
+// 	var $pager = $('<div id="common_jqgrid_pager"></div>').insertAfter($this);
+// 	var $jqgrid = $this.jqGrid({
+// 		data : opt.data,
+// 		datatype : "local",
+// 		height : 393,
+// 		colNames : colNames,
+// 		colModel : colModel,
+// 		viewrecords : true,
+// 		rowNum : 10,
+// 		rowList : [ 10, 20, 30 ],
+// 		pager : "#common_jqgrid_pager",
+// 		altRows : true,
+// 		multiselect : false,
+// 		multiboxonly : true,
+// 		rownumbers : true,
+// 		autowidth : true,
+// 		loadComplete : function() {
+// 			var table = this;
+// 			setTimeout(function() {
+// 				// styleCheckbox(table);
+//
+// 				// updateActionIcons(table);
+// 				updatePagerIcons(table);
+// 				// enableTooltips(table);
+// 			}, 0);
+// 		},
+// 	});
+//
+// }
 
 function updatePagerIcons(table) {
 	var replacement = {
@@ -717,4 +717,7 @@ cmp = function( x, y ) {
 	}
 	return true;
 };
+
+
+
 

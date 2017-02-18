@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="File">
-    
 
-
+    <insert id="insert" parameterType="FileInfo">
+        insert into P_file(fileId,fileName,fileType,fileSize,filePath,createTime) VALUES (#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath},NOW());
+    </insert>
 </mapper>

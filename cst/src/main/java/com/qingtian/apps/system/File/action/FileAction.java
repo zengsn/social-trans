@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.workSpace.utils.JsonUtils;
+import org.workSpace.utils.RandomGUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +31,7 @@ import java.util.List;
 public class FileAction {
 
 
-    //获取类名
-    private  String className = this.getClass().getName();
 
-    private  Logger logger = LoggerFactory.getLogger(className+".class");
 
     @Resource(name="fileService")
     private FileService fileService;
@@ -58,12 +56,15 @@ public class FileAction {
                             if (null != in){
                                 //获取附件名
                                 String fileName = multipartFile.getOriginalFilename();
-                                //
                                 if ( null != fileName && !"".equals(fileName)){
                                     FileInfo fileInfo = new FileInfo();
-                                    fileInfo.setFileId(Generator.getGUID());
+                                    //附件id
+                                    fileInfo.setFileId(new RandomGUID().toString());
+                                    //附件名：带后缀
                                     fileInfo.setFileName(fileName);
+                                    //附件大小
                                     fileInfo.setFileSize(String.valueOf(multipartFile.getSize()));
+                                    //附件类型
                                     fileInfo.setFileType(fileName.substring(fileName.lastIndexOf(".") + 1));
                                     Boolean isSuccess = fileService.insertFile(fileInfo,in);
                                     if(isSuccess){
@@ -72,13 +73,11 @@ public class FileAction {
 
                                 }
                             }else{
-                                logger.error(className+"==========="+ StringUtils.getMethodName()+":上传的文件不能为空");
-                                return JsonUtils.genUpdateDataReturnJsonStr(true,"上传的文件不能为空");
+                                return JsonUtils.genUpdateDataReturnJsonStr(false,"上传的文件不能为空");
                             }
 
                     } catch (Exception e) {
-                        logger.error(className+"==========="+ StringUtils.getMethodName()+":操作由于异常失败"+e.getStackTrace());
-                        return JsonUtils.genUpdateDataReturnJsonStr(false,"读取文件时操作由于异常失败");
+                        return JsonUtils.genUpdateDataReturnJsonStr(false,"读取文件时操作由于异常失败"+e.getMessage());
                     } finally {
                         if(in!=null){
                             in.close();
@@ -89,15 +88,12 @@ public class FileAction {
                 if(fileInfos.size() > 0){
                     return JsonUtils.genUpdateDataReturnJsonStr(true,"上传文件成功",fileInfos);
                 }else{
-                    logger.error(className+"==========="+ StringUtils.getMethodName()+":处理失败！文件上传失败");
-                    return JsonUtils.genUpdateDataReturnJsonStr(true,"文件上传失败",null);
+                    return JsonUtils.genUpdateDataReturnJsonStr(false,"文件上传失败",null);
                 }
             }else{
-                logger.error(className+"==========="+ StringUtils.getMethodName()+":当前表单不是文件上传表单");
-                return JsonUtils.genUpdateDataReturnJsonStr(true,"当前表单不是文件上传表单");
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"当前表单不是文件上传表单");
             }
         }catch (Exception e) {
-            logger.error(className+"==========="+ StringUtils.getMethodName()+":操作由于异常失败"+e.getStackTrace());
             return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常失败");
         }
     }

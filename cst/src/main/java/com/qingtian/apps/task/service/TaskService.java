@@ -4,6 +4,7 @@ import com.qingtian.apps.task.entity.Task;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.workSpace.utils.RandomGUID;
 
 import java.util.List;
 
@@ -25,5 +26,29 @@ public class TaskService {
         List<Task> lists= null;
         lists = sqlSession.selectList("Task.select");
         return lists;
+    }
+
+    /**
+     * 提交任务
+     * @param task
+     * @return
+     */
+    public Boolean saveTask(Task task) throws Exception{
+        //附件id
+        task.setTaskId(new RandomGUID().toString());
+        //是否有人接任务,0为无
+        task.setIsReceive("0");
+        int result = sqlSession.insert("Task.saveTask",task);
+        return result>0?true:false;
+    }
+
+    /**
+     * 根据任务id来删除任务
+     * @param taskId
+     * @return
+     */
+    public Boolean deleteTaskById(String taskId){
+        int result = sqlSession.delete("Task.deleteTaskById",taskId);
+        return result>0?true:false;
     }
 }

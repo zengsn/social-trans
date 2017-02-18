@@ -15,6 +15,8 @@ public class Task implements Serializable{
     private String receiverId;
     private String fileId;
     private String finishedTime;
+    private String isReceive;
+
 
     public String getTaskId() {
         return taskId;
@@ -78,5 +80,13 @@ public class Task implements Serializable{
 
     public void setFinishedTime(String finishedTime) {
         this.finishedTime = finishedTime;
+    }
+
+    public String getIsReceive() {
+        return isReceive;
+    }
+
+    public void setIsReceive(String isReceive) {
+        this.isReceive = isReceive;
     }
 }

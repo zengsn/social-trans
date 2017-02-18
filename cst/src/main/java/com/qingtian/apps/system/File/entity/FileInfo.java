@@ -11,6 +11,7 @@ public class FileInfo {
     private String fileType;
     private String fileSize;
     private String filePath;
+    private String createTime;
 
     public String getUserId() {
         return userId;
@@ -58,5 +59,13 @@ public class FileInfo {
 
     public void setFileSize(String fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

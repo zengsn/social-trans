@@ -93,8 +93,9 @@
     <script type="text/javascript" src="../js/commonJs/common.js"></script>
     <script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
     <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
-    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
-
+    <!--时间控件-->
+    <!--<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>-->
+    <script type="text/javascript" src="../js/commonJs/ajaxfileupload.js" ></script>
 </head>
 <body class="no-skip">
 <div class="page-content">
@@ -112,7 +113,7 @@
         <div class="col-xs-12">
             <!--工具栏 -->
             <div class="tool_bg">
-                <button class="btn btn-yellow" data-toggle="modal"  onclick="openAdd()">
+                <button class="btn btn-yellow" data-toggle="modal" onclick="openAdd()">
                     <i class="ace-icon fa fa-plus-circle"></i> 添加
                 </button>
             </div>
@@ -147,15 +148,10 @@
                                         <label class="control-label" for="add_submitter">任务提交人:</label>
                                     </td>
                                     <td>
-                                        <input class="form-control" id="add_submitter" name="submitter" type="text" style="width:168px"
+                                        <input class="form-control" id="add_submitter" name="submitter" type="text"
+                                               style="width:168px"
                                                readonly>
                                     </td>
-                                    <!--<td align="right">-->
-                                        <!--<label class="no-padding-right" for="add_password">密码:</label>-->
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <!--<input id="add_password" name="password" type="password" style="width:168px">-->
-                                    <!--</td>-->
                                 </tr>
                                 <tr>
                                     <td align="right">
@@ -164,16 +160,8 @@
 
                                     <td>
                                         <textarea id="add_comment" name="comment" rows="3" cols="50"></textarea>
-                                        <!--<input id="" name="" type="" style="width:168px">-->
                                     </td>
 
-                                    <!--<td align="right">-->
-                                        <!--<label class="no-padding-right" for="add_email">邮箱:</label>-->
-                                    <!--</td>-->
-
-                                    <!--<td>-->
-                                        <!--<input id="add_email" name="email" type="text" style="width:168px">-->
-                                    <!--</td>-->
 
                                 </tr>
                                 <tr>
@@ -186,25 +174,20 @@
 
 
                                 </tr>
-                                <tr>
+                                <!--<tr>-->
                                     <!--<td align="right">-->
-                                        <!--<label class="cno-padding-right" for="add_finishedTime">任务截至时间:</label>-->
+                                        <!--<label class="no-padding-right" for="add_finishedTime">任务截至时间:</label>-->
                                     <!--</td>-->
                                     <!--<td>-->
-                                        <!--<input id="add_finishedTime" name="finishedTime" type="text" style="width:168px">-->
+											<!--<span class="input-group">-->
+												<!--<input class="datetime" id="add_finishedTime" name="finishedTime"-->
+                                                       <!--type="text" style="width: 128px">-->
+													<!--<span class="input-group-addon" style="width: 0">-->
+														<!--<i class="fa fa-calendar bigger-110"></i>-->
+													<!--</span>-->
+											<!--</span>-->
                                     <!--</td>-->
-                                    <td align="right">
-                                        <label class="no-padding-right" for="add_finishedTime">任务截至时间:</label>
-                                    </td>
-                                    <td>
-											<span class="input-group">
-												<input class="datetime" id="add_finishedTime" name="finishedTime" type="text" style="width: 128px">
-													<span class="input-group-addon" style="width: 0">
-														<i class="fa fa-calendar bigger-110"></i>
-													</span>
-											</span>
-                                    </td>
-                                </tr>
+                                <!--</tr>-->
                             </table>
 
                         </form>
@@ -217,7 +200,7 @@
                 <button class="btn btn-lg btn-danger pull-left" onclick="closeAddWin()">
                     <i class="ace-icon fa  fa-undo"></i> 取消
                 </button>
-                <button class="btn btn-lg btn-success" type="button" onclick="addFn()">
+                <button class="btn btn-lg btn-success" type="button" onclick="upLoadFile()">
                     <i class="ace-icon fa fa-check"></i> 提交
                 </button>
             </div>
@@ -282,7 +265,8 @@
                                     </td>
                                     <td>
 											<span class="input-group">
-												<input class="datetime" id="add_birth_ymd" name="birth_ymd" type="text" style="width: 128px">
+												<input class="datetime" id="add_birth_ymd" name="birth_ymd" type="text"
+                                                       style="width: 128px">
 													<span class="input-group-addon" style="width: 0">
 														<i class="fa fa-calendar bigger-110"></i>
 													</span>
@@ -314,43 +298,44 @@
 
 
     var verify_result = false;
-    
+
 
     /*页面初始化调用*/
     $(document).ready(function () {
         doSearch();
-        initDateTimeModule();
+        //初始化时间控件
+//        initDateTimeModule();
     });
 
     function initDateTimeModule() {
         $('.datetime').datepicker({
-            autoclose : true,
-            todayHighlight : true,
-            format : 'yyyy-mm-dd'
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy-mm-dd'
         })
 
-        $('.datetime').each(function() {
-            $(this).next().on(ace.click_event, function() {
+        $('.datetime').each(function () {
+            $(this).next().on(ace.click_event, function () {
                 $(this).prev().focus();
             });
         })
     }
-    
+
     function openAdd() {
         var userId = getCookieValue("userId");
         $('#add_submitterId').val(userId);
-        var selectUrl_ = "/" + PROJECT_NAME+"/User/selectById.do";
+        var selectUrl_ = "/" + PROJECT_NAME + "/User/selectById.do";
         var params = {
-            userId:userId
+            userId: userId
         }
-        ajaxFunction(selectUrl_,params,function(data){
-            if(data.success){
+        ajaxFunction(selectUrl_, params, function (data) {
+            if (data.success) {
 //                console.log(data.data.username);
                 $('#add_submitter').val(data.data.username);
-            }else{
+            } else {
                 $('#add_submitter').val();
             }
-        },false);
+        }, false);
         $("#add-modal").modal('show');
     }
 
@@ -404,12 +389,12 @@
                                             "formatter": function (value, options,
                                                                    rowData) {
                                                 return "<div style='margin-left: 8px;'>"
-                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
-                                                        + JSON
-                                                                .stringify(rowData)
-                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
+//                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+//                                                        + JSON
+//                                                                .stringify(rowData)
+//                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
                                                         + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
-                                                        + rowData.userId
+                                                        + rowData.taskId
                                                         + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
                                                 ;
 
@@ -516,9 +501,8 @@
     /*删除用户*/
     function deleteFn(rowDataId) {
         var params = {};
-        params.userId = rowDataId;
-        var deleteFnUrl_ = "/" + PROJECT_NAME + "/User/deleteUserById.do";
-//            var deleteFnUrl_ = "/User/deleteUserById.do";
+        params.taskId = rowDataId;
+        var deleteFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/deleteTaskById.do";
         ajaxFunction(deleteFnUrl_, params,
                 function (result) {
                     if (result.success) {
@@ -530,33 +514,118 @@
         );
     }
 
-    /*添加用户*/
-    function addFn() {
+    /*添加任务*/
+    //    function addFn() {
+    //
+    //        var addFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/saveTaskAndFile.do";
+    //        var params = formToJsonstr('add-modal');
+    //        ajaxFunction(addFnUrl_, params,
+    //                function (result) {
+    //                    if (result.success) {
+    //                        bootbox.alert("添加任务成功");
+    //                        doSearch();
+    //                        closeAddWin();
+    //                    } else {
+    //                        bootbox.alert("添加任务失败");
+    //                        closeAddWin();
+    //                    }
+    //
+    //                }
+    //        );
+    //    }
+    /*添加任务*/
+        function upLoadFile() {
+            var addFileFnUrl_ = "/" + PROJECT_NAME + "/FileAction/upLoadFile.do";
+            $.ajaxFileUpload
+            (
+                    {
+                        url: addFileFnUrl_, //用于文件上传的服务器端请求地址
+                        secureuri: false, //是否需要安全协议，一般设置为false*/
+                        fileElementId: 'add_fileId', //文件上传域的ID
+                        dataType: 'text', //返回值类型 一般设置为json
+                        success: function(data,status,e) {
+                            if(status){
+                                //获取上传的其他信息
+                                //提交者
+                                var add_submitter = $('#add_submitter').val();
+                                //任务内容
+                                var add_comment = $('#add_comment').val();
+                                //任务截至时间
+//                                var add_finishedTime = $('#add_finishedTime').val();
+                                //提交者id
+                                var userId = getCookieValue("userId");
+                                console.log(data);
+                                var data = eval("(" + data + ")");
+                                var params = {
+                                    comment:add_comment,
+                                    submitter:add_submitter,
+                                    submitterId:userId,
+                                    fileId:data.data[0].fileId,
+                                }
+                                var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
+                                console.log(params);
+                                alert("准备添加任务");
+                                ajaxFunction(addFnUrl_, params,
+                                        function (result) {
+                                            if (result.success) {
+                                                bootbox.alert("添加任务成功");
+    //                                            doSearch();
+                                                closeAddWin();
+                                            } else {
+                                                bootbox.alert("添加任务失败");
+                                                closeAddWin();
+                                            }
 
-        //提交前先进行帐号唯一行验证
-        var userId = getCookieValue("userId");
-        alert(userId);
-        console.log(userId);
-        var params = {};
-        params = formToJsonstr('add-modal');
-        var addFnUrl_ = "/" + PROJECT_NAME + "/User/addUser.do";
-//                var addFnUrl_ = "/User/addUser.do";
-        ajaxFunction(addFnUrl_, params,
-                function (result) {
-                    if (result.success) {
-                        bootbox.alert("新增用户成功");
-                        doSearch();
-                        closeAddWin();
-                    } else {
-                        bootbox.alert("新增用户失败");
-                        closeAddWin();
+                                        }
+                                );
+
+                            }else{
+                                bootbox.alert("上传失败");
+                            }
+                        },
+                        error: function (data, status, e)//服务器响应失败处理函数
+                        {
+                            alert("上传失败"+e);
+                        }
                     }
+            )
+        }
 
-                }
-        );
-
-
-    }
+//    function upLoadFile() {
+//        FileUploadFunction(PROJECT_NAME, add_fileId, function (result) {
+//            if (result.success) { //文件上传成功
+//
+//                //获取上传的其他信息
+//                //提交者
+//                var add_submitter = $('#add_submitter').val();
+//                //任务内容
+//                var add_comment = $('#add_comment').val();
+//                //任务截至时间
+//                var add_finishedTime = $('#add_finishedTime').val();
+//                //提交者id
+//                var userId = getCookieValue("userId");
+//                var params = {
+//                    comment: 'add_comment',
+//                    submitter: 'add_submitter',
+//                    submitterId: 'userId',
+//                    finishedTime: 'add_finishedTime',
+//                    fileId: data.data.fileId
+//                }
+//                var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
+//                ajaxFunction(addFnUrl_, params, function (result) {
+//                    if (result.success) { //添加修改成功
+//
+//                        bootbox.alert("添加成功");
+//
+//                    } else {  //添加修改失败
+//                        bootbox.alert(result.mgs);
+//                    }
+//                });
+//            } else {  //文件上传失败
+//                bootbox.alert("文件上传失败");
+//            }
+//        });
+//    }
 
     /*校验帐号唯一性*/
     function doVerify() {
@@ -583,21 +652,21 @@
                 , false);
     }
 
-//    $('#add_finishedTime').datetimepicker({
-//        language: 'zh-CN',
-//        autoclose: 1,
-//        format: 'yyyy:MM:dd',
-//        weekStart: 5,
-//        startDate: '2014:12:15',
-//        endDate: '2014:12:28',
-//        startView: 1,
-//        minView: 2,
-//        todayBtn: 1,
-//        todayHighlight: 1,
-//        keyboardNavigation: 1,
-//        minuteStep: 6,
-//        showMeridian: 1,
-//    });
+    //    $('#add_finishedTime').datetimepicker({
+    //        language: 'zh-CN',
+    //        autoclose: 1,
+    //        format: 'yyyy:MM:dd',
+    //        weekStart: 5,
+    //        startDate: '2014:12:15',
+    //        endDate: '2014:12:28',
+    //        startView: 1,
+    //        minView: 2,
+    //        todayBtn: 1,
+    //        todayHighlight: 1,
+    //        keyboardNavigation: 1,
+    //        minuteStep: 6,
+    //        showMeridian: 1,
+    //    });
 
 
 </script>

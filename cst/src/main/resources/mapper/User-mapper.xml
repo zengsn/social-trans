@@ -135,18 +135,11 @@
         )
     </insert>
 
-    <!--<select id="verifyAccount" parameterType="User" resultType="User">-->
-        <!--select * from P_user WHERE username = #{username}-->
-    <!--</select>-->
 
     <select id="verifyAccount" parameterType="User" resultType="User">
         select * from P_user WHERE account = #{account}
     </select>
 
-
-    <!--<select id="login" parameterType="User" resultType="User">-->
-        <!--select * FROM P_user WHERE username = #{username} AND password = #{password}-->
-    <!--</select>-->
 
     <select id="login" parameterType="User" resultType="User">
         select * FROM P_user WHERE account = #{account} AND password = #{password} AND disabled =#{disabled}

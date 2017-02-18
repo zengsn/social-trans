@@ -38,14 +38,12 @@ public class FileService {
         //转换为路径格式
         date_s = StringUtils.dateToPath(date_s);
         //拼接路径
-        path = path + separator + date_s + separator + fileInfo.getFileName();
+//        path = path + separator + date_s + separator + fileInfo.getFileName();
+        path = path + separator + date_s + separator + fileInfo.getFileId();
 
         //存储数据库
-        FileInfo reFileInfo = new FileInfo();
-        reFileInfo.setFilePath(path);
-
-        //存入数据库
-        sqlSession.insert("File.insert", reFileInfo);
+        fileInfo.setFilePath(path);
+        sqlSession.insert("File.insert", fileInfo);
 
         // 创建目标文件
         File file = new File(path);
