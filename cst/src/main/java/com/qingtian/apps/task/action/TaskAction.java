@@ -55,7 +55,7 @@ public class TaskAction {
     @RequestMapping("saveTask.do")
     public String saveTask(Task task){
 
-        //验证评论非空
+        //验证任务非空
         String comment = task.getComment();
         if(StringUtils.isEmpty(comment)){
             logger.error("TaskAction ------- saveTask : comment 为空");
@@ -76,12 +76,12 @@ public class TaskAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"submitterId");
         }
 
-        //验证截止时间非空
-//        String finishedTime = task.getFinishedTime();
-//        if(StringUtils.isEmpty(finishedTime)){
-//            logger.error("TaskAction ------- saveTask : finishedTime 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"finishedTime");
-//        }
+        //验证文件路径非空
+        String filePath = task.getFilePath();
+        if(StringUtils.isEmpty(filePath)){
+            logger.error("TaskAction ------- saveTask : filePath 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath");
+        }
 
         //验证附件id非空
         String fileId = task.getFileId();

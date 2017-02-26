@@ -2,8 +2,10 @@ package com.qingtian.apps.system.File.action;
 
 import com.qingtian.apps.system.File.entity.FileInfo;
 import com.qingtian.apps.system.File.service.FileService;
+import com.qingtian.utils.Constant;
 import com.qingtian.utils.Generator;
 import com.qingtian.utils.StringUtils;
+import com.qingtian.utils.ToolUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.workSpace.utils.RandomGUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +34,7 @@ import java.util.List;
 public class FileAction {
 
 
+    private String separator = File.separator;
 
 
     @Resource(name="fileService")
@@ -58,6 +62,8 @@ public class FileAction {
                                 String fileName = multipartFile.getOriginalFilename();
                                 if ( null != fileName && !"".equals(fileName)){
                                     FileInfo fileInfo = new FileInfo();
+                                    //附件关联标识号
+                                    fileInfo.setFileCode(new RandomGUID().toString());
                                     //附件id
                                     fileInfo.setFileId(new RandomGUID().toString());
                                     //附件名：带后缀
@@ -66,6 +72,11 @@ public class FileAction {
                                     fileInfo.setFileSize(String.valueOf(multipartFile.getSize()));
                                     //附件类型
                                     fileInfo.setFileType(fileName.substring(fileName.lastIndexOf(".") + 1));
+                                    //附件地址
+                                    String path = ToolUtils.getPath(Constant.SOURCE_FILE_PATH) + separator + fileInfo.getFileCode();
+                                    fileInfo.setFilePath(path);
+                                    //是否为分割的小文件
+                                    fileInfo.setChildFile("0");
                                     Boolean isSuccess = fileService.insertFile(fileInfo,in);
                                     if(isSuccess){
                                         fileInfos.add(fileInfo);

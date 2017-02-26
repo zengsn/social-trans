@@ -1,7 +1,11 @@
 package com.qingtian.apps.system.File.service;
 
 import com.qingtian.apps.system.File.entity.FileInfo;
+import com.qingtian.apps.system.File.entity.TaskFile;
+import com.qingtian.apps.system.taskTranslate.SplitFile;
+import com.qingtian.utils.Constant;
 import com.qingtian.utils.StringUtils;
+import com.qingtian.utils.ToolUtils;
 import org.apache.commons.io.IOUtils;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by machao on 2017/1/15.
@@ -28,23 +33,23 @@ public class FileService {
 
     public Boolean insertFile(FileInfo fileInfo, InputStream in) throws Exception {
 
-        Calendar.getInstance();
-        //获取上传基路径，从配置文件中获取
-        String path = "E:" + separator + "UpAndDown";
-        //按年月日来生成文件夹
-        //获取当前日期
-        Date date = new Date();
-        String date_s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        //转换为路径格式
-        date_s = StringUtils.dateToPath(date_s);
-        //拼接路径
-//        path = path + separator + date_s + separator + fileInfo.getFileName();
-        path = path + separator + date_s + separator + fileInfo.getFileId();
-
-        //存储数据库
-        fileInfo.setFilePath(path);
+//        Calendar.getInstance();
+//        //获取上传基路径，从配置文件中获取
+//        String path = "E:" + separator + "UpAndDown";
+//        //按年月日来生成文件夹
+//        //获取当前日期
+//        Date date = new Date();
+//        String date_s = new SimpleDateFormat("yyyy-MM-dd").format(date);
+//        //转换为路径格式
+//        date_s = StringUtils.dateToPath(date_s);
+//        //拼接路径
+////        path = path + separator + date_s + separator + fileInfo.getFileId();
+//
+//        //存储数据库
+//        fileInfo.setFilePath(path);
         sqlSession.insert("File.insert", fileInfo);
 
+        String path = fileInfo.getFilePath();
         // 创建目标文件
         File file = new File(path);
         //该路径不存在，则先创建文件夹
@@ -59,7 +64,20 @@ public class FileService {
         fileOutputStream.flush();
         fileOutputStream.close();
         return true;
+    }
 
-
+    public Boolean saveFile(FileInfo fileInfo, InputStream in) throws Exception{
+//        //1:获取文件总行数
+//        SplitFile splitFile = new SplitFile();
+//        //1.1:获取已经经过处理的文件
+//        TaskFile taskFile = splitFile.getFileCountByIn(in);
+//        //行数
+//        int line = taskFile.getLine();
+//        //文本内容
+//        List<String> list = taskFile.getLists();
+//        //2:对文件进行分割（设置任务）
+////        fileInfo.setFilePath(sourceFilePath);
+//
+        return false;
     }
 }

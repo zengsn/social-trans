@@ -16,7 +16,24 @@ public class Task implements Serializable{
     private String fileId;
     private String finishedTime;
     private String isReceive;
+    private String fileCode;
+    private String filePath;
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getFileCode() {
+        return fileCode;
+    }
+
+    public void setFileCode(String fileCode) {
+        this.fileCode = fileCode;
+    }
 
     public String getTaskId() {
         return taskId;

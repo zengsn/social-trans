@@ -10,7 +10,7 @@
             p_task_subbmit.`comment`,
             p_task_subbmit.submitter,
             p_task_subbmit.submitterId,
-            p_task_subbmit.fileId,
+            p_task_subbmit.fileCode,
             p_task_subbmit.isReceive,
             p_task_subbmit.finishedTime
             FROM `p_task_subbmit`
@@ -35,8 +35,8 @@
                 submitterId,
             </if>
 
-            <if test="fileId != null and fileId != ''">
-                fileId,
+            <if test="fileCode != null and fileCode != ''">
+                fileCode,
             </if>
 
             <if test="finishedTime != null and finishedTime != ''">
@@ -69,8 +69,8 @@
                 #{submitterId},
             </if>
 
-            <if test="fileId != null and fileId != ''">
-                #{fileId},
+            <if test="fileCode != null and fileCode != ''">
+                #{fileCode},
             </if>
 
             <if test="finishedTime != null and finishedTime!= ''">

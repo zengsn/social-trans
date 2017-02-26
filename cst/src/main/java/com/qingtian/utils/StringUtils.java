@@ -53,8 +53,40 @@ public class StringUtils {
         String separator = File.separator;
         for(int i=0;i<dateArray.length;i++){
             path += dateArray[i] + separator;
-            System.out.println(path);
+//            System.out.println(path);
         }
         return path;
+    }
+
+    /**
+     * 两个字符串相加
+     * @param a
+     * @param b
+     * @return
+     */
+    public static String plusString(String a,String b){
+        StringBuilder builder = new StringBuilder(a);
+        builder.append(b);
+//        System.out.println(builder.toString());
+        return builder.toString();
+    }
+
+    /**
+     * 两个字符串相加，有换行
+     * @param a
+     * @param b
+     * @return
+     */
+    public static String plusNewLineString(String a,String b){
+        StringBuilder builder = new StringBuilder(a);
+        builder.append("\r\n"+b);
+//        System.out.println(builder.toString());
+        return builder.toString();
+    }
+
+
+
+    public static void main(String[] args) {
+        plusNewLineString("hello","world");
     }
 }

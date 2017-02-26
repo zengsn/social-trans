@@ -560,7 +560,8 @@
                                     comment:add_comment,
                                     submitter:add_submitter,
                                     submitterId:userId,
-                                    fileId:data.data[0].fileId,
+                                    fileCode:data.data[0].fileCode,
+                                    filePath:data.data[0].filePath,
                                 }
                                 var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
                                 console.log(params);

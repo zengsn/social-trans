@@ -5,13 +5,31 @@ package com.qingtian.apps.system.File.entity;
  */
 public class FileInfo {
 
-    private String fileId;
+    private String fileCode;
     private String userId;
     private String fileName;
     private String fileType;
     private String fileSize;
     private String filePath;
     private String createTime;
+    private String fileId;
+    private String childFile;
+
+    public String getChildFile() {
+        return childFile;
+    }
+
+    public void setChildFile(String childFile) {
+        this.childFile = childFile;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
 
     public String getUserId() {
         return userId;
@@ -29,12 +47,12 @@ public class FileInfo {
         this.filePath = filePath;
     }
 
-    public String getFileId() {
-        return fileId;
+    public String getFileCode() {
+        return fileCode;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setFileCode(String fileCode) {
+        this.fileCode = fileCode;
     }
 
     public String getFileName() {

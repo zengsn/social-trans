@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50632
 File Encoding         : 65001
 
-Date: 2017-02-20 00:15:58
+Date: 2017-02-27 00:36:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,22 +26,24 @@ CREATE TABLE `p_file` (
   `fileSize` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '文件大小',
   `filePath` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '文件存储路径',
   `createTime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `fileCode` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件关联标识号',
+  `childFile` char(1) CHARACTER SET utf8 DEFAULT '0' COMMENT '是否为分割的文件：0为否，1为是',
   PRIMARY KEY (`fileId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of p_file
 -- ----------------------------
-INSERT INTO `p_file` VALUES ('0AF222F4-335A-EE9A-C006-60F9DFC4B015', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null);
-INSERT INTO `p_file` VALUES ('0CBD4903-BF92-62FE-B8CF-E1275DD50522', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\0CBD4903-BF92-62FE-B8CF-E1275DD50522', '2017-02-18 17:24:44');
-INSERT INTO `p_file` VALUES ('1007A284-A1A8-9DA0-3B41-CF2516F53BB6', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
-INSERT INTO `p_file` VALUES ('10617610-E9F0-C439-4357-614A59084582', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
-INSERT INTO `p_file` VALUES ('1A827BDF-D007-0E6D-9D18-26429224CCB1', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
-INSERT INTO `p_file` VALUES ('2A1D8B4E-1C2B-6254-EA97-E6A0298FC247', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
-INSERT INTO `p_file` VALUES ('3BDD9432-38B3-3A5E-6B0E-890CDDE0DC66', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
-INSERT INTO `p_file` VALUES ('58C869D1-42E6-694E-0873-5A4E4803B63E', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\58C869D1-42E6-694E-0873-5A4E4803B63E', null);
-INSERT INTO `p_file` VALUES ('C5282D29-AE26-F45E-E2BB-7CEC6677CF01', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null);
-INSERT INTO `p_file` VALUES ('F3B572B7-9AE9-6F34-0054-E7BFBA37DBA5', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null);
+INSERT INTO `p_file` VALUES ('0AF222F4-335A-EE9A-C006-60F9DFC4B015', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null, '', null);
+INSERT INTO `p_file` VALUES ('0CBD4903-BF92-62FE-B8CF-E1275DD50522', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\0CBD4903-BF92-62FE-B8CF-E1275DD50522', '2017-02-18 17:24:44', '', null);
+INSERT INTO `p_file` VALUES ('1007A284-A1A8-9DA0-3B41-CF2516F53BB6', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('10617610-E9F0-C439-4357-614A59084582', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('1A827BDF-D007-0E6D-9D18-26429224CCB1', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('2A1D8B4E-1C2B-6254-EA97-E6A0298FC247', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('3BDD9432-38B3-3A5E-6B0E-890CDDE0DC66', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('58C869D1-42E6-694E-0873-5A4E4803B63E', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\58C869D1-42E6-694E-0873-5A4E4803B63E', null, '', null);
+INSERT INTO `p_file` VALUES ('C5282D29-AE26-F45E-E2BB-7CEC6677CF01', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null, '', null);
+INSERT INTO `p_file` VALUES ('F3B572B7-9AE9-6F34-0054-E7BFBA37DBA5', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
 
 -- ----------------------------
 -- Table structure for p_menu
@@ -154,7 +156,7 @@ CREATE TABLE `p_task_subbmit` (
   `comment` varchar(200) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务内容',
   `submitter` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务提交者',
   `submitterId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '与P_user表的userId关联',
-  `fileId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件id',
+  `fileCode` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件关联标识号',
   `finishedTime` datetime DEFAULT NULL COMMENT '任务完成时间',
   `isReceive` char(1) CHARACTER SET utf8 DEFAULT '0' COMMENT '是否有人领取任务,0为无人领取',
   PRIMARY KEY (`taskId`)
