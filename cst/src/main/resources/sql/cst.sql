@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : qingtian
 Source Server Version : 50632
 Source Host           : localhost:3306
 Source Database       : cst
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50632
 File Encoding         : 65001
 
-Date: 2017-02-27 00:36:32
+Date: 2017-02-27 18:10:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,16 +34,7 @@ CREATE TABLE `p_file` (
 -- ----------------------------
 -- Records of p_file
 -- ----------------------------
-INSERT INTO `p_file` VALUES ('0AF222F4-335A-EE9A-C006-60F9DFC4B015', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null, '', null);
-INSERT INTO `p_file` VALUES ('0CBD4903-BF92-62FE-B8CF-E1275DD50522', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\0CBD4903-BF92-62FE-B8CF-E1275DD50522', '2017-02-18 17:24:44', '', null);
-INSERT INTO `p_file` VALUES ('1007A284-A1A8-9DA0-3B41-CF2516F53BB6', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
-INSERT INTO `p_file` VALUES ('10617610-E9F0-C439-4357-614A59084582', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
-INSERT INTO `p_file` VALUES ('1A827BDF-D007-0E6D-9D18-26429224CCB1', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
-INSERT INTO `p_file` VALUES ('2A1D8B4E-1C2B-6254-EA97-E6A0298FC247', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
-INSERT INTO `p_file` VALUES ('3BDD9432-38B3-3A5E-6B0E-890CDDE0DC66', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
-INSERT INTO `p_file` VALUES ('58C869D1-42E6-694E-0873-5A4E4803B63E', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\58C869D1-42E6-694E-0873-5A4E4803B63E', null, '', null);
-INSERT INTO `p_file` VALUES ('C5282D29-AE26-F45E-E2BB-7CEC6677CF01', '20140104235918_uNikH.jpeg', 'jpeg', '745987', 'E:\\UpAndDown\\2017\\02\\18\\\\20140104235918_uNikH.jpeg', null, '', null);
-INSERT INTO `p_file` VALUES ('F3B572B7-9AE9-6F34-0054-E7BFBA37DBA5', '222.txt', 'txt', '2464', 'E:\\UpAndDown\\2017\\02\\18\\\\222.txt', null, '', null);
+INSERT INTO `p_file` VALUES ('EEB546D1-6594-4452-CB8A-D7643C00DEEA', 'test1.txt', 'txt', '1400089', 'E:\\TestCst\\2017\\02\\27\\\\B98A28A2-5894-2CD0-818A-D1BD20E04CAD', '2017-02-27 18:09:48', 'B98A28A2-5894-2CD0-818A-D1BD20E04CAD', '0');
 
 -- ----------------------------
 -- Table structure for p_menu
@@ -70,8 +61,8 @@ INSERT INTO `p_menu` VALUES ('2', '用户管理', 'cst/user.html', '', '1', '1',
 INSERT INTO `p_menu` VALUES ('3', '角色管理', '', 'fa fa-cubes', '0', '0', '1');
 INSERT INTO `p_menu` VALUES ('4', '角色管理', 'cst/role.html', '', '3', '1', '1');
 INSERT INTO `p_menu` VALUES ('5', '任务管理', '', 'fa fa-cubes', '0', '0', '1');
-INSERT INTO `p_menu` VALUES ('6', '任务管理', 'cst/task.html', '', '5', '1', '1');
-INSERT INTO `p_menu` VALUES ('7', '任务列表', 'cst/task.html', '', '5', '1', '1');
+INSERT INTO `p_menu` VALUES ('6', '任务管理', 'cst/subbmitTask.html', '', '5', '1', '1');
+INSERT INTO `p_menu` VALUES ('7', '任务列表', 'cst/receiveTask.html', '', '5', '1', '1');
 
 -- ----------------------------
 -- Table structure for p_permission
@@ -137,9 +128,14 @@ INSERT INTO `p_rolepermission` VALUES ('3', '002', 'basePer002');
 DROP TABLE IF EXISTS `p_task_receive`;
 CREATE TABLE `p_task_receive` (
   `id` int(11) NOT NULL,
-  `taskId` char(36) NOT NULL COMMENT '与P_task_subbmit表的taskId关联',
+  `taskId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '与P_task_subbmit表的taskId关联',
   `receiver` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '任务领取人',
   `receiverId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '与P_user表的userId关联',
+  `isReceive` char(1) CHARACTER SET utf8 DEFAULT '0' COMMENT '是否有人领取任务,0为无人领取',
+  `submitter` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务提交者',
+  `submitterId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '与P_user表的userId关联',
+  `fileId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件id',
+  `fileCode` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件关联标识号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -152,22 +148,21 @@ CREATE TABLE `p_task_receive` (
 -- ----------------------------
 DROP TABLE IF EXISTS `p_task_subbmit`;
 CREATE TABLE `p_task_subbmit` (
-  `taskId` char(36) NOT NULL COMMENT '任务id',
+  `taskId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '任务id',
   `comment` varchar(200) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务内容',
   `submitter` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务提交者',
   `submitterId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '与P_user表的userId关联',
   `fileCode` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件关联标识号',
   `finishedTime` datetime DEFAULT NULL COMMENT '任务完成时间',
   `isReceive` char(1) CHARACTER SET utf8 DEFAULT '0' COMMENT '是否有人领取任务,0为无人领取',
+  `fileId` char(36) CHARACTER SET utf8 NOT NULL COMMENT '附件id',
   PRIMARY KEY (`taskId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of p_task_subbmit
 -- ----------------------------
-INSERT INTO `p_task_subbmit` VALUES ('1', '任务1', '小明', '4BD85B34-1D05-4931-AEB9-6B38415220D2', '4BD85B34-1D05-4931-AEB9-6B38415220D2', null, '0');
-INSERT INTO `p_task_subbmit` VALUES ('524BA84F-6F1F-C81B-BC8F-3D4E8C90E73B', '222', '陈杰', 'E452F2E3-D4B7-4498-25B1-72E9B925F752', '0CBD4903-BF92-62FE-B8CF-E1275DD50522', null, '0');
-INSERT INTO `p_task_subbmit` VALUES ('F95DCDA5-8299-EA3B-D209-CDA8EA24469B', '1111', '陈杰', 'E452F2E3-D4B7-4498-25B1-72E9B925F752', 'C5282D29-AE26-F45E-E2BB-7CEC6677CF01', null, '0');
+INSERT INTO `p_task_subbmit` VALUES ('1', '1', '1', '1', '1', '2017-02-07 17:41:20', '0', '1');
 
 -- ----------------------------
 -- Table structure for p_user

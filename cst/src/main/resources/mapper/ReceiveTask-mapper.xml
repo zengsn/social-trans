@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="ReceiveTask">
+
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <!-- 批量添加任务 -->
+    <insert id="insertTaskBatch" parameterType="java.util.List">
+        insert p_task_receive(taskId,isReceive,submitter,submitterId,fileId,fileCode)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (#{item.taskId},#{item.isReceive},#{item.submitter},#{item.submitterId},#{item.fileId},#{item.fileCode})
+        </foreach>
+    </insert>
+
+    <select id="select" resultType="ReceiveTask">
+        SELECT * FROM p_task_receive
+    </select>
+</mapper>

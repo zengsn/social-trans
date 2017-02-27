@@ -1,25 +1,16 @@
 package com.qingtian.apps.task.action;
 
-import com.qingtian.apps.task.entity.Task;
+import com.qingtian.apps.task.entity.ReceiveTask;
+import com.qingtian.apps.task.entity.SubbmitTask;
 import com.qingtian.apps.task.service.TaskService;
 import com.qingtian.utils.StringUtils;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.workSpace.utils.JsonUtils;
-import org.workSpace.utils.RandomGUID;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.InputStream;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by qingtian on 2017/1/25.
@@ -40,7 +31,17 @@ public class TaskAction {
     @RequestMapping("getTaskList.do")
     public String getTaskList(){
 
-        List<Task> lists = taskService.getTaskList();
+        List<SubbmitTask> lists = taskService.getTaskList();
+        if(lists!=null && lists.size()>0){
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",lists);
+        }else {
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询失败");
+        }
+    }
+
+    @RequestMapping("getReceiveTaskList.do")
+    public String getReceiveTaskList(){
+        List<ReceiveTask> lists = taskService.getReceiveTaskList();
         if(lists!=null && lists.size()>0){
             return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",lists);
         }else {
@@ -53,7 +54,7 @@ public class TaskAction {
      * @param task
      */
     @RequestMapping("saveTask.do")
-    public String saveTask(Task task){
+    public String saveTask(SubbmitTask task){
 
         //验证任务非空
         String comment = task.getComment();
@@ -83,11 +84,17 @@ public class TaskAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath");
         }
 
-        //验证附件id非空
+        //验证附件标识号非空
+        String fileCode = task.getFileCode();
+        if(StringUtils.isEmpty(fileCode)){
+            logger.error("TaskAction ------- saveTask : fileCode 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileCode 为空");
+        }
+
         String fileId = task.getFileId();
         if(StringUtils.isEmpty(fileId)){
             logger.error("TaskAction ------- saveTask : fileId 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
         }
 
         try{

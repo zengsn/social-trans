@@ -33,20 +33,6 @@ public class FileService {
 
     public Boolean insertFile(FileInfo fileInfo, InputStream in) throws Exception {
 
-//        Calendar.getInstance();
-//        //获取上传基路径，从配置文件中获取
-//        String path = "E:" + separator + "UpAndDown";
-//        //按年月日来生成文件夹
-//        //获取当前日期
-//        Date date = new Date();
-//        String date_s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-//        //转换为路径格式
-//        date_s = StringUtils.dateToPath(date_s);
-//        //拼接路径
-////        path = path + separator + date_s + separator + fileInfo.getFileId();
-//
-//        //存储数据库
-//        fileInfo.setFilePath(path);
         sqlSession.insert("File.insert", fileInfo);
 
         String path = fileInfo.getFilePath();

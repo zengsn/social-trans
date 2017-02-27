@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>任务管理</title>
+    <title>任务列表</title>
 
     <meta name="description" content="overview &amp; stats"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -339,7 +339,7 @@
         $("#add-modal").modal('show');
     }
 
-    /*查询所有用户*/
+    /*查询所有任务*/
     function doSearch() {
         var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getTaskList.do";
 //            var selectAllUrl_ = "/User/selectAll.do";
@@ -514,25 +514,7 @@
         );
     }
 
-    /*添加任务*/
-    //    function addFn() {
-    //
-    //        var addFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/saveTaskAndFile.do";
-    //        var params = formToJsonstr('add-modal');
-    //        ajaxFunction(addFnUrl_, params,
-    //                function (result) {
-    //                    if (result.success) {
-    //                        bootbox.alert("添加任务成功");
-    //                        doSearch();
-    //                        closeAddWin();
-    //                    } else {
-    //                        bootbox.alert("添加任务失败");
-    //                        closeAddWin();
-    //                    }
-    //
-    //                }
-    //        );
-    //    }
+
     /*添加任务*/
         function upLoadFile() {
             var addFileFnUrl_ = "/" + PROJECT_NAME + "/FileAction/upLoadFile.do";
@@ -562,6 +544,7 @@
                                     submitterId:userId,
                                     fileCode:data.data[0].fileCode,
                                     filePath:data.data[0].filePath,
+                                    fileId:data.data[0].fileId,
                                 }
                                 var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
                                 console.log(params);

@@ -30,9 +30,10 @@ public class SplitFile {
         try {
 //            sqlitFile(filePath);
             SplitFile splitFile = new SplitFile();
+            splitFile.sqlitFile(filePath);
 //            splitFile.getMulitLine(filePath2);
 //            splitFile.preFileByCount(filePath2);
-            splitFile.getMulitLine1(filePath2);
+//            splitFile.getMulitLine1(filePath2);
         } catch (Exception e) {
 
         }
@@ -117,7 +118,7 @@ public class SplitFile {
         if (!file.isFile() || !file.exists()) {
             throw new Exception("指定文件不存在");
         }
-        List<FileInfo> list = null;
+        List<FileInfo> list = new ArrayList<>();
         //获取行数
         int count = taskFile.getLine();
         //获取文本内容
@@ -129,6 +130,8 @@ public class SplitFile {
         //获取被分割文件的路径，被分割的文件要存在该路径下
         File parentFile = file.getParentFile();
         //分割文件
+        int tmp=0;
+
         for (int i = 0; i <= num; i++) {
             //设置文件id
             String fileId = new RandomGUID().toString();
@@ -137,16 +140,17 @@ public class SplitFile {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetPath), encoding));
             String lineTxt = null;
             int line = 0;
+
             //循环一个最小分割粒度后切割文件
-            for(int j=0;j<=contentList.size();j++){
+            for(int j=tmp;j<=contentList.size()-tmp;j++){
                 bufferedWriter.append(contentList.get(j));
                 bufferedWriter.write("\n");
                 line++;
                 if (line % size == 0) {
+                    tmp = ++j;
                     break;
                 }
             }
-            bufferedWriter.flush();
             FileInfo reFileInfo = new FileInfo();
             reFileInfo.setFileId(fileId);
             reFileInfo.setFilePath(targetPath);
@@ -155,8 +159,8 @@ public class SplitFile {
             reFileInfo.setFileType(Constant.SUFFIX);
             reFileInfo.setFileCode(fileCode);
             list.add(reFileInfo);
+            bufferedWriter.flush();
         }
-
         return list;
     }
     /**
@@ -187,7 +191,7 @@ public class SplitFile {
         BufferedReader bufferedReader = new BufferedReader(read);
         //分割文件
         for (int i = 0; i <= num; i++) {
-            String targetPath = parentFile.getAbsolutePath() + separator + new RandomGUID().toString() + i + Constant.SUFFIX;
+            String targetPath = parentFile.getAbsolutePath() + separator + new RandomGUID().toString() + i + "."+Constant.SUFFIX;
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetPath), encoding));
             String lineTxt = null;
             int line = 0;

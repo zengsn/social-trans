@@ -4,14 +4,14 @@
 <mapper namespace="File">
 
     <insert id="insert" parameterType="FileInfo">
-        insert into P_file(fileCode,fileId,fileName,fileType,fileSize,filePath,createTime,childFile) VALUES ((#{fileCode},#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath},NOW(),#{childFile});
+        insert into p_file(fileCode,fileId,fileName,fileType,fileSize,filePath,childFile,createTime) VALUES (#{fileCode},#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath},#{childFile},NOW());
     </insert>
 
     <!-- 批量添加任务 -->
     <insert id="insertFileBatch" parameterType="java.util.List">
         insert p_file(fileCode,fileId,fileName,fileType,filePath,createTime,childFile)
         values
-        <foreach collection="list" item="item" index="index" separator="," >
+        <foreach collection="list" item="item"  separator="," >
             (#{item.fileCode},#{item.fileId},#{item.fileName},#{item.fileType},#{item.filePath},NOW(),#{item.childFile})
         </foreach>
     </insert>

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by qingtian on 2017/1/25.
  */
-public class Task implements Serializable{
+public class SubbmitTask implements Serializable{
 
     private String taskId;
     private String comment;
@@ -18,6 +18,8 @@ public class Task implements Serializable{
     private String isReceive;
     private String fileCode;
     private String filePath;
+
+
 
     public String getFilePath() {
         return filePath;
