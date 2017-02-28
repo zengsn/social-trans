@@ -1,10 +1,12 @@
 package com.qingtian.apps.task.service;
 
+import com.github.pagehelper.Page;
 import com.qingtian.apps.system.File.entity.FileInfo;
 import com.qingtian.apps.system.File.entity.TaskFile;
 import com.qingtian.apps.system.taskTranslate.SplitFile;
 import com.qingtian.apps.task.entity.ReceiveTask;
 import com.qingtian.apps.task.entity.SubbmitTask;
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,4 +106,23 @@ public class TaskService {
         list = splitFile.sqlitFile1(taskFile,sourceFilePath,fileCode);
         return list;
     }
+
+    /**
+     * 领取任务，即更新任务
+     * @param task
+     * @return
+     */
+    public Boolean updateReTask(ReceiveTask task) throws Exception{
+        task.setIsReceive("1");
+        int result = sqlSession.update("ReceiveTask.updateReTask",task);
+
+        return result>0? true:false;
+    }
+
+    public Page selectTaskByUerId(String userId,RowBounds rowBounds)throws Exception{
+        Page list = (Page)sqlSession.selectList("ReceiveTask.selectTaskByUerId",userId,rowBounds);
+        return list;
+    }
+
+
 }

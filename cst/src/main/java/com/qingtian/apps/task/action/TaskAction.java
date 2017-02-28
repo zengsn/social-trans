@@ -1,11 +1,16 @@
 package com.qingtian.apps.task.action;
 
+import com.github.pagehelper.Page;
+
+import com.qingtian.apps.system.entity.PageInfo;
 import com.qingtian.apps.task.entity.ReceiveTask;
 import com.qingtian.apps.task.entity.SubbmitTask;
 import com.qingtian.apps.task.service.TaskService;
 import com.qingtian.utils.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.workSpace.utils.JsonUtils;
 
@@ -35,7 +40,7 @@ public class TaskAction {
         if(lists!=null && lists.size()>0){
             return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",lists);
         }else {
-            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询失败");
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"查询失败");
         }
     }
 
@@ -45,7 +50,7 @@ public class TaskAction {
         if(lists!=null && lists.size()>0){
             return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",lists);
         }else {
-            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询失败");
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"查询失败");
         }
     }
 
@@ -135,6 +140,74 @@ public class TaskAction {
             logger.error("TaskAction ------- deleteTaskById : 操作由于异常而任务提交失败"+e.getMessage());
             return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而任务提交失败"+e.getMessage());
         }
+    }
+
+    /**
+     * 领取任务，即更新接受任务表
+     * @param task
+     * @return
+     */
+    @RequestMapping("updateReTask.do")
+    public String updateReTask(ReceiveTask task){
+
+        //验证任务id非空
+        String id=task.getId();
+        if(StringUtils.isEmpty(id)){
+            logger.error("TaskAction ------- updateReTask : id 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"id为空");
+        }
+
+        //验证接受者id非空
+        String receiveId = task.getReceiverId();
+        if(StringUtils.isEmpty(receiveId )){
+            logger.error("TaskAction ------- updateReTask : receiveId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"receiveId 为空");
+        }
+
+        String fileId = task.getFileId();
+        if(StringUtils.isEmpty(fileId )){
+            logger.error("TaskAction ------- updateReTask : fileId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
+        }
+
+        try{
+            Boolean isSuccess = taskService.updateReTask(task);
+            if(isSuccess){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"领取任务成功");
+            }else {
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"领取任务失败");
+            }
+        }catch (Exception e){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常失败" + e.getMessage());
+        }
+    }
+
+    /**
+     * 根据当前用户来筛选任务
+     * @param userId
+     * @return
+     */
+    @RequestMapping("selectTaskByUerId.do")
+    public String selectTaskByUerId(@RequestParam(name="rows")int rows, @RequestParam(name="page")int page, String userId){
+
+        if(StringUtils.isEmpty(userId )){
+            logger.error("TaskAction ------- updateReTask : userId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"userId 为空");
+        }
+        RowBounds pageBounds=new RowBounds(page,rows);
+        Page list=null;
+        try{
+            list = taskService.selectTaskByUerId(userId,pageBounds);
+            PageInfo reList=new PageInfo(list);
+            if(reList!=null){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",reList);
+            }else {
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"查询失败");
+            }
+        }catch (Exception e){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而失败"+e.getMessage());
+        }
+
     }
 
 

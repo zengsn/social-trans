@@ -341,7 +341,7 @@
 
     /*查询所有任务*/
     function doSearch() {
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getReceiveTaskList.do";
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getTaskList.do";
 //            var selectAllUrl_ = "/User/selectAll.do";
 
         ajaxFunction(
@@ -357,19 +357,14 @@
                                     height: 250,
                                     colModel: [
                                         {
-                                            "name": "id",
-                                            "label": "id",
-                                            "hidden": true
-                                        },
-                                        {
                                             "name": "taskId",
                                             "label": "任务id",
                                             "hidden": true
                                         },
                                         {
-                                            "name": "submitterId",
-                                            "label": "领取者id",
-                                            "hidden": true
+                                            "name": "comment",
+                                            "label": "任务内容",
+                                            "width": "200px"
                                         },
                                         {
                                             "name": "submitter",
@@ -430,6 +425,8 @@
 
 
     }
+
+
 
     /*打开修改界面*/
     function openUpdateWin(rowData) {
@@ -494,7 +491,7 @@
                 })
     }
 
-    /*删除选中用户*/
+    /*删除选中任务*/
     function delConfirm(rowDataId) {
         bootbox.confirm("确定要删除此条数据么？", function (result) {
             if (result == true) {
@@ -503,7 +500,7 @@
         });
     }
 
-    /*删除用户*/
+    /*删除任务*/
     function deleteFn(rowDataId) {
         var params = {};
         params.taskId = rowDataId;
@@ -580,41 +577,7 @@
             )
         }
 
-//    function upLoadFile() {
-//        FileUploadFunction(PROJECT_NAME, add_fileId, function (result) {
-//            if (result.success) { //文件上传成功
-//
-//                //获取上传的其他信息
-//                //提交者
-//                var add_submitter = $('#add_submitter').val();
-//                //任务内容
-//                var add_comment = $('#add_comment').val();
-//                //任务截至时间
-//                var add_finishedTime = $('#add_finishedTime').val();
-//                //提交者id
-//                var userId = getCookieValue("userId");
-//                var params = {
-//                    comment: 'add_comment',
-//                    submitter: 'add_submitter',
-//                    submitterId: 'userId',
-//                    finishedTime: 'add_finishedTime',
-//                    fileId: data.data.fileId
-//                }
-//                var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
-//                ajaxFunction(addFnUrl_, params, function (result) {
-//                    if (result.success) { //添加修改成功
-//
-//                        bootbox.alert("添加成功");
-//
-//                    } else {  //添加修改失败
-//                        bootbox.alert(result.mgs);
-//                    }
-//                });
-//            } else {  //文件上传失败
-//                bootbox.alert("文件上传失败");
-//            }
-//        });
-//    }
+
 
     /*校验帐号唯一性*/
     function doVerify() {

@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>任务列表</title>
+    <title>我的任务</title>
 
     <meta name="description" content="overview &amp; stats"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -101,7 +101,7 @@
 <div class="page-content">
     <div class="page-header">
         <h1>
-            任务信息
+            我的任务
             <small><i class="ace-icon fa fa-angle-double-right"></i>
             </small>
         </h1>
@@ -112,11 +112,11 @@
     <div class="row">
         <div class="col-xs-12">
             <!--工具栏 -->
-            <div class="tool_bg">
-                <button class="btn btn-yellow" data-toggle="modal" onclick="openTask()">
-                    <i class="ace-icon fa fa-plus-circle"></i> 我的任务
-                </button>
-            </div>
+            <!--<div class="tool_bg">-->
+                <!--<button class="btn btn-yellow" data-toggle="modal" onclick="openTask()">-->
+                    <!--<i class="ace-icon fa fa-plus-circle"></i> 我的任务-->
+                <!--</button>-->
+            <!--</div>-->
             </br>
             <div style="padding-top: 5px">
                 <table class="table" id="task_table">
@@ -163,19 +163,97 @@
 
 
 
+    function doSearch() {
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTaskByUerId.do";
+        var userId = getCookieValue("userId");
+        var params = {
+            userId:userId
+        };
+        $("#task_table").GridUnload();
+        $("#task_table")
+                .jqGrid(
+                        {
+                            url: selectAllUrl_,
+                            postData: params,
+                            datatype: "json",
+                            height: 393,
+                            mtype: "post",
+                            jsonReader: {
+                                "root": "data.rows",
+                                "page": "data.page",
+                                "total": "data.total",
+                                "records": "data.records",
+                                "repeatitems": true
+                            },
+                            colModel: [
+                                {
+                                    "name": "id",
+                                    "label": "id",
+                                    "hidden": true
+                                },
+                                {
+                                    "name": "taskId",
+                                    "label": "任务id",
+                                    "hidden": true
+                                },
+                                {
+                                    "name": "submitterId",
+                                    "label": "领取者id",
+                                    "hidden": true
+                                },
+                                {
+                                    "name": "fileId",
+                                    "label": "任务id",
+                                    "hidden": true
+                                },
+                                {
+                                    "name": "comment",
+                                    "label": "任务内容",
+                                },
+                                {
+                                    "name": "submitter",
+                                    "label": "任务提交者",
+                                }
+                                ],
+                            viewrecords: true,
+                            rowNum: 10,
+                            rowList: [10, 20, 30],
+                            pager: "#common_task_pager",
+                            beforeSelectRow: function (rowid, e) {
+                                jQuery("#task_table").jqGrid('resetSelection');
+                                fileId=$($("#task_table").jqGrid("getRowData", rowid).fileId).val();
+                                alert(fileId);
+//                                showWorkerQualList(fileId);
+                                return (true);
+                            },
+                            altRows: true,
+                            multiselect: true,
+                            multiboxonly: false,
+                            rownumbers: true,
+                            autowidth: true,
+                            loadComplete: function () {
+                                var table = this;
+                                setTimeout(function () {
+                                    updatePagerIcons(table);
+                                }, 0);
+                            }
+                        });
 
+    }
 
 
 
 
     /*查询所有任务*/
-    function doSearch() {
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getReceiveTaskList.do";
-//            var selectAllUrl_ = "/User/selectAll.do";
-
+    function doSearch1() {
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTaskByUerId.do";
+        var userId = getCookieValue("userId");
+        var params = {
+            userId:userId
+        };
         ajaxFunction(
                 selectAllUrl_,
-                null,
+                params,
                 function (result) {
                     if (result.success) {
                         $("#task_table").GridUnload();
@@ -201,39 +279,31 @@
                                             "hidden": true
                                         },
                                         {
+                                            "name": "comment",
+                                            "label": "任务内容",
+                                        },
+                                        {
                                             "name": "submitter",
                                             "label": "任务提交者"
-                                        },
-                                        {
-                                            "name": "isReceive",
-                                            "label": "是否有人领取",
-                                            formatter: function (value, options,
-                                                                 rowData) {
-                                                if (value == 0) {
-                                                    return "否";
-                                                } else {
-                                                    return "是";
-                                                }
-                                            }
-
-                                        },
-                                        {
-                                            "name": "fnDiv",
-                                            "label": "功能",
-                                            "formatter": function (value, options,
-                                                                   rowData) {
-                                                return "<div style='margin-left: 8px;'>"
-                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
-                                                        + JSON
-                                                                .stringify(rowData)
-                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
-                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
-                                                        + rowData.id
-                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
-                                                ;
-
-                                            }
-                                        }],
+                                        }
+//                                        {
+//                                            "name": "fnDiv",
+//                                            "label": "功能",
+//                                            "formatter": function (value, options,
+//                                                                   rowData) {
+//                                                return "<div style='margin-left: 8px;'>"
+//                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+//                                                        + JSON
+//                                                                .stringify(rowData)
+//                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
+//                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
+//                                                        + rowData.id
+//                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
+//                                                ;
+//
+//                                            }
+//                                        }
+                                        ],
                                     viewrecords: true,
                                     rowNum: 10,
                                     rowList: [10, 20, 30],
@@ -302,7 +372,6 @@
         var params = {
             id: rowData.id,
             receiverId:userId,
-            fileId:rowData.fileId
         }
         ajaxFunction(updateFnUrl_, params,
                 function (result) {

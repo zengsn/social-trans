@@ -16,4 +16,29 @@
     <select id="select" resultType="ReceiveTask">
         SELECT * FROM p_task_receive
     </select>
+
+    <update id="updateReTask" parameterType="ReceiveTask">
+        UPDATE p_task_receive SET receiverId = #{receiverId},isReceive = #{isReceive} WHERE id = #{id}
+    </update>
+
+    <select id="selectTaskByUerId" parameterType="String" resultType="ReceiveTask">
+        SELECT
+            a.id,
+            a.taskId,
+            a.receiver,
+            a.receiverId,
+            a.isReceive,
+            a.submitter,
+            a.submitterId,
+            a.fileId,
+            a.fileCode,
+            b.`comment`
+            FROM
+            p_task_receive AS a ,
+            p_task_subbmit AS b
+            WHERE
+            a.taskId = b.taskId
+            AND
+            a.receiverId = #{userId}
+    </select>
 </mapper>
