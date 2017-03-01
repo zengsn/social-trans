@@ -15,6 +15,16 @@ public class ReceiveTask implements Serializable{
 
     private String comment;
 
+    private String filePath;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public String getComment() {
         return comment;
     }

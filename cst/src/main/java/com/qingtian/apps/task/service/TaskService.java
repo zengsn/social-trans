@@ -6,6 +6,8 @@ import com.qingtian.apps.system.File.entity.TaskFile;
 import com.qingtian.apps.system.taskTranslate.SplitFile;
 import com.qingtian.apps.task.entity.ReceiveTask;
 import com.qingtian.apps.task.entity.SubbmitTask;
+import com.qingtian.apps.task.entity.TranslateComment;
+import com.qingtian.utils.Constant;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +125,19 @@ public class TaskService {
         Page list = (Page)sqlSession.selectList("ReceiveTask.selectTaskByUerId",userId,rowBounds);
         return list;
     }
+
+    /**
+     * 根据附件地址来显示
+     * @param filePath
+     * @return
+     */
+    public List<TranslateComment> selectTranslateComment(String filePath)throws Exception{
+        SplitFile splitFile = new SplitFile();
+        int pageLine = Constant.PAGE_LINE;
+        List<TranslateComment> list = splitFile.getMulitLine(filePath,pageLine);
+        return list;
+    }
+
 
 
 }

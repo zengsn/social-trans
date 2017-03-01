@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.qingtian.apps.system.entity.PageInfo;
 import com.qingtian.apps.task.entity.ReceiveTask;
 import com.qingtian.apps.task.entity.SubbmitTask;
+import com.qingtian.apps.task.entity.TranslateComment;
 import com.qingtian.apps.task.service.TaskService;
 import com.qingtian.utils.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.workSpace.utils.JsonUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -206,6 +208,22 @@ public class TaskAction {
             }
         }catch (Exception e){
             return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而失败"+e.getMessage());
+        }
+
+    }
+
+    @RequestMapping("selectTranslateComment.do")
+    public String selectTranslateComment(String filePath){
+
+        if(StringUtils.isEmpty(filePath )){
+            logger.error("TaskAction ------- selectTranslateComment : filePath  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath 为空");
+        }
+        try{
+            List<TranslateComment> list = taskService.selectTranslateComment(filePath);
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",list);
+        }catch (Exception e){
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"操作由于异常而失败"+e.getMessage());
         }
 
     }

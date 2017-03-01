@@ -2,6 +2,7 @@ package com.qingtian.apps.system.taskTranslate;
 
 import com.qingtian.apps.system.File.entity.FileInfo;
 import com.qingtian.apps.system.File.entity.TaskFile;
+import com.qingtian.apps.task.entity.TranslateComment;
 import com.qingtian.utils.Constant;
 import com.qingtian.utils.StringUtils;
 import com.qingtian.utils.ToolUtils;
@@ -24,16 +25,16 @@ public class SplitFile {
     public static void main(String argv[]) {
         String filePath = "F:\\machao1\\test1.txt";
         String filePath1= "F:\\machao1\\0D372E17-8A86-0CCC-AF51-AA63A583349111.txt";
-        String filePath2= "E:\\UpAndDown\\test\\abc.txt";
+        String filePath2= "F:\\machao1\\test\\abc.txt";
 //        readTxtFile(filePath);
 //        System.out.println(getFileCount(filePath));
         try {
 //            sqlitFile(filePath);
             SplitFile splitFile = new SplitFile();
-            splitFile.sqlitFile(filePath);
+//            splitFile.sqlitFile(filePath);
 //            splitFile.getMulitLine(filePath2);
-//            splitFile.preFileByCount(filePath2);
-//            splitFile.getMulitLine1(filePath2);
+//            splitFile.preFileByCount(filePath2,3);
+            splitFile.getMulitLine(filePath2,3);
         } catch (Exception e) {
 
         }
@@ -209,19 +210,6 @@ public class SplitFile {
         read.close();
     }
 
-    /**
-     *
-     * @param sourceFilePath
-     * @return
-     * @throws IOException
-     */
-    public List<String> getFile(String sourceFilePath) throws IOException {
-        //获取经过处理后的文件
-        List<String> lists = getMulitLine(sourceFilePath);
-
-
-        return null;
-    }
 
     /**
      * 获取多行数据
@@ -229,13 +217,12 @@ public class SplitFile {
      * @return
      * @throws IOException
      */
-    public List<String> getMulitLine(String sourceFilePath) throws IOException {
+    public List<String> getMulitLine1(String sourceFilePath,int pageLine) throws IOException {
         List<String> lists = new ArrayList<>();
         FileInputStream fileInputStream = new FileInputStream(sourceFilePath);
         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "GBK");
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         String lineTxt = null;
-//        String resultText = null;
         String resultText = "";
         int line = 1;
         int count = 0;
@@ -243,15 +230,12 @@ public class SplitFile {
             //字符相加
             resultText = StringUtils.plusString(resultText,lineTxt);
             //每3行划分一个
-            if(line % Constant.PAGE_LINE==0){
+            if(line % pageLine==0){
                 lists.add(resultText);
                 System.out.println(resultText);
                 resultText = "";
                 count++;
             }
-//            else if(line % Constant.PAGE_LINE!=0 && resultText!=null){
-//                System.out.println(resultText);
-//            }
             line++;
         }
         System.out.println("count:"+count);
@@ -259,7 +243,14 @@ public class SplitFile {
         return lists;
     }
 
-    public List<String> preFileByCount(String sourceFilePath)throws IOException{
+    /**
+     * 不足规定行数的则补充换行符
+     * @param sourceFilePath
+     * @return
+     * @throws IOException
+     */
+    public List<String> preFileByCount(String sourceFilePath,int pageLine)throws IOException{
+
         List<String> lists = new ArrayList<>();
         FileInputStream fileInputStream = new FileInputStream(sourceFilePath);
         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "GBK");
@@ -270,29 +261,85 @@ public class SplitFile {
             lists.add(lineTxt);
             count++;
         }
-        switch (count%3){
+        switch (count % pageLine){
             case 1:lists.add("\r\n");
             case 2:lists.add("\r\n");break;
+
         }
 //        System.out.println(lists.toString());
         return lists;
     }
 
 
-    public List<String> getMulitLine1(String sourceFilePath) throws IOException{
-        List<String> lists = preFileByCount(sourceFilePath);
+    /**
+     * 获取多行数据
+     * @param sourceFilePath
+     * @return
+     * @throws IOException
+     */
+    public List<String> getMulitLine2(String sourceFilePath,int pageLine) throws IOException{
+        //不足规定行数补足
+        List<String> lists = preFileByCount(sourceFilePath,pageLine);
+        //返回的list
         List<String> reLists = new ArrayList<>();
+        //初始行数
         int line = 1;
         String resultText = "";
+        //划分：每隔规定行就往list中添加String
         for(int i=0;i<=lists.size();i++){
             resultText = StringUtils.plusNewLineString(resultText,lists.get(i));
             if(line % Constant.PAGE_LINE==0){
                 reLists.add(resultText);
-                System.out.println(resultText);
+//                System.out.println(resultText);
                 resultText = "";
             }
             line++;
         }
         return reLists;
+    }
+
+    /**
+     * 获取多行数据
+     * @param sourceFilePath
+     * @return
+     * @throws IOException
+     */
+    public List<TranslateComment> getMulitLine(String sourceFilePath, int pageLine) throws IOException{
+        //不足规定行数补足
+        List<String> lists = preFileByCount(sourceFilePath,pageLine);
+        //返回的list
+        List<TranslateComment> reLists = new ArrayList<>();
+        //初始行数
+        int line = 1;
+        int count = 1;
+        String resultText = "";
+        //划分：每隔规定行就往list中添加String
+        for(int i=0;i<lists.size();i++){
+            resultText = StringUtils.plusNewLineString(resultText,lists.get(i));
+            if(line % Constant.PAGE_LINE==0){
+                TranslateComment tc = new TranslateComment();
+                tc.setComment(resultText);
+                tc.setCommentId(count);
+                reLists.add(tc);
+//                System.out.println(resultText);
+                resultText = "";
+                count++;
+            }
+            line++;
+        }
+        return reLists;
+    }
+
+
+    /**
+     * 获取经过处理的文件
+     * @param sourceFilePath
+     * @return
+     * @throws IOException
+     */
+    public List<TranslateComment> getFile(String sourceFilePath,int pageLine) throws IOException {
+        //获取经过处理后的文件
+        List<TranslateComment> list = getMulitLine(sourceFilePath,pageLine);
+        return list;
     }
 }

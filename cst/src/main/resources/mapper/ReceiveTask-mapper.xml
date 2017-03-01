@@ -32,13 +32,15 @@
             a.submitterId,
             a.fileId,
             a.fileCode,
-            b.`comment`
+            b.`comment`,
+            c.filePath
             FROM
             p_task_receive AS a ,
-            p_task_subbmit AS b
+            p_task_subbmit AS b ,
+            p_file AS c
             WHERE
-            a.taskId = b.taskId
-            AND
+            a.taskId = b.taskId AND
+            a.fileId = c.fileId AND
             a.receiverId = #{userId}
     </select>
 </mapper>

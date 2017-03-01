@@ -124,6 +124,11 @@
                 <div id="common_task_pager"></div>
             </div>
 
+            <div style="padding-top: 60px">
+                <table class="table" id="task_comment_table">
+                </table>
+                <div id="common_task_comment_pager"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -162,7 +167,7 @@
 
 
 
-
+    /*查询当前用户的所有任务*/
     function doSearch() {
         var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTaskByUerId.do";
         var userId = getCookieValue("userId");
@@ -176,7 +181,7 @@
                             url: selectAllUrl_,
                             postData: params,
                             datatype: "json",
-                            height: 393,
+                            height: 200,
                             mtype: "post",
                             jsonReader: {
                                 "root": "data.rows",
@@ -207,6 +212,11 @@
                                     "hidden": true
                                 },
                                 {
+                                    "name": "filePath",
+                                    "label": "文件路径",
+                                    "hidden": true
+                                },
+                                {
                                     "name": "comment",
                                     "label": "任务内容",
                                 },
@@ -221,13 +231,14 @@
                             pager: "#common_task_pager",
                             beforeSelectRow: function (rowid, e) {
                                 jQuery("#task_table").jqGrid('resetSelection');
-                                fileId=$($("#task_table").jqGrid("getRowData", rowid).fileId).val();
-                                alert(fileId);
-//                                showWorkerQualList(fileId);
+
+                                var rowData = $("#task_table").jqGrid('getRowData',rowid);
+//                                console.log(rowData);
+                                showTranslationString(rowData);
                                 return (true);
                             },
                             altRows: true,
-                            multiselect: true,
+                            multiselect: false,
                             multiboxonly: false,
                             rownumbers: true,
                             autowidth: true,
@@ -238,76 +249,126 @@
                                 }, 0);
                             }
                         });
-
     }
 
+    /*显示需要翻译的内容*/
+    function showTranslationString1(rowData) {
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTranslateComment.do";
 
-
-
-    /*查询所有任务*/
-    function doSearch1() {
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTaskByUerId.do";
-        var userId = getCookieValue("userId");
         var params = {
-            userId:userId
+            filePath:rowData.filePath
         };
+        $("#task_comment_table").GridUnload();
+        $("#task_comment_table")
+                .jqGrid(
+                        {
+                            url: selectAllUrl_,
+                            postData: params,
+                            datatype: "json",
+                            height: 200,
+                            mtype: "post",
+                            jsonReader: {
+                                "root": "data.rows",
+                                "page": "data.page",
+                                "total": "data.total",
+                                "records": "data.records",
+                                "repeatitems": true
+                            },
+                            colModel: [
+                                {
+                                    "name": "commentId",
+                                    "label": "commentId",
+                                    "hidden": true
+                                },
+                                {
+                                    "name": "comment",
+                                    "label": "翻译内容",
+                                }
+                            ],
+                            viewrecords: true,
+                            rowNum: 10,
+                            rowList: [10, 20, 30],
+                            pager: "#common_task_comment_pager",
+//                            beforeSelectRow: function (rowid, e) {
+//                                jQuery("#task_comment_table").jqGrid('resetSelection');
+//
+//                                var rowData = $("#task_comment_table").jqGrid('getRowData',rowid);
+//                                console.log(rowData);
+////                                fileId=$($("#task_table").jqGrid("getRowData", rowid).fileId).val();
+////                                alert(fileId);
+////                                showWorkerQualList(fileId);
+//                                return (true);
+//                            },
+                            altRows: true,
+                            multiselect: false,
+                            multiboxonly: false,
+                            rownumbers: true,
+                            autowidth: true,
+                            loadComplete: function () {
+                                var table = this;
+                                setTimeout(function () {
+                                    updatePagerIcons(table);
+                                }, 0);
+                            }
+                        });
+    }
+
+    function showTranslationString(rowData) {
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTranslateComment.do";
+
+        var params = {
+            filePath:rowData.filePath
+        };
+
         ajaxFunction(
                 selectAllUrl_,
                 params,
                 function (result) {
                     if (result.success) {
-                        $("#task_table").GridUnload();
-                        $("#task_table").jqGrid(
+                        $("#task_comment_table").GridUnload();
+                        $("#task_comment_table").jqGrid(
                                 {
                                     data: result.data,
                                     datatype: "local",
                                     height: 250,
                                     colModel: [
                                         {
-                                            "name": "id",
-                                            "label": "id",
-                                            "hidden": true
-                                        },
-                                        {
-                                            "name": "taskId",
-                                            "label": "任务id",
-                                            "hidden": true
-                                        },
-                                        {
-                                            "name": "submitterId",
-                                            "label": "领取者id",
+                                            "name": "commentId",
+                                            "label": "commentId",
                                             "hidden": true
                                         },
                                         {
                                             "name": "comment",
-                                            "label": "任务内容",
+                                            "label": "翻译内容",
+                                            "formatter":function (value,options,rowData) {
+                                                console.log(value.length);
+                                                return value;
+
+                                            }
                                         },
                                         {
-                                            "name": "submitter",
-                                            "label": "任务提交者"
-                                        }
-//                                        {
-//                                            "name": "fnDiv",
-//                                            "label": "功能",
-//                                            "formatter": function (value, options,
-//                                                                   rowData) {
-//                                                return "<div style='margin-left: 8px;'>"
-//                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
-//                                                        + JSON
-//                                                                .stringify(rowData)
-//                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
+                                            "name": "fnDiv",
+                                            "label": "功能",
+                                            "formatter": function (value, options,
+                                                                   rowData) {
+                                                return "<div style='margin-left: 8px;'>"
+                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+                                                        + JSON
+                                                                .stringify(rowData)
+                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
 //                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
 //                                                        + rowData.id
-//                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
-//                                                ;
-//
-//                                            }
-//                                        }
+//                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>"
+                                                        ;
+                                                ;
+
+                                            }
+                                        }
                                         ],
                                     viewrecords: true,
-                                    rowNum: 10,
+                                    rowNum: 5,
                                     rowList: [10, 20, 30],
-                                    pager: "#common_task_pager",
+                                    pager: "#common_task_comment_pager",
                                     altRows: true,
                                     multiselect: false,
                                     multiboxonly: true,
@@ -326,9 +387,12 @@
                     }
 
                 });
-
-
     }
+
+
+
+
+
 
 
 
