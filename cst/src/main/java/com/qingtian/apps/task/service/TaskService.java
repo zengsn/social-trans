@@ -131,13 +131,48 @@ public class TaskService {
      * @param filePath
      * @return
      */
-    public List<TranslateComment> selectTranslateComment(String filePath)throws Exception{
-        SplitFile splitFile = new SplitFile();
-        int pageLine = Constant.PAGE_LINE;
-        List<TranslateComment> list = splitFile.getMulitLine(filePath,pageLine);
+    public List<TranslateComment> selectTranslateComment(String filePath,String fileId)throws Exception{
+        List<TranslateComment> list = null;
+        if(haveTranslate(fileId)){//已经存在，则从数据库表中获取翻译内容和翻译结果
+            list = sqlSession.selectList("TranslateComment.selectList",fileId);
+        }else {//不存在的插表
+            SplitFile splitFile = new SplitFile();
+            int pageLine = Constant.PAGE_LINE;
+            list = splitFile.getFile(filePath,fileId,pageLine);
+            sqlSession.insert("TranslateComment.insertTranslateBatch",list);
+        }
         return list;
     }
 
+    /**
+     * 保存翻译结果
+     * @param tc
+     * @return
+     */
+    public Boolean updateTranslateResult(TranslateComment tc){
+        int result = sqlSession.update("TranslateComment.updateTranslateResult",tc);
+        return result>0? true:false;
+    }
+
+    /**
+     * 判断翻译文件是否已经按照要求划分
+     */
+    public Boolean haveTranslate(String fileId){
+        List<TranslateComment> list = sqlSession.selectList("TranslateComment.selectList",fileId);
+        if(list!=null && list.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public List<TranslateComment> selectTranslateResult(String fileId,int commentId){
+        TranslateComment tc = new TranslateComment();
+        tc.setFileId(fileId);
+        tc.setCommentId(commentId);
+        List<TranslateComment> list = sqlSession.selectList("TranslateComment.selectListByFC",tc);
+        return list;
+    }
 
 
 }

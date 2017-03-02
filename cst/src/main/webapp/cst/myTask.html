@@ -131,6 +131,59 @@
             </div>
         </div>
     </div>
+
+    <div tabindex="-1" class="modal fade in bs-example-modal-lg" id="update-modal" aria-hidden="false" style="padding-right: 17px; display:none">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>
+                    <h3 class="smaller lighter blue no-margin">翻译窗口</h3>
+                </div>
+                <input type="hidden" name="commentId">
+                <input type="hidden" name="fileId">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <form class="form-horizontal" style="margin: 0px" >
+                                <table style="width: 100%;margin-left: 4% ;border-collapse:separate; border-spacing:10px;" cellpadding="10" cellspacing="10" >
+                                    <tr>
+                                        <td align="right">
+                                            <label class="control-label" for="comment">翻译内容:</label>
+                                        </td>
+
+                                        <td>
+                                            <textarea id="comment" name="comment" rows="5" cols="100" readonly></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr style="margin-top: 10px">
+                                        <td align="right">
+                                            <label class="control-label" for="commentResult">翻译结果:</label>
+                                        </td>
+                                        <td>
+                                            <textarea id="commentResult" name="commentResult" rows="5" cols="100" ></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </form>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-danger pull-left" onclick="closeTranslateWin()">
+                        <i class="ace-icon fa  fa-undo"></i> 取消
+                    </button>
+                    <button class="btn btn-lg btn-success" type="button" onclick="upTranslateFn()">
+                        <i class="ace-icon fa fa-check"></i> 提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -251,73 +304,14 @@
                         });
     }
 
-    /*显示需要翻译的内容*/
-    function showTranslationString1(rowData) {
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTranslateComment.do";
 
-        var params = {
-            filePath:rowData.filePath
-        };
-        $("#task_comment_table").GridUnload();
-        $("#task_comment_table")
-                .jqGrid(
-                        {
-                            url: selectAllUrl_,
-                            postData: params,
-                            datatype: "json",
-                            height: 200,
-                            mtype: "post",
-                            jsonReader: {
-                                "root": "data.rows",
-                                "page": "data.page",
-                                "total": "data.total",
-                                "records": "data.records",
-                                "repeatitems": true
-                            },
-                            colModel: [
-                                {
-                                    "name": "commentId",
-                                    "label": "commentId",
-                                    "hidden": true
-                                },
-                                {
-                                    "name": "comment",
-                                    "label": "翻译内容",
-                                }
-                            ],
-                            viewrecords: true,
-                            rowNum: 10,
-                            rowList: [10, 20, 30],
-                            pager: "#common_task_comment_pager",
-//                            beforeSelectRow: function (rowid, e) {
-//                                jQuery("#task_comment_table").jqGrid('resetSelection');
-//
-//                                var rowData = $("#task_comment_table").jqGrid('getRowData',rowid);
-//                                console.log(rowData);
-////                                fileId=$($("#task_table").jqGrid("getRowData", rowid).fileId).val();
-////                                alert(fileId);
-////                                showWorkerQualList(fileId);
-//                                return (true);
-//                            },
-                            altRows: true,
-                            multiselect: false,
-                            multiboxonly: false,
-                            rownumbers: true,
-                            autowidth: true,
-                            loadComplete: function () {
-                                var table = this;
-                                setTimeout(function () {
-                                    updatePagerIcons(table);
-                                }, 0);
-                            }
-                        });
-    }
 
     function showTranslationString(rowData) {
         var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/selectTranslateComment.do";
 
         var params = {
-            filePath:rowData.filePath
+            filePath:rowData.filePath,
+            fileId:rowData.fileId
         };
 
         ajaxFunction(
@@ -338,11 +332,18 @@
                                             "hidden": true
                                         },
                                         {
+                                            "name": "fileId",
+                                            "label": "附件id",
+                                            "hidden": true
+                                        },
+                                        {
                                             "name": "comment",
                                             "label": "翻译内容",
                                             "formatter":function (value,options,rowData) {
-                                                console.log(value.length);
-                                                return value;
+                                                //只显示0-40个字符
+                                                var str = value.substring(0,40);
+//                                                console.log(str);
+                                                return str;
 
                                             }
                                         },
@@ -352,7 +353,7 @@
                                             "formatter": function (value, options,
                                                                    rowData) {
                                                 return "<div style='margin-left: 8px;'>"
-                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openTranslateWin("
                                                         + JSON
                                                                 .stringify(rowData)
                                                         + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
@@ -367,7 +368,7 @@
                                         ],
                                     viewrecords: true,
                                     rowNum: 5,
-                                    rowList: [10, 20, 30],
+                                    rowList: [5, 10, 15],
                                     pager: "#common_task_comment_pager",
                                     altRows: true,
                                     multiselect: false,
@@ -391,12 +392,49 @@
 
 
 
+    /*翻译窗口*/
+    function openTranslateWin(rowData) {
+        var selectURL_ = "/" + PROJECT_NAME + "/TaskAction/selectTranslateResult.do";
+        var params = {
+            fileId:rowData.fileId,
+            commentId:rowData.commentId
+        }
+        ajaxFunction(selectURL_,params,function (result) {
+            if(result.success){
+                $("#update-modal").modal('show');
 
+                console.log(result);
 
+                /*翻译界面数据初始化*/
+                update_init($('#update-modal'), result.data[0]);
+            }else {
+                bootbox.alert("加载失败");
+            }
 
+        })
 
+    }
 
+    /*关闭翻译界面*/
+    function closeTranslateWin() {
+        $("#update-modal").modal('hide');
+    }
 
+    /*保存当前翻译内容，按条*/
+    function upTranslateFn() {
+        var params = formToJsonstr('update-modal');
+//        console.log(params);
+        var updateFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/updateTranslateResult.do";
+        ajaxFunction(updateFnUrl_,params,function (result) {
+            if(result.success){
+                bootbox.alert("修改成功");
+                closeTranslateWin();
+            }else{
+                bootbox.alert("修改失败");
+            }
+        });
+
+    }
 
 
     /*信息重置*/
@@ -412,42 +450,9 @@
 
 
 
-    /*领取任务*/
-    function openUpdateWin(rowData) {
-//        console.log(rowData);
-        bootbox.confirm("确定要领取该任务么？", function (result) {
-            if (result == true) {
-                reConfirm(rowData);
-            }
-        });
-    }
 
-    /*领取任务*/
-    function reConfirm(rowData) {
 
-        var isReceive = rowData.isReceive;
-        if(isReceive == '1'){
-            bootbox.alert("该任务已经被领取了");
-            return;
-        }
-        var updateFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/updateReTask.do";
-        //当前登录用户id
-        var userId = getCookieValue("userId");
-        var params = {
-            id: rowData.id,
-            receiverId:userId,
-        }
-        ajaxFunction(updateFnUrl_, params,
-                function (result) {
-                    if (result.success) {
-                        bootbox.alert("领取成功:");
-                        doSearch();
-                    } else {
-                        bootbox.alert("领取失败:");
-                    }
 
-                })
-    }
 
 
 
@@ -487,6 +492,23 @@
     //        minuteStep: 6,
     //        showMeridian: 1,
     //    });
+
+    var GetLength = function (str) {
+        ///<summary>获得字符串实际长度，中文2，英文1</summary>
+        ///<param name="str">要获得长度的字符串</param>
+        var realLength = 0, len = str.length, charCode = -1;
+        for (var i = 0; i < len; i++) {
+            charCode = str.charCodeAt(i);
+            if (charCode >= 0 && charCode <= 128) realLength += 1;
+            else realLength += 2;
+        }
+        return realLength;
+    };
+
+    //js截取字符串，中英文都能用
+    //如果给定的字符串大于指定长度，截取指定长度返回，否者返回源字符串。
+    //字符串，长度
+
 
 
 </script>

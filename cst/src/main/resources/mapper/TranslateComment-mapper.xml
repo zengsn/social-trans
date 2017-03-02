@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="TranslateComment">
+
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <update id="updateTranslateResult" parameterType="TranslateComment">
+        update p_translate_result set commentResult =#{commentResult} WHERE fileId = #{fileId} AND commentId =#{commentId}
+    </update>
+
+    <select id="selectList" parameterType="String" resultType="TranslateComment">
+        select * from p_translate_result WHERE fileId = #{fileId}
+    </select>
+
+    <!-- 批量添加翻译内容 -->
+    <insert id="insertTranslateBatch" parameterType="java.util.List">
+        insert p_translate_result(fileId,commentId,comment)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (#{item.fileId},#{item.commentId},#{item.comment})
+        </foreach>
+    </insert>
+
+    <select id="selectListByFC" parameterType="TranslateComment" resultType="TranslateComment">
+         select * from p_translate_result WHERE fileId = #{fileId} AND commentId =#{commentId}
+    </select>
+
+
+
+</mapper>

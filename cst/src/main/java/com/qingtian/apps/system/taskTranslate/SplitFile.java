@@ -34,7 +34,7 @@ public class SplitFile {
 //            splitFile.sqlitFile(filePath);
 //            splitFile.getMulitLine(filePath2);
 //            splitFile.preFileByCount(filePath2,3);
-            splitFile.getMulitLine(filePath2,3);
+            splitFile.getMulitLine(filePath2,"123",3);
         } catch (Exception e) {
 
         }
@@ -304,7 +304,7 @@ public class SplitFile {
      * @return
      * @throws IOException
      */
-    public List<TranslateComment> getMulitLine(String sourceFilePath, int pageLine) throws IOException{
+    public List<TranslateComment> getMulitLine(String sourceFilePath,String fileId,int pageLine) throws IOException{
         //不足规定行数补足
         List<String> lists = preFileByCount(sourceFilePath,pageLine);
         //返回的list
@@ -320,6 +320,7 @@ public class SplitFile {
                 TranslateComment tc = new TranslateComment();
                 tc.setComment(resultText);
                 tc.setCommentId(count);
+                tc.setFileId(fileId);
                 reLists.add(tc);
 //                System.out.println(resultText);
                 resultText = "";
@@ -337,9 +338,9 @@ public class SplitFile {
      * @return
      * @throws IOException
      */
-    public List<TranslateComment> getFile(String sourceFilePath,int pageLine) throws IOException {
+    public List<TranslateComment> getFile(String sourceFilePath,String fileId,int pageLine) throws IOException {
         //获取经过处理后的文件
-        List<TranslateComment> list = getMulitLine(sourceFilePath,pageLine);
+        List<TranslateComment> list = getMulitLine(sourceFilePath,fileId,pageLine);
         return list;
     }
 }

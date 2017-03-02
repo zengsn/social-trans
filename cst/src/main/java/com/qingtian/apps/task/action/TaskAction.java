@@ -212,15 +212,27 @@ public class TaskAction {
 
     }
 
+    /**
+     * 查询翻译内容
+     * @param filePath
+     * @param fileId
+     * @return
+     */
     @RequestMapping("selectTranslateComment.do")
-    public String selectTranslateComment(String filePath){
+    public String selectTranslateComment(String filePath,String fileId){
 
         if(StringUtils.isEmpty(filePath )){
             logger.error("TaskAction ------- selectTranslateComment : filePath  为空");
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath 为空");
         }
+
+        if(StringUtils.isEmpty(fileId )){
+            logger.error("TaskAction ------- selectTranslateComment : fileId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
+        }
+
         try{
-            List<TranslateComment> list = taskService.selectTranslateComment(filePath);
+            List<TranslateComment> list = taskService.selectTranslateComment(filePath,fileId);
             return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",list);
         }catch (Exception e){
             return JsonUtils.genUpdateDataReturnJsonStr(true,"操作由于异常而失败"+e.getMessage());
@@ -228,5 +240,61 @@ public class TaskAction {
 
     }
 
+    /**
+     * 保存翻译结果
+     * @param tc
+     * @return
+     */
+    @RequestMapping("updateTranslateResult.do")
+    public String updateTranslateResult(TranslateComment tc){
+
+        String fileId = tc.getFileId();
+        if(StringUtils.isEmpty(fileId )){
+            logger.error("TaskAction ------- saveTranslateResult : fileId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
+        }
+
+        String commentResult = tc.getCommentResult();
+        if(StringUtils.isEmpty(commentResult )){
+            logger.error("TaskAction ------- saveTranslateResult : commentResult  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"commentResult 为空");
+        }
+
+        try{
+            Boolean isSuccess = taskService.updateTranslateResult(tc);
+            if(isSuccess){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"保存成功");
+            }else {
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"保存失败");
+            }
+        }catch (Exception e){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而失败"+e.getMessage());
+        }
+
+    }
+
+    /**
+     * 查询翻译结果
+     * @param fileId
+     * @param commentId
+     * @return
+     */
+    @RequestMapping("selectTranslateResult.do")
+    public String selectTranslateResult(String fileId,int commentId){
+
+        if(StringUtils.isEmpty(fileId )){
+            logger.error("TaskAction ------- saveTranslateResult : fileId  为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
+        }
+
+
+
+        List<TranslateComment> list = taskService.selectTranslateResult(fileId,commentId);
+        if(list.size()>0 && list!= null){
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"查询成功",list);
+        }else{
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"查询失败");
+        }
+    }
 
 }
