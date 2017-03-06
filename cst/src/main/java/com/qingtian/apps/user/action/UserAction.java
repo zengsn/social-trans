@@ -66,12 +66,6 @@ public class UserAction {
         }
 
 
-        //验证手机号码非空
-//        String phoneNumber = user.getPhoneNumber();
-//        if(phoneNumber == null || "".equals(phoneNumber)){
-//            logger.error("UserAction ------- updateUser : phoneNumber 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"phoneNumber为空");
-//        }
 
         Boolean isSuccess = userService.updateUser(user);
         if(isSuccess){

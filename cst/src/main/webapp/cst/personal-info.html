@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detail Admin - My Info</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../assets/mstp/bootstrap/bootstrap.css">
+    <link href="../assets/mstp/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/mstp/bootstrap/bootstrap-overrides.css">
+
+
+    <!-- global styles -->
+    <link rel="stylesheet" href="../assets/mstp/layout.css">
+    <link rel="stylesheet" href="../assets/mstp/elements.css">
+    <link rel="stylesheet" href="../assets/mstp/icons.css">
+
+
+    <!-- libraries -->
+    <link rel="stylesheet" href="../assets/mstp/lib/font-awesome.css">
+
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="../assets/mstp/compiled/personal-info.css">
+
+
+</head>
+<body>
+
+
+
+<!-- main container .wide-content is used for this layout without sidebar :)  -->
+<div class="content wide-content">
+    <div class="container-fluid">
+        <div class="settings-wrapper" id="pad-wrapper">
+            <!-- avatar column -->
+            <div class="span3 avatar-box">
+                <div class="personal-image">
+                    <img src="../assets/img/headImg.jpg" class="avatar img-circle" />
+                    <p>上传头像.</p>
+
+                    <input type="file" />
+                </div>
+            </div>
+
+            <!-- edit form column -->
+            <div class="span7 personal-info">
+                <!--<div class="alert alert-info">-->
+                    <!--<i class="icon-lightbulb"></i>-->
+                    <!--This page shows an example of an alternative layout with the main navbar on the top-->
+                    <!--<br /> using <strong>.content.wide-content</strong> for this main container-->
+                <!--</div>-->
+                <h5 class="personal-title">用户信息</h5>
+
+                <form id="userInfo"/>
+                <input name="userId" hidden>
+                <div class="field-box">
+                    <label>用户帐号:</label>
+                    <input class="span5 inline-input" type="text" value="chenjie@163.com" name="account" disabled />
+                </div>
+                <div class="field-box">
+                    <label>用户名:</label>
+                    <input class="span5 inline-input" type="text" name="username" value="陈杰" />
+                </div>
+                <div class="field-box">
+                    <label>邮箱:</label>
+                    <input class="span5 inline-input" type="text" name="email" value="chenjie@163.com" />
+                </div>
+                <div class="field-box">
+                    <label>电话号码:</label>
+                    <input class="span5 inline-input" type="text" name="phoneNumber" value="15767979002" />
+                </div>
+                <!--<div class="field-box">-->
+                    <!--<label>Time Zone:</label>-->
+                    <!--<div class="ui-select">-->
+                        <!--<select id="user_time_zone" name="user[time_zone]">-->
+                            <!--<option value="Hawaii" />(GMT-10:00) Hawaii-->
+                            <!--<option value="Alaska" />(GMT-09:00) Alaska-->
+                            <!--<option value="Pacific Time (US &amp; Canada)" />(GMT-08:00) Pacific Time (US &amp; Canada)-->
+                            <!--<option value="Arizona" />(GMT-07:00) Arizona-->
+                            <!--<option value="Mountain Time (US &amp; Canada)" />(GMT-07:00) Mountain Time (US &amp; Canada)-->
+                            <!--<option value="Central Time (US &amp; Canada)" selected="selected" />(GMT-06:00) Central Time (US &amp; Canada)-->
+                            <!--<option value="Eastern Time (US &amp; Canada)" />(GMT-05:00) Eastern Time (US &amp; Canada)-->
+                            <!--<option value="Indiana (East)" />(GMT-05:00) Indiana (East)-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="field-box">
+                    <label>用户角色:</label>
+                    <input class="span5 inline-input" type="text"  name="role" value="普通用户" disabled />
+                </div>
+                <!--<div class="field-box">-->
+                    <!--<label>Password:</label>-->
+                    <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
+                <!--</div>-->
+                <!--<div class="field-box">-->
+                    <!--<label>Confirm password:</label>-->
+                    <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
+                <!--</div>-->
+                </form>
+                <div class="span6 field-box actions" style="margin-left:90px">
+                    <input type="button" class="btn-glow primary btn-lg" value="保存" onclick="updateUser()"/>
+                    <!--<span>OR</span>-->
+                    <!--<input type="reset" value="Cancel" class="reset" />-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end main container -->
+
+
+<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+
+<!-- scripts -->
+<script src="../assets/mstp/js/jquery-latest.js"></script>
+<script src="../assets/mstp/js/bootstrap.min.js"></script>
+<script src="../assets/mstp/js/theme.js"></script>
+<!--bootbox依赖于modal-->
+<script src="../assets/js/bootbox.min.js"></script>
+<!--commonJs-->
+<script type="text/javascript" src="../js/commonJs/common.js"></script>
+<script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
+<script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
+<script>
+
+    $(document).ready(function (result) {
+        initData();
+    });
+
+    /*获取当前用户信息*/
+    function initData() {
+        //获取登录的用户id
+        var userId = getCookieValue("userId");
+        var url = "/" + PROJECT_NAME + "/User/selectById.do";
+        var params = {
+            userId:userId
+        }
+        ajaxFunction(url,params,function (result) {
+            if(result){
+//                console.log(result);
+//                $("#system_username").html(result.data.username);
+                //加载用户信息
+                user_init($('#userInfo'),result.data);
+            }else{
+                bootbox.alert("加载失败");
+            }
+        });
+    }
+
+    /*数据初始化*/
+    function user_init($dom, data) {
+        //textarea select
+        $dom.find(":input").each(function() {
+            var $this = $(this);
+            var name = $this.attr("name");
+            $this.val(data[name])
+        });
+    }
+
+    function updateUser() {
+        var params = formToJsonstr('userInfo');
+        var updateURL_ = "/" + PROJECT_NAME + "/User/updateUser.do";
+        ajaxFunction(updateURL_,params,function (result) {
+            if(result.success){
+
+                //更新用户信息表
+                initData();
+                //更新当前登录用户名
+
+                bootbox.alert("修改成功");
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

@@ -258,7 +258,7 @@
 							<a href="#">关于</a>
 						</span></li>
 				<li><span>
-							<a href="login.html" target="_parent">退出</a>
+							<a href="signin.html" target="_parent">退出</a>
 						</span></li>
 			</ul>
 			<div class="user">
@@ -268,7 +268,9 @@
 					</span>
 				<!--  <i>消息</i>
                 <b>5</b>-->
+
 			</div>
+
 		</div>
 	</div>
 	<!-- /.navbar-container -->
@@ -388,8 +390,23 @@
 			});
 		}
 		initAdd();
-
+		initData();
 	});
+
+	function initData() {
+		//获取登录的用户id
+		var userId = getCookieValue("userId");
+		var url = "/" + PROJECT_NAME + "/User/selectById.do";
+		var params = {
+			userId:userId
+		}
+		ajaxFunction(url,params,function (result) {
+			if(result){
+				console.log(result);
+				$("#system_username").html(result.data.username);
+			}
+		});
+	}
 
 
 
@@ -566,6 +583,7 @@
 			id = $(this).attr("tabclose");
 			closeTab(id);
 		});
+
 
 	}
 </script>
