@@ -79,7 +79,7 @@
     <script src="../assets/js/jquery.jqGrid.min.js"></script>
     <script src="../assets/js/grid.locale-en.js"></script>
     <script src="../assets/js/bootstrap-datepicker.min.js"></script>
-
+    <script src="../assets/js/bootbox.min.js"></script>
 
 
     <!--[if lte IE 8]>
@@ -96,6 +96,7 @@
     <!--时间控件-->
     <!--<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>-->
     <script type="text/javascript" src="../js/commonJs/ajaxfileupload.js" ></script>
+
 </head>
 <body class="no-skip">
 <div class="page-content">
@@ -436,7 +437,6 @@
 
     }
 
-
     /*信息重置*/
     function reset_add($dom) {
         //textarea select
@@ -448,34 +448,26 @@
     }
 
 
-
-
-
-
-
-
-
-
     function delConfirm() {
         bootbox.alert("无法删除");
     }
-
-    /*进入我的任务*/
-    function openTask() {
-        var obj = new Object();
-        //注意命名规则，以页面名+该按钮功能名为id
-        obj.id="我的任务";
-        //id与addtabs一致
-        obj.addtabs="我的任务";
-        //title自己命名
-        obj.title = "我的任务";
-        //url
-        obj.url="cst/myTask.html";
-        //是否可以关闭
-        obj.close=true;
-        //调用父iframe的方法
-        window.parent.addTabs(obj);
-    }
+//
+//    /*进入我的任务*/
+//    function openTask() {
+//        var obj = new Object();
+//        //注意命名规则，以页面名+该按钮功能名为id
+//        obj.id="我的任务";
+//        //id与addtabs一致
+//        obj.addtabs="我的任务";
+//        //title自己命名
+//        obj.title = "我的任务";
+//        //url
+//        obj.url="cst/myTask.html";
+//        //是否可以关闭
+//        obj.close=true;
+//        //调用父iframe的方法
+//        window.parent.addTabs(obj);
+//    }
 
     //    $('#add_finishedTime').datetimepicker({
     //        language: 'zh-CN',
@@ -493,21 +485,9 @@
     //        showMeridian: 1,
     //    });
 
-    var GetLength = function (str) {
-        ///<summary>获得字符串实际长度，中文2，英文1</summary>
-        ///<param name="str">要获得长度的字符串</param>
-        var realLength = 0, len = str.length, charCode = -1;
-        for (var i = 0; i < len; i++) {
-            charCode = str.charCodeAt(i);
-            if (charCode >= 0 && charCode <= 128) realLength += 1;
-            else realLength += 2;
-        }
-        return realLength;
-    };
 
-    //js截取字符串，中英文都能用
-    //如果给定的字符串大于指定长度，截取指定长度返回，否者返回源字符串。
-    //字符串，长度
+
+
 
 
 

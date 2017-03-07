@@ -7,15 +7,10 @@ public class User implements Serializable{
     private static final long serialVersionUID = 1L;
 
 
+    private String headImage;
+
+
     private String account;
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
 
     /**
      *
@@ -176,5 +171,21 @@ public class User implements Serializable{
      */
     public void setDisabled(String disabled) {
         this.disabled = disabled;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
     }
 }

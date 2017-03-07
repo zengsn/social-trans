@@ -42,7 +42,6 @@
         </trim>
     </select>
 
-
     <update id="updateById" parameterType="User">
         update P_user
         <trim prefix="SET" suffixOverrides=",">
@@ -59,6 +58,14 @@
 
             <if test="role !='' and role !=null">
                 `role` = #{role},
+            </if>
+
+            <if test="email !='' and email !=null">
+                `email` = #{email},
+            </if>
+
+            <if test="headImage !='' and headImage !=null">
+                `headImage` = #{headImage},
             </if>
         </trim>
         where userId=#{userId}

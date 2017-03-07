@@ -3,12 +3,12 @@
 <head>
     <title>Detail Admin - My Info</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!-- bootstrap -->
     <link rel="stylesheet" href="../assets/mstp/bootstrap/bootstrap.css">
-    <link href="../assets/mstp/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="../assets/mstp/bootstrap/bootstrap-responsive.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../assets/mstp/bootstrap/bootstrap-overrides.css">
 
 
@@ -25,10 +25,15 @@
     <!-- this page specific styles -->
     <link rel="stylesheet" href="../assets/mstp/compiled/personal-info.css">
 
-
+    <style>
+        .img-responsive {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
-
 
 
 <!-- main container .wide-content is used for this layout without sidebar :)  -->
@@ -37,20 +42,22 @@
         <div class="settings-wrapper" id="pad-wrapper">
             <!-- avatar column -->
             <div class="span3 avatar-box">
-                <div class="personal-image">
-                    <img src="../assets/img/headImg.jpg" class="avatar img-circle" />
-                    <p>上传头像.</p>
 
-                    <input type="file" />
+                <div class="personal-image">
+                    <img id="headImage" src="#" class="avatar img-circle img-responsive" alt=""/>
+                    <p>上传头像.</p>
+                    <input  type="file"  id="add_fileId" name="fileId"style="width:168px">
                 </div>
+
+
             </div>
 
             <!-- edit form column -->
             <div class="span7 personal-info">
                 <!--<div class="alert alert-info">-->
-                    <!--<i class="icon-lightbulb"></i>-->
-                    <!--This page shows an example of an alternative layout with the main navbar on the top-->
-                    <!--<br /> using <strong>.content.wide-content</strong> for this main container-->
+                <!--<i class="icon-lightbulb"></i>-->
+                <!--This page shows an example of an alternative layout with the main navbar on the top-->
+                <!--<br /> using <strong>.content.wide-content</strong> for this main container-->
                 <!--</div>-->
                 <h5 class="personal-title">用户信息</h5>
 
@@ -58,46 +65,46 @@
                 <input name="userId" hidden>
                 <div class="field-box">
                     <label>用户帐号:</label>
-                    <input class="span5 inline-input" type="text" value="chenjie@163.com" name="account" disabled />
+                    <input class="span5 inline-input" type="text" value="chenjie@163.com" name="account" disabled/>
                 </div>
                 <div class="field-box">
                     <label>用户名:</label>
-                    <input class="span5 inline-input" type="text" name="username" value="陈杰" />
+                    <input class="span5 inline-input" type="text" name="username"/>
                 </div>
                 <div class="field-box">
                     <label>邮箱:</label>
-                    <input class="span5 inline-input" type="text" name="email" value="chenjie@163.com" />
+                    <input class="span5 inline-input" type="text" name="email"/>
                 </div>
                 <div class="field-box">
                     <label>电话号码:</label>
-                    <input class="span5 inline-input" type="text" name="phoneNumber" value="15767979002" />
+                    <input class="span5 inline-input" type="text" name="phoneNumber"/>
                 </div>
                 <!--<div class="field-box">-->
-                    <!--<label>Time Zone:</label>-->
-                    <!--<div class="ui-select">-->
-                        <!--<select id="user_time_zone" name="user[time_zone]">-->
-                            <!--<option value="Hawaii" />(GMT-10:00) Hawaii-->
-                            <!--<option value="Alaska" />(GMT-09:00) Alaska-->
-                            <!--<option value="Pacific Time (US &amp; Canada)" />(GMT-08:00) Pacific Time (US &amp; Canada)-->
-                            <!--<option value="Arizona" />(GMT-07:00) Arizona-->
-                            <!--<option value="Mountain Time (US &amp; Canada)" />(GMT-07:00) Mountain Time (US &amp; Canada)-->
-                            <!--<option value="Central Time (US &amp; Canada)" selected="selected" />(GMT-06:00) Central Time (US &amp; Canada)-->
-                            <!--<option value="Eastern Time (US &amp; Canada)" />(GMT-05:00) Eastern Time (US &amp; Canada)-->
-                            <!--<option value="Indiana (East)" />(GMT-05:00) Indiana (East)-->
-                        <!--</select>-->
-                    <!--</div>-->
+                <!--<label>Time Zone:</label>-->
+                <!--<div class="ui-select">-->
+                <!--<select id="user_time_zone" name="user[time_zone]">-->
+                <!--<option value="Hawaii" />(GMT-10:00) Hawaii-->
+                <!--<option value="Alaska" />(GMT-09:00) Alaska-->
+                <!--<option value="Pacific Time (US &amp; Canada)" />(GMT-08:00) Pacific Time (US &amp; Canada)-->
+                <!--<option value="Arizona" />(GMT-07:00) Arizona-->
+                <!--<option value="Mountain Time (US &amp; Canada)" />(GMT-07:00) Mountain Time (US &amp; Canada)-->
+                <!--<option value="Central Time (US &amp; Canada)" selected="selected" />(GMT-06:00) Central Time (US &amp; Canada)-->
+                <!--<option value="Eastern Time (US &amp; Canada)" />(GMT-05:00) Eastern Time (US &amp; Canada)-->
+                <!--<option value="Indiana (East)" />(GMT-05:00) Indiana (East)-->
+                <!--</select>-->
+                <!--</div>-->
                 <!--</div>-->
                 <div class="field-box">
                     <label>用户角色:</label>
-                    <input class="span5 inline-input" type="text"  name="role" value="普通用户" disabled />
+                    <input class="span5 inline-input" type="text" name="role" disabled/>
                 </div>
                 <!--<div class="field-box">-->
-                    <!--<label>Password:</label>-->
-                    <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
+                <!--<label>Password:</label>-->
+                <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
                 <!--</div>-->
                 <!--<div class="field-box">-->
-                    <!--<label>Confirm password:</label>-->
-                    <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
+                <!--<label>Confirm password:</label>-->
+                <!--<input class="span5 inline-input" type="password" value="blablablabla" />-->
                 <!--</div>-->
                 </form>
                 <div class="span6 field-box actions" style="margin-left:90px">
@@ -124,6 +131,7 @@
 <script type="text/javascript" src="../js/commonJs/common.js"></script>
 <script type="text/javascript" src="../js/commonJs/appCommon.js"></script>
 <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
+<script type="text/javascript" src="../js/commonJs/ajaxfileupload.js"></script>
 <script>
 
     $(document).ready(function (result) {
@@ -136,24 +144,28 @@
         var userId = getCookieValue("userId");
         var url = "/" + PROJECT_NAME + "/User/selectById.do";
         var params = {
-            userId:userId
+            userId: userId
         }
-        ajaxFunction(url,params,function (result) {
-            if(result){
-//                console.log(result);
-//                $("#system_username").html(result.data.username);
+        ajaxFunction(url, params, function (result) {
+            if (result) {
                 //加载用户信息
-                user_init($('#userInfo'),result.data);
-            }else{
+                user_init($('#userInfo'), result.data);
+                //显示头像
+                showImage(result.data.headImage);
+            } else {
                 bootbox.alert("加载失败");
             }
         });
     }
 
+    function showImage(path) {
+        $('#headImage').attr('src', "/" + PROJECT_NAME + "/FileAction/showImage.do?path=" + path);
+    }
+
     /*数据初始化*/
     function user_init($dom, data) {
         //textarea select
-        $dom.find(":input").each(function() {
+        $dom.find(":input").each(function () {
             var $this = $(this);
             var name = $this.attr("name");
             $this.val(data[name])
@@ -161,18 +173,51 @@
     }
 
     function updateUser() {
-        var params = formToJsonstr('userInfo');
-        var updateURL_ = "/" + PROJECT_NAME + "/User/updateUser.do";
-        ajaxFunction(updateURL_,params,function (result) {
-            if(result.success){
+        //先上传头像
+        var upLoadImageURL_ = "/" + PROJECT_NAME + "/FileAction/upLoadFile.do";
+        $.ajaxFileUpload
+        (
+                {
+                    url: upLoadImageURL_, //用于文件上传的服务器端请求地址
+                    secureuri: false, //是否需要安全协议，一般设置为false*/
+                    fileElementId: 'add_fileId', //文件上传域的ID
+                    dataType: 'text', //返回值类型 一般设置为json
+                    success: function (data, status, e) {
+                        if (status) {
+                            var params = formToJsonstr('userInfo');
+                            var data = eval("(" + data + ")");
+                            var updateHeadImage = false;
+                            if(data.success){
+                                params = $.extend({}, params, {headImage: data.data[0].filePath});
+                                updateHeadImage = true;
+                            }
+                            var updateURL_ = "/" + PROJECT_NAME + "/User/updateUser.do";
+                            ajaxFunction(updateURL_, params, function (result) {
+                                if (result.success) {
 
-                //更新用户信息表
-                initData();
-                //更新当前登录用户名
+                                    //更新用户信息表
+                                    initData();
+                                    //更新当前登录用户名
+                                    window.parent.initData();
+                                    //更新头像
+                                    if(updateHeadImage){
+                                        showImage(data.data[0].filePath);
+                                    }
+                                    bootbox.alert("修改成功");
+                                }
+                            })
 
-                bootbox.alert("修改成功");
-            }
-        })
+                        } else {
+                            bootbox.alert("上传失败");
+                        }
+                    },
+                    error: function (data, status, e)//服务器响应失败处理函数
+                    {
+                        alert("上传失败" + e);
+                    }
+                }
+        )
+
     }
 
 

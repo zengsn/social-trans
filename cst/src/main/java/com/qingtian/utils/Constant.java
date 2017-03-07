@@ -30,4 +30,9 @@ public class Constant {
     public final static int SIZE = 500;
     //文件存放地址
     public final static String SOURCE_FILE_PATH = "E:" + File.separator + "TestCst";
+
+    //头像宽度
+    public final static int HEADIMAGE_WIDTH = 650;
+    //头像高度
+    public final static int HEADIMAGE_HEIGHT = 650;
 }
