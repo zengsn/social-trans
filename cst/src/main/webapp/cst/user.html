@@ -290,7 +290,6 @@
         /*页面初始化调用*/
         $(document).ready(function () {
             doSearch();
-
         });
 
 
@@ -365,7 +364,7 @@
                                             setTimeout(function() {
                                                 // styleCheckbox(table);
                                                 // updateActionIcons(table);
-                                                updatePagerIcons(table);
+//                                                updatePagerIcons(table);
                                                 // enableTooltips(table);
                                             }, 0);
                                         }
@@ -502,7 +501,6 @@
                 account:account
             };
             var doVerifyUrl_ = "/" + PROJECT_NAME + "/User/verifyAccount.do";
-//            var doVerifyUrl_ = "/User/verifyAccount.do";
             //ajax设置为同步，去后台验证
             ajaxFunction(doVerifyUrl_,params,
                     function (result) {

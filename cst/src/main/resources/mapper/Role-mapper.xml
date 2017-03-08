@@ -4,15 +4,11 @@
 <mapper namespace="Role">
     
     <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
-    <select id="selectAll"  parameterType="Role" resultType="Role">
-        select id,code,rolename,description,disabled from P_role
+    <select id="selectAllRole"  parameterType="Role" resultType="Role">
+        select * from p_role
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
-            <if test="id !='' and id !=null">
-                    and `id` = #{id}
-            </if>
-
-            <if test="code !='' and code !=null">
-                    and `code` = #{code}
+            <if test="roleId !='' and roleId !=null">
+                    and `roleId` = #{roleId}
             </if>
 
             <if test="rolename !='' and rolename !=null">
