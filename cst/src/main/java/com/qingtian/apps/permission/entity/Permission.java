@@ -1,14 +1,12 @@
 package com.qingtian.apps.permission.entity;
-import org.apache.ibatis.type.Alias;
-
 import java.io.Serializable;
 
    /**
     * permission 实体类
-    * Wed Mar 08 17:34:27 CST 2017 
+    * Thu Mar 09 09:47:52 CST 2017 
     */ 
 
-@Alias("Permission")
+
 public class Permission implements Serializable {
 	/**
 	*权限id
@@ -19,6 +17,11 @@ public class Permission implements Serializable {
 	*权限名称
 	*/
 	private String permissionName;
+
+	/**
+	*permissionName别名
+	*/
+	private String sname;
 
 	/**
 	*说明
@@ -51,6 +54,12 @@ public class Permission implements Serializable {
 	}
 	public String getPermissionName(){
 		return permissionName;
+	}
+	public void setSname(String sname){
+	this.sname=sname;
+	}
+	public String getSname(){
+		return sname;
 	}
 	public void setDescription(String description){
 	this.description=description;

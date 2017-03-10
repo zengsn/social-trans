@@ -21,5 +21,7 @@
 
     </select>
 
-
+	<select id="selectAllPermission" resultType="Permission">
+		SELECT * from p_permission
+	</select>
 </mapper>

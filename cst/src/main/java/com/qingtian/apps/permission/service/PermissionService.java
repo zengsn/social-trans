@@ -28,4 +28,13 @@ public class PermissionService {
         List<Permission> list = sqlSession.selectList("Permission.selectPermissionByRoleId",roleId);
         return list;
     }
+
+    /**
+     * 查询所有权限
+     * @return
+     */
+    public List<Permission> selectAllPermission(){
+        List<Permission> list = sqlSession.selectList("Permission.selectAllPermission");
+        return list;
+    }
 }
