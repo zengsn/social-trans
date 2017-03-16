@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.workSpace.utils.RandomGUID;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/12/20.
@@ -32,55 +34,17 @@ public class RoleService {
         List<Role> list = sqlSession.selectList("Role.selectAllRole",role);
         return list;
     }
-//
-//    /**
-//     * 增加角色
-//     * @param role
-//     * @return
-//     */
-//    public Boolean addRole(Role role){
-//        role.setId(new RandomGUID().toString());
-//        int result = sqlSession.insert("Role.insert",role);
-//        return result>0? true:false;
-//    }
-//
-//    /**
-//     * 校验角色代码唯一性
-//     * @param code
-//     * @return
-//     */
-//    public Boolean verifyAccount(String code){
-//        Role role = new Role();
-//        role.setCode(code);
-//        List<Role> list = sqlSession.selectList("Role.verifyAccount",role);
-//        if(list!= null && list.size()>0){
-//            //角色代码不唯一
-//            return true;
-//        }else {
-//            //角色代码唯一
-//            return false;
-//        }
-//    }
-//
-//    /**
-//     * 根据id修改角色资料
-//     * @param role
-//     * @return
-//     */
-//    public Boolean updateRole(Role role){
-//        int result = sqlSession.update("Role.updateById",role);
-//        return result>0? true:false;
-//    }
-//
-//    /**
-//     * 根据角色id删除角色（逻辑删除）
-//     * @param id
-//     * @return
-//     */
-//    public Boolean deleteRoleById(String id){
-//        Role role = new Role();
-//        role.setId(id);
-//        int result = sqlSession.update("Role.deleteRoleById",role);
-//        return result>0? true:false;
-//    }
+
+    public Boolean deleteRoleAndPermissionByRoleId(String roleId){
+
+        //1：根据roleId更新p_role表，设置disabled字段为0，逻辑删除
+        Role role = new Role();
+        role.setRoleId(roleId);
+        role.setDisabled("0");
+        int roleResult = sqlSession.update("Role.deleteRoleById",role);
+        //2：根据roleId删除p_rolepermission表中对应的权限
+        int rolePermissionResult = sqlSession.delete("Role.deletePermissionByRoleId",roleId);
+        return (roleResult>0 && rolePermissionResult>0);
+    }
+
 }

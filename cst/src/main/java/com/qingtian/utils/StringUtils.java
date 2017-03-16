@@ -7,6 +7,8 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by machao on 2016/12/31.
@@ -156,12 +158,20 @@ public class StringUtils {
         }
     }
 
+//    public static String permissionNameMatch(String sname){
+////        if(sname.equals("userManagement"))
+//    }
+
     public static void main(String[] args) {
-        String sourcePath = "F:\\image\\1.jpg";
-        String aimPath = "F:\\image\\5.jpg";
-//        zoomImage(sourcePath, aimPath, 650, 650);
-        scale(sourcePath,aimPath,650,650,false);
+//        String sourcePath = "F:\\image\\1.jpg";
+//        String aimPath = "F:\\image\\5.jpg";
+////        zoomImage(sourcePath, aimPath, 650, 650);
+//        scale(sourcePath,aimPath,650,650,false);
+
+
 
 //        plusNewLineString("hello","world");
     }
 }
+
+

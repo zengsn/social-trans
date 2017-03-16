@@ -50,7 +50,7 @@
         <div class="col-xs-12">
             <!--工具栏 -->
             <div class="tool_bg">
-                <button class="btn btn-yellow" data-toggle="modal" data-target="#add-modal">
+                <button class="btn btn-yellow" data-toggle="modal"  onclick="openAddWin()">
                     <i class="ace-icon fa fa-plus-circle"></i> 添加
                 </button>
 
@@ -78,47 +78,6 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <!--<form class="form-horizontal" style="margin: 0px">-->
-                            <!--<table style="width: 100%;margin-left: 15%" cellpadding="30" cellspacing="30">-->
-                            <!--<tr>-->
-                            <!--<td align="right">-->
-                            <!--<label class="control-label" for="add_rolename">角色名称:</label>-->
-                            <!--</td>-->
-                            <!--<td>-->
-                            <!--&lt;!&ndash;<select  id="add_rolename" name="rolename" style="width:168px">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="普通用户">普通用户</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="超级用户">超级用户</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                            <!--<input id="add_rolename" name="rolename" type="text" style="width:168px" >-->
-                            <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr>-->
-                            <!--<td align="right">-->
-                            <!--<label class="control-label" for="add_description">角色说明:</label>-->
-                            <!--</td>-->
-                            <!--<td>-->
-                            <!--<input id="add_description" name="description" type="text" style="width:168px" >-->
-                            <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr>-->
-                            <!--<td align="right">-->
-                            <!--<label class="control-label" >权限:</label>-->
-                            <!--</td>-->
-                            <!--&lt;!&ndash;<td >&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="checkbox">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<input name="pname" type="checkbox" class="ace" value="用户管理"/>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<span class="lbl"> 用户管理</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<input name="pname" type="checkbox" class="ace" value="角色管理"/>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<span class="lbl"> 角色管理</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</td>&ndash;&gt;-->
-                            <!--</tr>-->
-
-                            <!--</table>-->
 
                             <!--</form>-->
                             <form class="form-horizontal">
@@ -166,6 +125,66 @@
         </div>
     </div>
 
+    <!--角色修改界面-->
+    <div tabindex="-1" class="modal fade in" id="update-modal" aria-hidden="false"
+         style="padding-right: 17px; display:none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>
+                    <h3 class="smaller lighter blue no-margin">修改窗口</h3>
+                </div>
+
+                <input id="update_roleId" name="roleId" hidden>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <!--</form>-->
+                            <form class="form-horizontal">
+                                <div style="margin-left: 100px">
+                                    <div class="form-group">
+                                        <label for="add_rolename" class="col-sm-2 control-label">角色名称</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="update_rolename" name="rolename"
+                                                   placeholder="请输入角色名称" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="add_description" class="col-sm-2 control-label">角色说明</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="update_description"
+                                                   name="description" placeholder="请输入角色说明" >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="update_permissionName" class="col-sm-2 control-label">权限</label>
+                                        <div id="update_permissionName" class="col-sm-6">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-danger pull-left" onclick="closeUpdateWin()">
+                        <i class="ace-icon fa  fa-undo"></i> 取消
+                    </button>
+                    <button class="btn btn-lg btn-success" type="button" onclick="UpdateWin()">
+                        <i class="ace-icon fa fa-check"></i> 提交
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -241,8 +260,46 @@
     $(document).ready(function () {
         //查询角色
         doSearch();
-        selectAllPermission();
     });
+
+    /*修改用户角色*/
+    function UpdateWin() {
+        //获取角色id
+        var roleId = $('#update_roleId').val();
+        //获取角色说明
+        var description = $('#update_description').val();
+        //被选中的权限值
+        var obj = document.getElementsByName("update_permissionName");
+        //权限id集合
+        var permissionIdList = [];
+        //权限名称集合
+        var permissionNameList = [];
+        for(k in obj){
+            if(obj[k].checked){
+                permissionIdList.push(obj[k].id);
+                permissionNameList.push(obj[k].value);
+            }
+        }
+
+        var params = $.extend({},{roleId:roleId,description:description});
+        var resultParams = {
+            roleParam:JSON.stringify(params),
+            permissionIdList:JSON.stringify(permissionIdList),
+            permissionNameList:JSON.stringify(permissionNameList)
+        };
+
+        var updatePermissionURL_ = "/" + PROJECT_NAME + "/Permission/updatePermission.do";
+        ajaxFunction(updatePermissionURL_,resultParams,function (result) {
+            if(result.success){
+                //关闭添加框
+                doSearch();
+                closeUpdateWin();
+            }else{
+                closeUpdateWin();
+                bootbox.alert("修改角色失败");
+            }
+        });
+    }
 
     /*添加权限*/
     function addFn(){
@@ -252,35 +309,76 @@
         var description = $('#add_description').val();
         //被选中的权限值
         var obj = document.getElementsByName("add_permissionName");
-        var check_val = [];
-        var taskArray = new Array();
-        var list = new List();
-//        var a = sname;
+//        var check_val = [];
+//        for(k in obj){
+//            if(obj[k].checked){
+//                check_val.push(obj[k].value);
+//            }
+//        }
+
+        var permissionIdList = [];
+        var permissionNameList = [];
         for(k in obj){
             if(obj[k].checked){
-                check_val.push(obj[k].value);
-                taskArray[k] = obj[k].value;
-                list.add(obj[k].value);
-//                list[k].sname= obj[k].value;
+                permissionIdList.push(obj[k].id);
+                permissionNameList.push(obj[k].value);
             }
         }
 
-//        var a = JSON.stringify(taskArray);
-//        console.log(a);
-//        console.log(taskArray);
-//        console.log(list);
+//        console.log(permission_val);
         //用户id
         var userId = getCookieValue("userId");
         var params = $.extend({},{rolename:rolename,description:description,userId:userId});
         var resultParams = {
-            param1:params,
-            param2:taskArray
-        }
+            userParam:JSON.stringify(params),
+            permissionIdList:JSON.stringify(permissionIdList),
+            permissionNameList:JSON.stringify(permissionNameList)
+        };
 //        console.log(resultParams);
 
         var addPermissionURL_ = "/" + PROJECT_NAME + "/Permission/addPermission.do";
         ajaxFunction(addPermissionURL_,resultParams,function (result) {
+                if(result.success){
+                    //关闭添加框
+                    doSearch();
+                    closeAddWin();
+                }else{
+                    closeAddWin();
+                    bootbox.alert("添加角色失败");
+                }
+        });
+    }
 
+    /*修改界面的权限*/
+    function selectPermission(inputId,roleId) {
+        var params = {
+            roleId:roleId
+        };
+        var prefixString = "<div class='checkbox'>";
+        var suffixString = "</div>";
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/Permission/selectAllPermission.do";
+        ajaxFunction(selectAllUrl_, null, function (result) {
+//            console.log(result);
+            if (result.success) {
+                var middleString = "";
+                for (var i in result.data) {
+                    middleString += "<label><input name='update_permissionName' type='checkbox' class='ace' id='"
+                            + result.data[i].permissionId
+                            + "' value='"
+                            + result.data[i].permissionName
+                            + "' /> <span class='lbl' value='"
+                            + result.data[i].permissionName
+                            +"'>"
+                            + result.data[i].permissionName
+                            + "</span></label>";
+                }
+
+                resultString = prefixString + middleString + suffixString;
+//                console.log(resultString);
+                $('#'+inputId).html(resultString);
+            } else {
+
+            }
         });
     }
 
@@ -295,17 +393,19 @@
             if (result.success) {
                 var middleString = "";
                 for (var i in result.data) {
-                    middleString += "<label><input name='add_permissionName' type='checkbox' class='ace' value='"
-                            + result.data[i].sname
+                    middleString += "<label><input name='add_permissionName' type='checkbox' class='ace' id='"
+                            + result.data[i].permissionId
+                            + "' value='"
+                            + result.data[i].permissionName
                             + "'/> <span class='lbl' value='"
-                            + result.data[i].sname
+                            + result.data[i].permissionName
                             +"'>"
                             + result.data[i].permissionName
                             + "</span></label>";
                 }
                 resultString = prefixString + middleString + suffixString;
 //                console.log(resultString);
-                $('#add_permissionName').append(resultString);
+                $('#add_permissionName').html(resultString);
             } else {
 
             }
@@ -334,6 +434,10 @@
                                             "hidden": true
                                         },
                                         {
+                                            "name": "rolename",
+                                            "label": "角色名称"
+                                        },
+                                        {
                                             "name": "description",
                                             "label": "角色说明"
                                         },
@@ -352,7 +456,7 @@
                                                         + JSON.stringify(rowData)
                                                         + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
                                                         + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
-                                                        + rowData.id
+                                                        + rowData.roleId
                                                         + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
 
                                             }
@@ -382,6 +486,39 @@
                 });
     }
 
+    /*根据角色id删除对应的权限*/
+    function delConfirm(roleId) {
+        
+        var params = {
+            roleId:roleId
+        };
+        var deleteRoleAndPermissionURL_ = "/" + PROJECT_NAME + "/Role/deleteRoleAndPermissionByRoleId.do";
+        ajaxFunction(deleteRoleAndPermissionURL_,params,function (result) {
+            if(result.success){
+                doSearch();
+                bootbox.alert("删除成功");
+            }else{
+                bootbox.alert("删除失败");
+            }
+        })
+    }
+
+    /*打开更开角色界面*/
+    function openUpdateWin(rowData) {
+        $("#update-modal").modal('show');
+        /*修改界面数据初始化*/
+        update_init($('#update-modal'), rowData);
+        /*权限集合初始化*/
+        selectPermission('update_permissionName',rowData.roleId);
+    }
+
+    /*打开添加界面*/
+    function openAddWin() {
+        $("#add-modal").modal('show');
+        selectAllPermission();
+    }
+
+
 
     /*关闭新增角色界面*/
     function closeAddWin() {
@@ -390,6 +527,9 @@
         reset_data($('#add-modal'));
     }
 
+    function closeUpdateWin() {
+        $("#update-modal").modal('hide');
+    }
 
     /*获取用户权限*/
     function getPermission(value, options, rowData) {
@@ -399,13 +539,17 @@
 //        var suffixString = "</div>";
         var middleString = "";
         for (var i in result.data) {
-            middleString += "<label><input name='form-field-checkbox' type='checkbox' class='ace' value='"
-                    + result.data[i].sname
+
+            middleString += "<label><input name='form-field-checkbox' type='checkbox' class='ace' id='" +
+                    + result.data[i].permissionId
+                    +"' value='"
+                    + result.data[i].permissionName
                     + "'checked disabled/> <span class='lbl' value='"
-                    + result.data[i].sname
+                    + result.data[i].permissionName
                     +"'>"
                     + result.data[i].permissionName
                     + "</span></label>";
+
         }
         return middleString;
 

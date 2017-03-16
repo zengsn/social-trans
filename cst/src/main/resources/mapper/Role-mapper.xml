@@ -29,9 +29,9 @@
     
     <insert id="insert" parameterType="Role">
         INSERT INTO P_role
-        (id,code,rolename,description)
+        (roleId,disabled,rolename,description)
         VALUES
-        (#{id},#{code},#{rolename},#{description})
+        (#{roleId},#{disabled},#{rolename},#{description})
     </insert>
 
     <select id="verifyAccount" parameterType="Role" resultType="Role">
@@ -39,27 +39,28 @@
 
     </select>
 
-    <update id="updateById" parameterType="Role">
-        update P_role
+    <update id="updateById" parameterType="java.util.HashMap">
+        update p_role
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id !='' and id !=null">
-                `id` = #{id},
-            </if><if test="code !='' and code !=null">
-                `code` = #{code},
-            </if><if test="rolename !='' and rolename !=null">
+            <if test="roleId !='' and roleId !=null">
+                `roleId` = #{roleId},
+            </if>
+            <if test="rolename !='' and rolename !=null">
                 `rolename` = #{rolename},
-            </if><if test="description !='' and description !=null">
+            </if>
+            <if test="description !='' and description !=null">
                 `description` = #{description},
-            </if><if test="disabled !='' and disabled !=null">
+            </if>
+            <if test="disabled !='' and disabled !=null">
                 `disabled` = #{disabled},
             </if>
         </trim>
-        where id=#{id}
+        where roleId=#{roleId}
     </update>
 
     <update id="deleteRoleById" parameterType="Role">
-        update P_role set disabled = 0
-        where id = #{id}
+        update p_role set disabled = 0
+        where roleId = #{roleId}
     </update>
 
     <delete id="deleteById" parameterType="java.util.HashMap">
@@ -72,4 +73,40 @@
             #{idItem}
         </foreach>
     </delete>
+
+    <insert id="addUserRole" parameterType="java.util.HashMap">
+        INSERT INTO p_userrole
+         (userId,roleId)
+         VALUES
+         (#{userId},#{roleId})
+    </insert>
+
+    <!-- 批量添加权限 -->
+    <insert id="insertRolePermissionBatch" parameterType="java.util.List">
+        insert p_rolepermission(roleId,permissionId,disabled)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (#{item.roleId},#{item.permissionId},#{item.disabled})
+        </foreach>
+    </insert>
+
+    <update id="updateRolePermissionBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open=""
+                 close="" separator=";">
+            UPDATE p_rolepermission
+            <set>
+                disabled = #{item.disabled}
+            </set>
+            WHERE roleId = #{item.roleId} AND permissionId =
+            #{item.permissionId}
+        </foreach>
+    </update>
+
+    <delete id="deletePermissionByRoleId" parameterType="String">
+        DELETE FROM p_rolepermission WHERE roleId = #{roleId}
+    </delete>
+
+    <update id="">
+
+    </update>
 </mapper>

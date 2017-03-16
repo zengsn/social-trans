@@ -3,6 +3,7 @@ package com.qingtian.apps.role.action;
 import com.github.pagehelper.StringUtil;
 import com.qingtian.apps.role.entity.Role;
 import com.qingtian.apps.role.service.RoleService;
+import com.qingtian.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,113 +35,28 @@ public class RoleAction {
         List<Role> lists = roleService.selectAllRole();
         return JsonUtils.genUpdateDataReturnJsonStr(true,"查询角色列表成功",lists);
     }
-//
-//    /**
-//     * 新增角色
-//     * @param role
-//     * @return
-//     */
-//    @RequestMapping("addRole.do")
-//    public String addRole(Role role){
-//
-//        String rolename = role.getRolename();
-//        if(rolename == null || "".equals(rolename)){
-//            logger.error("RoleAction ------- addRole : rolename 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"rolename为空");
-//        }
-//
-//        String code = role.getCode();
-//        if(code == null || "".equals(code)){
-//            logger.error("RoleAction ------- addRole : code 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"code为空");
-//        }
-//
-//
-//        Boolean isSuccess = roleService.addRole(role);
-//        if(isSuccess){
-//            return JsonUtils.genUpdateDataReturnJsonStr(true,"新增角色成功");
-//        }else {
-//            logger.error("RoleAction ------- addRole : 新增角色失败");
-//            return JsonUtils.genUpdateDataReturnJsonStr(false,"新增角色失败");
-//        }
-//    }
-//
-//    /**
-//     * 验证角色代码唯一性
-//     * @param code
-//     * @return
-//     */
-//    @RequestMapping("verifyAccount.do")
-//    public String verifyAccount(String code){
-//
-//
-//        //验证角色代码非空
-//        if(code == null || "".equals(code)){
-//            logger.error("RoleAction ------- verifyAccount : code 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"code为空");
-//        }
-//
-//
-//        Boolean Vresult = roleService.verifyAccount(code);
-//        if(Vresult){
-//            //角色代码已存在
-//            return JsonUtils.genUpdateDataReturnJsonStr(true,"角色代码已存在");
-//        }else {
-//            //角色代码不存在
-//            return JsonUtils.genUpdateDataReturnJsonStr(false,"角色代码不存在");
-//        }
-//    }
-//
-//    /**
-//     * 根据角色id修改角色资料
-//     * @param role
-//     * @return
-//     */
-//    @RequestMapping("updateRole.do")
-//    public String updateRole(Role role){
-//
-//        //验证角色id非空
-//        String id = role.getId();
-//        if(StringUtil.isEmpty(id)){
-//            logger.error("RoleAction ------- updateRole : id 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"id为空");
-//        }
-//
-//        //验证角色代码非空
-//        String code = role.getCode();
-//        if(StringUtil.isEmpty(code)){
-//            logger.error("RoleAction ------- updateRole : code 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"code为空");
-//        }
-//
-//        //验证角色名称非空
-//        String rolename = role.getRolename();
-//        if(StringUtil.isEmpty(rolename)){
-//            logger.error("RoleAction ------- updateRole : rolename 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"rolename 为空");
-//        }
-//
-//        Boolean isSuccess = roleService.updateRole(role);
-//        if(isSuccess){
-//            return JsonUtils.genUpdateDataReturnJsonStr(true,"更新角色资料成功");
-//        }else{
-//            return JsonUtils.genUpdateDataReturnJsonStr(false,"更新角色资料失败");
-//        }
-//    }
-//
-//    @RequestMapping("deleteRoleById")
-//    public String deleteRoleById(String id){
-//        //验证id非空
-//        if(StringUtil.isEmpty(id)){
-//            logger.error("RoleAction ------- deleteRoleById : id 为空");
-//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"id 为空");
-//        }
-//
-//        Boolean isSuccess = roleService.deleteRoleById(id);
-//        if(isSuccess){
-//            return JsonUtils.genUpdateDataReturnJsonStr(true,"删除角色成功");
-//        }else{
-//            return JsonUtils.genUpdateDataReturnJsonStr(false,"删除角色失败");
-//        }
-//    }
+
+    /**
+     * 根据roleId来逻辑删除角色和角色权限
+     * @param roleId
+     * @return
+     */
+    @RequestMapping("deleteRoleAndPermissionByRoleId")
+    public String deleteRoleAndPermissionByRoleId(String roleId){
+        if(StringUtils.isEmpty(roleId)){
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"roleId为空");
+        }
+
+        try{
+            Boolean isSuccess = roleService.deleteRoleAndPermissionByRoleId(roleId);
+            if (isSuccess){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"删除成功");
+            }else {
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"删除失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而失败"+e.getMessage());
+        }
+    }
 }
