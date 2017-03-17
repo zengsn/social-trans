@@ -30,7 +30,9 @@
     <![endif]-->
 
     <!-- inline styles related to this page -->
-
+    <!--zTrees-->
+    <link rel="stylesheet" href="../assets/zTree_v3/css/demo.css" type="text/css">
+    <link rel="stylesheet" href="../assets/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
 
 </head>
 <body class="no-skip">
@@ -74,7 +76,7 @@
                     <h3 class="smaller lighter blue no-margin">新增窗口</h3>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body" style="height: 350px">
                     <div class="row">
                         <div class="col-xs-12">
 
@@ -82,7 +84,7 @@
                             <form class="form-horizontal">
                                 <div style="margin-left: 100px">
                                     <div class="form-group">
-                                        <label for="add_permissionName" class="col-sm-2 control-label">权限名称</label>
+                                        <label for="add_permissionName" class="col-sm-3 control-label">权限名称</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="add_permissionName" name="permissionName"
                                                    placeholder="请输入权限名称">
@@ -90,7 +92,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="add_description" class="col-sm-2 control-label">权限说明</label>
+                                        <label for="add_description" class="col-sm-3 control-label">权限说明</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="add_description"
                                                    name="description" placeholder="请输入权限说明">
@@ -98,9 +100,23 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="add_menuName" class="col-sm-2 control-label">菜单</label>
+                                        <label for="add_menuName" class="col-sm-3 control-label">菜单</label>
                                         <div id="add_menuName" class="col-sm-6">
 
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!--<div class="content_wrap">-->
+                                            <!--<div class="zTreeDemoBackground left">-->
+                                                <!--<ul class="list">-->
+                                                    <!--<li class="title">&nbsp;&nbsp;Test: <input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenu();" />-->
+                                                        <!--&nbsp;<a id="menuBtn" href="#" onclick="showMenu(); return false;">select</a></li>-->
+                                                <!--</ul>-->
+                                            <!--</div>-->
+
+                                        <!--</div>-->
+                                        <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+                                            <ul id="treeDemo" class="ztree" style="margin-top:0; width:222px; height: 200px;" ></ul>
                                         </div>
                                     </div>
                                 </div>
@@ -191,19 +207,50 @@
 
 <!--表单验证-->
 <script type="text/javascript" src="../assets/js/dist/js/bootstrapValidator.js"></script>
-
+<!--zTree-->
+<script type="text/javascript" src="../assets/zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="../assets/zTree_v3/js/jquery.ztree.excheck.js"></script>
 <script>
 
 
     $(document).ready(function () {
+
         //查询角色
         doSearch();
     });
+
+    /*权限添加*/
+    function addFn(){
+        //获取被选择的checkbox的id
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),//根据ztreeId来获取ztree对象
+                nodes = zTree.getCheckedNodes(true),//获取输入框被勾选 或 未勾选的节点集合
+                ids = [];
+        for (var i=0, l=nodes.length; i<l; i++) {
+            ids.push(nodes[i].id);
+        }
+//        console.log(ids);
+        var params = formToJsonstr('add-modal');
+        var queryParams = {
+            params:JSON.stringify(params),
+            menuIds:JSON.stringify(ids)
+        }
+        var addURL_ = "/" + PROJECT_NAME + "/Permission/addPermissionAndMenu.do";
+        ajaxFunction(addURL_,queryParams,function (result) {
+            if(result.success){
+                closeAddWin();
+                doSearch();
+            }else {
+                bootbox.alert("插入失败");
+                closeAddWin();
+            }
+        });
+    }
 
     /*打开添加界面*/
     function openAddWin() {
         $("#add-modal").modal('show');
         selectAllMenu();
+        showMenu();
     }
 
     /*关闭新增角色界面*/
@@ -213,32 +260,19 @@
         reset_data($('#add-modal'));
     }
 
+    function reset_data($dom) {
+        //textarea select
+        $dom.find(":input").each(function () {
+            var $this = $(this);
+            var name = $this.attr("name");
+            $this.val("");
+        });
+    }
+
     /*查询菜单*/
     function selectAllMenu() {
-        var prefixString = "<div class='checkbox'>";
-        var suffixString = "</div>";
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/Menu/list.do";
-        ajaxFunction(selectAllUrl_,null,function (result) {
-            if(result.success){
-                var middleString = "";
-                for (var i in result.data) {
-                    middleString += "<label><input name='add_menuName' type='checkbox' class='ace' id='"
-                            + result.data[i].id
-                            + "' value='"
-                            + result.data[i].menuName
-                            + "'/> <span class='lbl' value='"
-                            + result.data[i].menuName
-                            +"'>"
-                            + result.data[i].menuName
-                            + "</span></label>";
-                }
-                resultString = prefixString + middleString + suffixString;
-//                console.log(resultString);
-                $('#add_menuName').html(resultString);
-            }else{
-
-            }
-        });
+        //加载zTree
+        $.fn.zTree.init($("#treeDemo"), setting);
     }
 
     /*查询所有权限*/
@@ -309,6 +343,77 @@
 
                 });
     }
+
+
+    var setting = {
+        check: {
+            enable: true,
+            //父节点子节点关联
+            chkboxType: {"Y":"ps", "N":"ps"}
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: false
+        },
+        async: {
+            enable: true,
+            url:"/"+PROJECT_NAME+"/Menu/getMenuList.do"
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeClick: beforeClick,
+            onCheck: onCheck,
+            onAsyncSuccess:zTreeOnAsyncSuccess
+        }
+    };
+
+    function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
+//			console.log(treeNode);
+        zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
+//        console.log(zTree_Menu.getNodes()[0].data);
+        var zNodes = zTree_Menu.getNodes()[0].data
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+    };
+
+    function beforeClick(treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.checkNode(treeNode, !treeNode.checked, null, true);
+        return false;
+    }
+
+    /*点选checkbox触发*/
+    function onCheck(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),//根据ztreeId来获取ztree对象
+                nodes = zTree.getCheckedNodes(true),//获取输入框被勾选 或 未勾选的节点集合
+                ids = [];
+        for (var i=0, l=nodes.length; i<l; i++) {
+            ids.push(nodes[i].id);
+        }
+//        console.log(ids);
+        return ids;
+    }
+
+    function showMenu() {
+        var cityOffset = $("#add_description").offset();
+        $("#menuContent").css({left:"235px", top:"100px"}).slideDown("normal");
+//        $("#menuContent").css({left:cityOffset.right *10+ "px", top:"100px"}).slideDown("normal");
+
+        $("body").bind("mousedown");
+    }
+//    function hideMenu() {
+//        $("#menuContent").fadeOut("fast");
+//        $("body").unbind("mousedown", onBodyDown);
+//    }
+//    function onBodyDown(event) {
+//        if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+//            hideMenu();
+//        }
+//    }
 
 </script>
 </body>

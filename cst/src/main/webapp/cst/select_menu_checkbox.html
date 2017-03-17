@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<TITLE> ZTREE DEMO - checkbox select menu</TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../assets/zTree_v3/css/demo.css" type="text/css">
+	<link rel="stylesheet" href="../assets/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="../assets/js/jquery.2.1.1.min.js"></script>
+	<script type="text/javascript" src="../assets/zTree_v3/js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="../assets/zTree_v3/js/jquery.ztree.excheck.js"></script>
+<!--	<script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>-->
+	<SCRIPT type="text/javascript">
+
+		var PROJECT_NAME = "cst";
+
+		var setting = {
+			check: {
+				enable: true,
+				chkboxType: {"Y":"", "N":""}
+			},
+			view: {
+				dblClickExpand: false
+			},
+//			async: {
+//				enable: true,
+//				url:"/"+PROJECT_NAME+"/Menu/getMenuList.do",
+////				dataFilter: filter
+//			},
+			data: {
+//				simpleData: {
+//					enable: true,
+//					idKey: "id",
+//					pIdKey: "parentId",
+//					rootPId: 0
+//				},
+//				key: {
+//					name: "menuName",
+//				}
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeClick: beforeClick,
+				onCheck: onCheck,
+//				onAsyncSuccess:zTreeOnAsyncSuccess
+			}
+		};
+		var menu =
+				[
+					{
+						"id": "1",
+						"menuCode": null,
+						"menuName": "用户管理",
+						"url": "",
+						"iconCls": "fa fa-users",
+						"parentId": "0",
+						"level": "0",
+						"sort": "1"
+					},
+					{
+						"id": "2",
+						"menuCode": null,
+						"menuName": "用户管理",
+						"url": "cst/user.html",
+						"iconCls": "",
+						"parentId": "10",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "5",
+						"menuCode": null,
+						"menuName": "任务管理",
+						"url": "",
+						"iconCls": "fa fa-cubes",
+						"parentId": "0",
+						"level": "0",
+						"sort": "1"
+					},
+					{
+						"id": "6",
+						"menuCode": null,
+						"menuName": "任务管理",
+						"url": "cst/subbmitTask.html",
+						"iconCls": "",
+						"parentId": "5",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "7",
+						"menuCode": null,
+						"menuName": "任务列表",
+						"url": "cst/receiveTask.html",
+						"iconCls": "",
+						"parentId": "5",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "8",
+						"menuCode": null,
+						"menuName": "我的任务",
+						"url": "cst/myTask.html",
+						"iconCls": "",
+						"parentId": "5",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "9",
+						"menuCode": null,
+						"menuName": "用户信息",
+						"url": "cst/personal-info.html",
+						"iconCls": "",
+						"parentId": "1",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "10",
+						"menuCode": null,
+						"menuName": "系统设置",
+						"url": "",
+						"iconCls": "fa-cog",
+						"parentId": "0",
+						"level": "0",
+						"sort": "1"
+					},
+					{
+						"id": "11",
+						"menuCode": null,
+						"menuName": "角色管理",
+						"url": "cst/role1.html",
+						"iconCls": "",
+						"parentId": "10",
+						"level": "1",
+						"sort": "1"
+					},
+					{
+						"id": "12",
+						"menuCode": null,
+						"menuName": "权限管理",
+						"url": "cst/permission.html",
+						"iconCls": "",
+						"parentId": "10",
+						"level": "1",
+						"sort": "1"
+					}
+				];
+		var zNodes =[
+			{id:1, pId:0, name:"用户管理",open:true, nocheck:true},
+			{id:2, pId:10, name:"用户管理"},
+			{id:5, pId:0, name:"任务管理",open:true, nocheck:true},
+			{id:6, pId:5, name:"任务管理"},
+			{id:7, pId:5, name:"任务列表"},
+			{id:8, pId:5, name:"我的任务"},
+			{id:9, pId:1, name:"用户信息"},
+			{id:10, pId:0, name:"系统设置",open:true},
+			{id:11, pId:10, name:"角色管理"},
+			{id:12, pId:10, name:"权限管理"}
+		 ];
+
+//		var zNodes =[
+//			{id:1, pId:0, name:"用户管理"},
+//			{id:2, pId:10, name:"用户管理"},
+//			{id:5, pId:0, name:"任务管理"},
+//			{id:6, pId:5, name:"任务管理"},
+//			{id:7, pId:5, name:"任务列表"},
+//			{id:8, pId:5, name:"我的任务"},
+//			{id:9, pId:1, name:"用户信息"},
+//			{id:10, pId:0, name:"系统设置"},
+//			{id:11, pId:10, name:"角色管理"},
+//			{id:12, pId:10, name:"权限管理"}
+//		];
+
+		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
+//			console.log(treeNode);
+			zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
+			console.log(zTree_Menu.getNodes()[0].data);
+			var zNodes = zTree_Menu.getNodes()[0].data
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+		};
+
+		function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.checkNode(treeNode, !treeNode.checked, null, true);
+			return false;
+		}
+		
+		function onCheck(e, treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),//根据ztreeId来获取ztree对象
+			nodes = zTree.getCheckedNodes(true),//获取输入框被勾选 或 未勾选的节点集合
+			v = "";
+			for (var i=0, l=nodes.length; i<l; i++) {
+				v += nodes[i].name + ",";
+			}
+			if (v.length > 0 ) v = v.substring(0, v.length-1);
+			var cityObj = $("#citySel");
+			cityObj.attr("value", v);
+		}
+
+		function showMenu() {
+			var cityObj = $("#citySel");
+			var cityOffset = $("#citySel").offset();
+			$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+			$("body").bind("mousedown", onBodyDown);
+		}
+		function hideMenu() {
+			$("#menuContent").fadeOut("fast");
+			$("body").unbind("mousedown", onBodyDown);
+		}
+		function onBodyDown(event) {
+			if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+				hideMenu();
+			}
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting,zNodes);
+		});
+		//-->
+	</SCRIPT>
+	<style type="text/css">
+	</style>
+ </HEAD>
+
+<BODY>
+<h1>带 checkbox 的多选下拉菜单  -- zTree</h1>
+<h6>[ 文件路径: super/select_menu_checkbox.html ]</h6>
+<div class="content_wrap">
+	<div class="zTreeDemoBackground left">
+		<ul class="list">
+			<li class="title">&nbsp;&nbsp;<span class="highlight_red">勾选 checkbox 或者 点击节点 进行选择</span></li>
+			<li class="title">&nbsp;&nbsp;Test: <input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenu();" />
+		&nbsp;<a id="menuBtn" href="#" onclick="showMenu(); return false;">select</a></li>
+		</ul>
+	</div>
+	<div class="right">
+		<ul class="info">
+			<li class="title"><h2>实现方法说明</h2>
+				<ul class="list">
+				<li>用 checkbox 也可以轻松实现多选的下拉菜单</li>
+				<li>此 Demo 主要用于 和 其他下拉菜单进行对比</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+	<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+</div>
+</HTML>

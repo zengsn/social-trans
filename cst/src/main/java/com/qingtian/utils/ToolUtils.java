@@ -1,8 +1,13 @@
 package com.qingtian.utils;
 
+import com.qingtian.apps.system.menu.entity.*;
+import com.qingtian.apps.system.menu.entity.Menu;
+
+import java.awt.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by qingtian on 2017/2/26.
@@ -27,6 +32,24 @@ public class ToolUtils {
         return path;
     }
 
+
+    public static List<Map<String,String>> tranJsonData(List<Menu> list){
+        List<Map<String,String>> reList = new ArrayList<>();
+        Menu menu = null;
+        Map<String,String> map = null;
+        for(int i=0;i<list.size();i++){
+//            menu = new Menu();
+//            menu.setId(list.get(i).getId());
+//            menu.setMenuName(list.get(i).getMenuName());
+//            menu.setParentId(list.get(i).getParentId());
+            map = new HashMap<String,String>();
+            map.put("id",list.get(i).getId());
+            map.put("pId",list.get(i).getParentId());
+            map.put("name",list.get(i).getMenuName());
+            reList.add(map);
+        }
+        return reList;
+    }
 
 
     public static void main(String[] args) {

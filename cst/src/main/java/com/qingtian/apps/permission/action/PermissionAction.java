@@ -149,4 +149,36 @@ public class PermissionAction {
 
     }
 
+    /**
+     * 添加权限
+     */
+    @RequestMapping("addPermissionAndMenu.do")
+    public String addPermissionAndMenu(@RequestParam HashMap<String,String> params){
+        //获取前台的JSON字符串
+        String permissionParam = params.get("params");
+        String menuIds = params.get("menuIds");
+
+        //获取权限信息
+        Map permissionMap = (Map)JSON.parse(permissionParam);
+        String permissionName = (String)permissionMap.get("permissionName");
+        if(permissionName == null || "".equals(permissionName)){
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"permissionName为空");
+        }
+
+        //获取菜单id的List
+        List<String> menuIdList = (List<String>) JSON.parse(menuIds);
+
+        try{
+            Boolean isSuccess = permissionService.addPermissionAndMenu(permissionMap,menuIdList);
+            if(isSuccess){
+                return JsonUtils.genUpdateDataReturnJsonStr(true,"插入成功");
+            }else {
+                return JsonUtils.genUpdateDataReturnJsonStr(false,"插入失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonUtils.genUpdateDataReturnJsonStr(true,"操作由于异常而失败"+e.getMessage());
+        }
+    }
+
 }

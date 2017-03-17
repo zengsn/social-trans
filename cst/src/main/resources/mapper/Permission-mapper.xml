@@ -25,5 +25,18 @@
 		SELECT * from p_permission
 	</select>
 
+	<insert id="insert" parameterType="java.util.HashMap">
+		INSERT INTO p_permission(permissionId,permissionName,description,disabled)
+		VALUES
+		(#{permissionId},#{permissionName},#{description},#{disabled})
+	</insert>
 
+	<!-- 批量权限菜单权限 -->
+	<insert id="insertPermissionMenuBatch" parameterType="java.util.List">
+		insert p_permissionmenu(id,permissionId)
+		values
+		<foreach collection="list" item="item"  separator="," >
+			(#{item.id},#{item.permissionId})
+		</foreach>
+	</insert>
 </mapper>

@@ -3,6 +3,7 @@ package com.qingtian.apps.permission.service;
 import com.qingtian.apps.permission.entity.Permission;
 
 
+import com.qingtian.apps.permission.entity.PermissionMenu;
 import com.qingtian.apps.role.entity.Role;
 import com.qingtian.apps.role.entity.RolePermission;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -121,5 +122,25 @@ public class PermissionService {
 
 //        int updateRolePermissionResult = sqlSession.update("Role.updateRolePermissionBatch",updateList);
         return (deleteRolePermissionResult>0 & roleResult>0 & permissionResult>0);
+    }
+
+    public Boolean addPermissionAndMenu(Map p,List<String> menuIdList)throws Exception{
+        //1：生成一个permissionId
+        String permissionId = new RandomGUID().toString();
+        //2：插入p_permission表
+        p.put("permissionId",permissionId);
+        p.put("disabled","1");
+        int permissionResult = sqlSession.insert("Permission.insert",p);
+        //3：插入p_permissionmenu表
+        PermissionMenu pm = null;
+        List<PermissionMenu> addList = new ArrayList<>();
+        for (int i=0;i<menuIdList.size();i++){
+            pm = new PermissionMenu();
+            pm.setId(menuIdList.get(i));
+            pm.setPermissionId(permissionId);
+            addList.add(pm);
+        }
+        int permissionMenuResult = sqlSession.insert("Permission.insertPermissionMenuBatch",addList);
+        return (permissionResult>0 & permissionMenuResult>0);
     }
 }
