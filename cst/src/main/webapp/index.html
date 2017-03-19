@@ -371,14 +371,8 @@
 </script>
 <![endif]-->
 <script type="text/javascript">
-	if ('ontouchstart' in document.documentElement)
-		document
-				.write("<script src='assets/js/jquery.mobile.custom.min.js'>"
-				+ "<"+"/script>");
 
-	function initiFrameHeight() {
-		var height = $(document).height();
-	}
+
 
 	//初始化iframe 高度
 	$(function() {
@@ -409,18 +403,31 @@
 	}
 
 
+		function initMenu() {
+			var userId = getCookieValue("userId");
+			var params = {
+				userId:userId
+			};
+			var selectURL_ = "/" + PROJECT_NAME + "/Menu/getMenuListByUserId.do";
+			ajaxFunction(selectURL_, params, function(data) {
+				if (data) {
+					var menuTpl = spellMenu(data.data);
+					$("#leftMenu").append(menuTpl);
+				}
+			});
+		}
 
-
-	function initMenu() {
-		var url = "/" + PROJECT_NAME + "/Menu/list.do";
-		ajaxFunction(url, {}, function(data) {
-
-			if (data) {
-				var menuTpl = spellMenu(data.data);
-				$("#leftMenu").append(menuTpl);
-			}
-		});
-	}
+//	function initMenu() {
+//
+//		var url = "/" + PROJECT_NAME + "/Menu/list.do";
+//		ajaxFunction(url, {}, function(data) {
+//
+//			if (data) {
+//				var menuTpl = spellMenu(data.data);
+//				$("#leftMenu").append(menuTpl);
+//			}
+//		});
+//	}
 
 	var tempPermission = {};
 	function spellMenu(data) {
@@ -585,6 +592,15 @@
 		});
 
 
+	}
+
+	if ('ontouchstart' in document.documentElement)
+		document
+				.write("<script src='assets/js/jquery.mobile.custom.min.js'>"
+						+ "<"+"/script>");
+
+	function initiFrameHeight() {
+		var height = $(document).height();
 	}
 	
 

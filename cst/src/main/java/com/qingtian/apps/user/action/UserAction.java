@@ -120,11 +120,11 @@ public class UserAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"password为空");
         }
 
-        //验证角色非空
-        String role = user.getRole();
-        if(role == null || "".equals(role)){
-            logger.error("UserAction ------- updateUser : role 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"role为空");
+        //验证角色id非空
+        String roleId = user.getRoleId();
+        if(roleId == null || "".equals(roleId)){
+            logger.error("UserAction ------- updateUser : roleId 为空");
+            return  JsonUtils.genUpdateDataReturnJsonStr(false,"roleId为空");
         }
 
         //如果用户名为空，则让其为用户帐号

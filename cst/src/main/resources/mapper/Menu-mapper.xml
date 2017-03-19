@@ -2,40 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="Menu">
-    
+
     <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
-    <select id="select"  resultType="Menu">
+    <select id="select" resultType="Menu">
         select id,menuName,url,iconCls,parentId,level,sort from P_menu
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="id !='' and id !=null">
-                    and `id` = #{id}
+                and `id` = #{id}
             </if>
-            
+
             <if test="menuName !='' and menuName !=null">
-                    and `menuName` = #{menuName}
+                and `menuName` = #{menuName}
             </if>
-            
+
             <if test="url !='' and url !=null">
-                    and `url` = #{url}
+                and `url` = #{url}
             </if>
-            
+
             <if test="iconCls !='' and iconCls !=null">
-                    and `iconCls` = #{iconCls}
+                and `iconCls` = #{iconCls}
             </if>
-            
+
             <if test="parentId !='' and parentId !=null">
-                    and `parentId` = #{parentId}
+                and `parentId` = #{parentId}
             </if>
-            
+
             <if test="level !='' and level !=null">
-                    and `level` = #{level}
+                and `level` = #{level}
             </if>
-            
+
             <if test="sort !='' and sort !=null">
-                    and `sort` = #{sort}
+                and `sort` = #{sort}
             </if>
-            
+
         </trim>
     </select>
 
+    <select id="getMenuListByUserId" parameterType="String" resultType="Menu">
+            SELECT
+                        *
+                      FROM
+                p_menu
+            WHERE
+                id IN (
+                    SELECT
+                        id
+                    FROM
+                        p_permissionMenu
+                    WHERE
+                        permissionId IN (
+                            SELECT
+                                permissionId
+                            FROM
+                                p_rolepermission
+                            WHERE
+                                roleId IN (
+                                    SELECT
+                                        roleId
+                                    FROM
+                                        p_userrole
+                                    WHERE
+                                        userId = #{userId}
+                                )
+                        )
+                )
+    </select>
 </mapper>

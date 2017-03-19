@@ -74,8 +74,10 @@ public class UserService {
         //随机产生一个GUID
         String userId = new RandomGUID().toString();
         user.setUserId(userId);
-        int result = sqlSession.insert("User.addUser",user);
-        return result>0? true:false;
+        int userResult = sqlSession.insert("User.addUser",user);
+        //插入表p_userrole中
+        int userRoleResult = sqlSession.insert("User.insertUserRole",user);
+        return (userResult>0 && userRoleResult>0);
     }
 
 //    /**

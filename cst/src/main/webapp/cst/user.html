@@ -110,7 +110,7 @@
             <div class="col-xs-12">
                 <!--工具栏 -->
                 <div class="tool_bg">
-                    <button class="btn btn-yellow" data-toggle="modal" data-target="#add-modal">
+                    <button class="btn btn-yellow" data-toggle="modal" onclick="openAddWin()">
                         <i class="ace-icon fa fa-plus-circle"></i> 添加
                     </button>
                 </div>
@@ -169,23 +169,18 @@
                                         <td>
                                             <input id="add_phoneNumber" name="phoneNumber" type="text" style="width:168px" >
                                         </td>
-                                        <!--<td align="right">-->
-                                            <!--<label class="no-padding-right" for="add_email">邮箱:</label>-->
-                                        <!--</td>-->
 
-                                        <!--<td>-->
-                                            <!--<input id="add_email" name="email" type="text" style="width:168px" >-->
-                                        <!--</td>-->
 
                                     </tr>
                                     <tr>
-
-
                                         <td align="right">
                                             <label class="cno-padding-right" for="add_role">角色:</label>
                                         </td>
                                         <td>
-                                            <input id="add_role" name="role" type="text" style="width:168px" >
+                                            <select id="add_role" style="width: 168px">
+                                                
+                                            </select>
+                                            <!--<input id="add_role" name="role" type="text" style="width:168px" >-->
                                         </td>
                                     </tr>
                                 </table>
@@ -291,8 +286,26 @@
         $(document).ready(function () {
             doSearch();
         });
+        
+        /*打开添加用户界面*/
+        function openAddWin() {
+            var selectUrl_ = "/" + PROJECT_NAME + "/Role/selectAllRole.do";
+            ajaxFunction(selectUrl_,null,function (result) {
+                if(result.success){
+                    var options = "";
+                    for (var i in result.data) {
+                        var obj = result.data[i].rolename;
+                        var key = result.data[i].roleId;
+                        options += "<option value='" + key + "'>"
+                                + obj
+                                + "</option>";
+                    }
 
-
+                    $("#add_role").html("<option value=\"\"></option>" + options);
+                }
+            },false);
+            $("#add-modal").modal('show');
+        }
 
         /*查询所有用户*/
         function doSearch() {
@@ -328,10 +341,11 @@
                                                 "name" : "phoneNumber",
                                                 "label" : "手机号码"
                                             },
-                                            {
-                                                "name" : "role",
-                                                "label" : "角色"
-                                            },
+//                                            {
+//                                                "name" : "rolename",
+//                                                "label" : "角色",
+//                                                "formatter":getRolename,
+//                                            },
                                             {
                                                 "name" : "fnDiv",
                                                 "label" : "功能",
@@ -375,6 +389,8 @@
 
 
         }
+
+
 
         /*打开修改界面*/
         function openUpdateWin(rowData) {
@@ -468,14 +484,16 @@
 
         /*添加用户*/
         function addFn() {
-
+            var roleId = $("#add_role").val();
+//            console.log(roleId);
             //提交前先进行帐号唯一行验证
             doVerify();
             if(verify_result){
                 var params = {};
                 params = formToJsonstr('add-modal');
+                $.extend(params,{roleId:roleId});
+//                console.log(params);
                 var addFnUrl_ = "/" + PROJECT_NAME + "/User/addUser.do";
-//                var addFnUrl_ = "/User/addUser.do";
                 ajaxFunction(addFnUrl_, params,
                         function(result) {
                             if(result.success){

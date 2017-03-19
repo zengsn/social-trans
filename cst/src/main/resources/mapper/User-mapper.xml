@@ -42,6 +42,36 @@
         </trim>
     </select>
 
+    <!--<select id="selectAll" parameterType="User" resultType="User">-->
+    <!--SELECT-->
+    <!--p_user.userId,-->
+    <!--p_user.account,-->
+    <!--p_user.`password`,-->
+    <!--p_user.username,-->
+    <!--p_user.email,-->
+    <!--p_user.phoneNumber,-->
+    <!--(-->
+    <!--SELECT-->
+    <!--rolename-->
+    <!--FROM-->
+    <!--p_role-->
+    <!--WHERE-->
+    <!--roleId IN (-->
+    <!--SELECT-->
+    <!--roleId-->
+    <!--FROM-->
+    <!--p_userrole-->
+    <!--WHERE-->
+    <!--userId = #{userId}-->
+    <!--)-->
+    <!--) as role,-->
+    <!--p_user.disabled,-->
+    <!--p_user.createTime,-->
+    <!--p_user.headImage-->
+    <!--FROM-->
+    <!--p_user-->
+    <!--</select>-->
+
     <update id="updateById" parameterType="User">
         update P_user
         <trim prefix="SET" suffixOverrides=",">
@@ -160,4 +190,10 @@
     <select id="selectById" parameterType="User" resultType="User">
         select * FROM P_user WHERE userId = #{userId} AND disabled =#{disabled}
     </select>
+
+    <insert id="insertUserRole" parameterType="User">
+        INSERT INTO p_userrole(userId,roleId)
+        VALUES
+        (#{userId},#{roleId})
+    </insert>
 </mapper>

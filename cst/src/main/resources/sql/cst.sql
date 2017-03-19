@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50632
 File Encoding         : 65001
 
-Date: 2017-03-18 00:14:51
+Date: 2017-03-19 12:59:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,6 +46,7 @@ INSERT INTO `p_file` VALUES ('2C789BD5-F819-2726-A8DC-DB8A4CCE1DD6', '2C789BD5-F
 INSERT INTO `p_file` VALUES ('35C45077-4D71-3499-96DE-6F622FBBF1F8', '35C45077-4D71-3499-96DE-6F622FBBF1F8', 'txt', null, 'E:\\TestCst\\2017\\02\\28\\35C45077-4D71-3499-96DE-6F622FBBF1F84.txt', '2017-02-28 11:40:53', '5530557D-3D5A-3EF5-C538-C8C8480239B7', '1');
 INSERT INTO `p_file` VALUES ('3741EFA5-D410-AB3C-149C-DA2758F90B51', '3.jpg', 'jpg', '17785', 'E:\\TestCst\\2017\\03\\07\\\\A43CE835-C764-A9C2-FD27-D8D197AF6906', '2017-03-07 20:59:44', 'A43CE835-C764-A9C2-FD27-D8D197AF6906', '0');
 INSERT INTO `p_file` VALUES ('3BBD9710-F8F8-3B6E-AC13-DEB0EFCDEA5E', '3.jpg', 'jpg', '17785', 'E:\\TestCst\\2017\\03\\07\\\\C2E170FB-81A8-9812-BCF0-7BB579C8635C', '2017-03-07 21:17:36', 'C2E170FB-81A8-9812-BCF0-7BB579C8635C', '0');
+INSERT INTO `p_file` VALUES ('3E352E80-41B1-0AED-EA08-0244EF7AC97D', '5.jpg', 'jpg', '17785', 'E:\\TestCst\\2017\\03\\19\\\\7A960730-9CEC-568B-65A1-58BF513BAAAE', '2017-03-19 12:58:59', '7A960730-9CEC-568B-65A1-58BF513BAAAE', '0');
 INSERT INTO `p_file` VALUES ('4353CA26-0B69-69F0-EBB3-3E0EB2591752', '1.jpg', 'jpg', '76409', 'E:\\TestCst\\2017\\03\\07\\\\D4EC5417-B8CE-3EFE-8C6F-8183374B088E', '2017-03-07 20:49:02', 'D4EC5417-B8CE-3EFE-8C6F-8183374B088E', '0');
 INSERT INTO `p_file` VALUES ('45B3877B-C1B9-439F-7F00-A3EC4C1C337B', '1.jpg', 'jpg', '76409', 'E:\\TestCst\\2017\\03\\07\\\\68F8DFA7-AD72-8FC6-80BB-77BFB2000587', '2017-03-07 20:34:19', '68F8DFA7-AD72-8FC6-80BB-77BFB2000587', '0');
 INSERT INTO `p_file` VALUES ('51F737C7-03D7-92E5-A168-3F9B6840E579', '4.jpg', 'jpg', '72998', 'E:\\TestCst\\2017\\03\\07\\\\A115E947-6666-4E48-DCDA-AF9CE5F840BF', '2017-03-07 21:58:17', 'A115E947-6666-4E48-DCDA-AF9CE5F840BF', '0');
@@ -143,8 +144,10 @@ CREATE TABLE `p_permission` (
 -- ----------------------------
 INSERT INTO `p_permission` VALUES ('1', '用户管理', 'userManagement', '用户管理', '', null, '1');
 INSERT INTO `p_permission` VALUES ('2', '角色管理', 'roleManagement', '角色管理', '', null, '1');
+INSERT INTO `p_permission` VALUES ('2D32F4BA-0EC9-AE42-2D18-1C6368EAFC63', '马超2哦', null, '马超2哦', '', null, '1');
 INSERT INTO `p_permission` VALUES ('3', '任务管理', 'taskManagement', '任务管理', '', null, '1');
 INSERT INTO `p_permission` VALUES ('4', '系统设置', 'systemSet', '系统设置', '', null, '1');
+INSERT INTO `p_permission` VALUES ('84CFD5CF-9659-C469-8C2D-8D55BFCACF47', '马超', null, '马超特有', '', null, '1');
 
 -- ----------------------------
 -- Table structure for p_permissionMenu
@@ -158,6 +161,16 @@ CREATE TABLE `p_permissionMenu` (
 -- ----------------------------
 -- Records of p_permissionMenu
 -- ----------------------------
+INSERT INTO `p_permissionMenu` VALUES ('5', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('6', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('7', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('8', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('10', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('2', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('11', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('12', '84CFD5CF-9659-C469-8C2D-8D55BFCACF47');
+INSERT INTO `p_permissionMenu` VALUES ('1', '2D32F4BA-0EC9-AE42-2D18-1C6368EAFC63');
+INSERT INTO `p_permissionMenu` VALUES ('9', '2D32F4BA-0EC9-AE42-2D18-1C6368EAFC63');
 
 -- ----------------------------
 -- Table structure for p_role
@@ -202,11 +215,8 @@ INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '
 INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '2', '0');
 INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '3', '1');
 INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '4', '1');
-INSERT INTO `p_rolepermission` VALUES ('1', '1', '1');
-INSERT INTO `p_rolepermission` VALUES ('1', '2', '1');
-INSERT INTO `p_rolepermission` VALUES ('1', '3', '1');
-INSERT INTO `p_rolepermission` VALUES ('1', '4', '1');
 INSERT INTO `p_rolepermission` VALUES ('2', '1', '1');
+INSERT INTO `p_rolepermission` VALUES ('1', '2D32F4BA-0EC9-AE42-2D18-1C6368EAFC63', '1');
 
 -- ----------------------------
 -- Table structure for p_task_receive
@@ -1305,7 +1315,9 @@ CREATE TABLE `p_user` (
 -- Records of p_user
 -- ----------------------------
 INSERT INTO `p_user` VALUES ('362AF613-F441-0222-88CB-34D1BA33E43E', 'qingtian@163.com', '1', '晴天1993', null, '13613033671', '超级用户', '1', '2017-03-07 18:10:59', 'F:\\image\\1.jpg');
+INSERT INTO `p_user` VALUES ('410430DE-43EB-EF68-FACA-3A3895043F96', '马超', '1', '马超', null, null, '普通用户', '1', '2017-03-19 12:58:59', 'E:\\TestCst\\2017\\03\\19\\\\7A960730-9CEC-568B-65A1-58BF513BAAAE');
 INSERT INTO `p_user` VALUES ('7974A5E1-ADD2-7C72-A2E8-9204DD872180', '温四天', '1', null, null, null, '普通用户', '1', null, null);
+INSERT INTO `p_user` VALUES ('87680FF3-DB5E-A71B-F8EC-EC777991EA76', '马超哦', '1', null, null, null, '普通用户', '1', '2017-03-19 12:35:38', null);
 INSERT INTO `p_user` VALUES ('B3347B03-0646-5B00-38D6-CFDDA11970D5', '11', '11', '1', null, '1', '1', '1', '2017-02-10 23:34:39', null);
 INSERT INTO `p_user` VALUES ('CBB91C91-14AB-9BEE-F78E-15527DFB2E16', '123', '123', null, null, null, '普通用户', '0', '2017-02-07 23:59:10', null);
 INSERT INTO `p_user` VALUES ('CD1B3074-17B8-20AF-3FED-DCBFA565617A', '方旅生', '123456', null, null, null, '普通用户', '0', '2017-02-10 23:48:08', null);
@@ -1330,3 +1342,5 @@ INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '7125BF
 INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '74B2338E-7006-E11B-0700-CB8AD4D8D9B6');
 INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '9078176B-596E-C325-A6BB-57C57B6D8BFC');
 INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', 'B8F8217F-031D-0E47-0681-511A499F9B22');
+INSERT INTO `p_userrole` VALUES ('410430DE-43EB-EF68-FACA-3A3895043F96', '1');
+INSERT INTO `p_userrole` VALUES ('87680FF3-DB5E-A71B-F8EC-EC777991EA76', '1');

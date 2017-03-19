@@ -28,4 +28,9 @@ public class MenuService {
         List<Menu> list = sqlSession.selectList("Menu.select");
         return list;
     }
+
+    public List<Menu> getMenuListByUserId(String userId){
+        List<Menu> list = sqlSession.selectList("Menu.getMenuListByUserId",userId);
+        return list;
+    }
 }

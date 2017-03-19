@@ -7,6 +7,9 @@ public class User implements Serializable{
     private static final long serialVersionUID = 1L;
 
 
+    private String roleId;
+
+
     private String headImage;
 
 
@@ -187,5 +190,14 @@ public class User implements Serializable{
 
     public void setHeadImage(String headImage) {
         this.headImage = headImage;
+    }
+
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }
