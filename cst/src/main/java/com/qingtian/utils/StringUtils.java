@@ -40,9 +40,10 @@ public class StringUtils {
 
     /**
      * 获取方法名
+     *
      * @return
      */
-    public static String getMethodName(){
+    public static String getMethodName() {
         //获取方法名
         String methodName = Thread.currentThread().getStackTrace()[1].getClassName();
         return methodName;
@@ -51,15 +52,16 @@ public class StringUtils {
     /**
      * 日期格式转换为路径格式
      * 比如2016-12-08转换为2016\12\08\
+     *
      * @param date 日期
      * @return
      */
-    public static String dateToPath(String date){
+    public static String dateToPath(String date) {
         String dateArray[] = date.split("-");
         String path = "";
         //定义分隔符，防止调用多次
         String separator = File.separator;
-        for(int i=0;i<dateArray.length;i++){
+        for (int i = 0; i < dateArray.length; i++) {
             path += dateArray[i] + separator;
 //            System.out.println(path);
         }
@@ -68,11 +70,12 @@ public class StringUtils {
 
     /**
      * 两个字符串相加
+     *
      * @param a
      * @param b
      * @return
      */
-    public static String plusString(String a,String b){
+    public static String plusString(String a, String b) {
         StringBuilder builder = new StringBuilder(a);
         builder.append(b);
 //        System.out.println(builder.toString());
@@ -81,13 +84,14 @@ public class StringUtils {
 
     /**
      * 两个字符串相加，有换行
+     *
      * @param a
      * @param b
      * @return
      */
-    public static String plusNewLineString(String a,String b){
+    public static String plusNewLineString(String a, String b) {
         StringBuilder builder = new StringBuilder(a);
-        builder.append("\r\n"+b);
+        builder.append("\r\n" + b);
 //        System.out.println(builder.toString());
         return builder.toString();
     }
@@ -110,12 +114,6 @@ public class StringUtils {
             e.printStackTrace();
         }
     }
-
-//    public static void main(String[] args) {
-//        String sourcePath = "F:\\image\\1.jpg";
-//        String aimPath = "F:\\image\\3.jpg";
-//        zoomImage(sourcePath,aimPath,650,650);
-//    }
 
     public static void scale(String srcImageFile, String result, int height, int width, boolean bb) {
         try {
@@ -158,19 +156,64 @@ public class StringUtils {
         }
     }
 
-//    public static String permissionNameMatch(String sname){
-////        if(sname.equals("userManagement"))
-//    }
+    public static int countSum(String str) {
+        int unicodeCount = 0;
+        int szCount = 0;
+        int zmCount = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+
+            char c = str.charAt(i);
+            if (c >= '0' && c <= '9') {
+                szCount++;
+            } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                zmCount++;
+            } else {
+                unicodeCount++;
+            }
+        }
+//        System.out.println("Unicode:" + unicodeCount);
+//        System.out.println("数字：" + szCount);
+//        System.out.println("字母：" + zmCount);
+        int sum = szCount + zmCount + unicodeCount;
+        return sum;
+    }
+
+    public static int countSum2(String str) {
+        int abccount = 0;
+        int numcount = 0;
+        int spacecount = 0;
+        int othercount = 0;
+        char[] b = str.toCharArray();
+        for (int i = 0; i < b.length; i++) {
+            if (b[i] >= 'a' && b[i] <= 'z' || b[i] >= 'A' && b[i] <= 'Z') {
+                abccount++;
+            } else if (b[i] >= '0' && b[i] <= '9') {
+                numcount++;
+            } else if (b[i] == ' ') {
+                spacecount++;
+            } else {
+                othercount++;
+            }
+        }
+        int sum = abccount + numcount + spacecount + othercount;
+//        System.out.println("字符串中含有的英文字母数为：" + abccount);
+//        System.out.println("字符串中含有的数字数为：" + numcount);
+//        System.out.println("字符串中含有的空格数为：" + spacecount);
+//        System.out.println("字符串中含有的其他字符为：" + othercount);
+        return sum;
+    }
+
 
     public static void main(String[] args) {
-//        String sourcePath = "F:\\image\\1.jpg";
-//        String aimPath = "F:\\image\\5.jpg";
-////        zoomImage(sourcePath, aimPath, 650, 650);
-//        scale(sourcePath,aimPath,650,650,false);
-
-
-
-//        plusNewLineString("hello","world");
+//        //==========================================统计字数=========================================================================
+//        String str = "展恒理财，2004年在北京成立，是国内最大的理财咨询类机构之一。获得国家颁发的独立基金销售牌照.是2013年中国网球公开赛10大核心赞助商之一。公司成立10年来，在为客户进行全面的家庭财务规划方面积累了十分丰富的经验。目前拥有中高端忠实客户10000多名，配置客户资金超过200亿元，位列行业排名前三强。";
+//
+//        System.out.println("[总字符数1]："+countSum(str));
+//        System.out.println("--------------------");
+//        System.out.println("[总字符数2]："+countSum2(str));
+//        System.out.println("--------------------");
+//        System.out.println("[总字符数3]："+str.length());
     }
 }
 

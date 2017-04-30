@@ -13,6 +13,26 @@ public class TaskFile implements Serializable{
     //文本内容
     private List<String> lists;
 
+    private int wordCount;
+
+    private String lineText;
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
+    }
+
+    public String getLineText() {
+        return lineText;
+    }
+
+    public void setLineText(String lineText) {
+        this.lineText = lineText;
+    }
+
     public int getLine() {
         return line;
     }

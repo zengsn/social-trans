@@ -294,9 +294,12 @@
                 //关闭添加框
                 doSearch();
                 closeUpdateWin();
+                bootbox.alert("修改角色成功");
             }else{
                 closeUpdateWin();
                 bootbox.alert("修改角色失败");
+
+
             }
         });
     }
@@ -342,6 +345,7 @@
                     //关闭添加框
                     doSearch();
                     closeAddWin();
+                    bootbox.alert("添加角色成功");
                 }else{
                     closeAddWin();
                     bootbox.alert("添加角色失败");

@@ -35,4 +35,6 @@ public class Constant {
     public final static int HEADIMAGE_WIDTH = 650;
     //头像高度
     public final static int HEADIMAGE_HEIGHT = 650;
+    //根据行数手动设置章节
+    public final static int CHAPTER_LINE = 2;
 }

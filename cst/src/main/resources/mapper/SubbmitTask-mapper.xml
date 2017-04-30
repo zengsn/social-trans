@@ -9,81 +9,19 @@
     </select>
 
     <insert id="saveTask" parameterType="SubbmitTask">
-        insert into p_task_subbmit(
-        <trim suffixOverrides=",">
-            <if test="taskId != null and taskId != ''">
-                taskId,
-            </if>
-
-            <if test="comment != null and comment != ''">
-                comment,
-            </if>
-
-            <if test="submitter != null and submitter != ''">
-                submitter,
-            </if>
-
-            <if test="submitterId != null and submitterId != ''">
-                submitterId,
-            </if>
-
-            <if test="fileCode != null and fileCode != ''">
-                fileCode,
-            </if>
-
-            <if test="finishedTime != null and finishedTime != ''">
-                finishedTime,
-            </if>
-
-            <if test="isReceive != null and isReceive != ''">
-                isReceive,
-            </if>
-
-            <if test="fileId != null and fileId != ''">
-                fileId,
-            </if>
-
-        </trim>
-        )
-        values(
-        <trim suffixOverrides=",">
-
-            <if test="taskId != null and taskId != ''">
-                #{taskId},
-            </if>
-
-
-            <if test="comment != null and comment != ''">
-                #{comment},
-            </if>
-
-            <if test="submitter != null and submitter != ''">
-                #{submitter},
-            </if>
-
-            <if test="submitterId != null and submitterId != ''">
-                #{submitterId},
-            </if>
-
-            <if test="fileCode != null and fileCode != ''">
-                #{fileCode},
-            </if>
-
-            <if test="finishedTime != null and finishedTime!= ''">
-                #{finishedTime},
-            </if>
-
-            <if test="isReceive != null and isReceive!= ''">
-                #{isReceive},
-            </if>
-
-            <if test="fileId != null and fileId!= ''">
-                #{fileId},
-            </if>
-
-        </trim>
-        )
+        INSERT INTO p_task_subbmit
+        (taskId,commentName,comment,submitter,submitterId,fileCode,finishedTime,isReceive,fileId,taskMoney,receivePeopleNum,filePath,startTime)
+        VALUES
+        (#{taskId},#{commentName},#{comment},#{submitter},#{submitterId},#{fileCode},#{finishedTime},#{isReceive},#{fileId},#{taskMoney},#{receivePeopleNum},#{filePath},#{startTime})
     </insert>
+
+
+    <!--<insert id="saveTask" parameterType="SubbmitTask">-->
+        <!--INSERT INTO p_task_subbmit-->
+        <!--(taskId,commentName,comment,submitter,submitterId,fileCode,finishedTime,isReceive,fileId,taskMoney,receivePeopleNum,filePath,startTime)-->
+        <!--VALUES-->
+        <!--(#{taskId},#{commentName},#{comment},#{submitter},#{submitterId},#{fileCode},#{finishedTime},#{isReceive},#{fileId},#{taskMoney},#{receivePeopleNum},#{filePath},#{startTime})-->
+    <!--</insert>-->
 
     <delete id="deleteTaskById" parameterType="String">
         delete from P_task_subbmit where

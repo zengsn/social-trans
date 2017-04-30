@@ -10,6 +10,7 @@ import org.workSpace.utils.RandomGUID;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,19 +27,18 @@ public class SplitFile {
         String filePath = "F:\\machao1\\test1.txt";
         String filePath1= "F:\\machao1\\0D372E17-8A86-0CCC-AF51-AA63A583349111.txt";
         String filePath2= "F:\\machao1\\test\\abc.txt";
-//        readTxtFile(filePath);
-//        System.out.println(getFileCount(filePath));
-        try {
-//            sqlitFile(filePath);
-            SplitFile splitFile = new SplitFile();
-//            splitFile.sqlitFile(filePath);
-//            splitFile.getMulitLine(filePath2);
-//            splitFile.preFileByCount(filePath2,3);
-            splitFile.getMulitLine(filePath2,"123",3);
-        } catch (Exception e) {
+        String filePath3= "F:\\machao1\\test\\致谢.txt";
+        try{
+            SplitFile sf = new SplitFile();
+            TaskFile taskFile = sf.getFileCountByFilePath(filePath3);
+            taskFile.getLine();
+            taskFile.getLineText();
+            taskFile.getLists();
+            taskFile.getWordCount();
+            System.out.println("hello");
+        }catch (Exception x){
 
         }
-
     }
 
     public final static String separator = File.separator;
@@ -87,7 +87,7 @@ public class SplitFile {
     public TaskFile getFileCountByFilePath(String path)throws IOException{
         //获取输入流
         FileInputStream in = new FileInputStream(path);
-        //获取reader
+        //获取reader,设置编码格式
         InputStreamReader inputStreamReader = new InputStreamReader(in,encoding);
         BufferedReader reader = new BufferedReader(inputStreamReader);
         //获取文件行数和文本内容
@@ -95,17 +95,64 @@ public class SplitFile {
         TaskFile taskFile = new TaskFile();
         //行数
         int line = 0;
+        //文本字数
+        int wordCount = 0;
         //文本内容
-        List<String> contentList = new ArrayList<>();
+//        List<String> contentList = new ArrayList<>();
+        List<String> contentList = new LinkedList<>();
+        String tmpLineTxt = null;
         while((lineText = reader.readLine())!=null){
+            tmpLineTxt = lineText + tmpLineTxt;
             contentList.add(lineText);
+            //统计文本字数
+            wordCount = wordCount + StringUtils.countSum(lineText);
+            //统计行数
             line++;
+            //每5000行手动设置章节
+            //章节
+            int chapterNum = 1;
+            if(line % Constant.CHAPTER_LINE ==0){
+                String ChapterName= "第"+chapterNum+"章";
+                contentList.add(ChapterName);
+                chapterNum = chapterNum +1;
+            }
         }
         reader.close();
         taskFile.setLine(line);
         taskFile.setLists(contentList);
+        taskFile.setWordCount(wordCount);
+        taskFile.setLineText(tmpLineTxt);
         return taskFile;
     }
+
+//    /**
+//     * 通过inputstream来获取处理后的文件
+//     * @param path
+//     * @return
+//     */
+//    public TaskFile getFileCountByFilePath(String path)throws IOException{
+//        //获取输入流
+//        FileInputStream in = new FileInputStream(path);
+//        //获取reader,设置编码格式
+//        InputStreamReader inputStreamReader = new InputStreamReader(in,encoding);
+//        BufferedReader reader = new BufferedReader(inputStreamReader);
+//        //获取文件行数和文本内容
+//        String lineText = null;
+//        TaskFile taskFile = new TaskFile();
+//        //行数
+//        int line = 0;
+//        //文本内容
+//        List<String> contentList = new ArrayList<>();
+//        while((lineText = reader.readLine())!=null){
+//            contentList.add(lineText);
+//            line++;
+//        }
+//        reader.close();
+//        taskFile.setLine(line);
+//        taskFile.setLists(contentList);
+//        return taskFile;
+//    }
+
 
     /**
      * 分割文件
@@ -141,7 +188,6 @@ public class SplitFile {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetPath), encoding));
             String lineTxt = null;
             int line = 0;
-
             //循环一个最小分割粒度后切割文件
             for(int j=tmp;j<=contentList.size()-tmp;j++){
                 bufferedWriter.append(contentList.get(j));

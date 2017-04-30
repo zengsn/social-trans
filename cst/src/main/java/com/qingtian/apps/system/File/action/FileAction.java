@@ -43,6 +43,7 @@ public class FileAction {
     @Resource(name = "fileService")
     private FileService fileService;
 
+
     @RequestMapping(path = "/upLoadFile.do", produces = "text/html;charset=UTF-8")
     public String upLoadFile(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -65,8 +66,6 @@ public class FileAction {
                             String fileName = multipartFile.getOriginalFilename();
                             if (null != fileName && !"".equals(fileName)) {
                                 FileInfo fileInfo = new FileInfo();
-                                //附件关联标识号
-                                fileInfo.setFileCode(new RandomGUID().toString());
                                 //附件id
                                 fileInfo.setFileId(new RandomGUID().toString());
                                 //附件名：带后缀
@@ -75,11 +74,12 @@ public class FileAction {
                                 fileInfo.setFileSize(String.valueOf(multipartFile.getSize()));
                                 //附件类型
                                 fileInfo.setFileType(fileName.substring(fileName.lastIndexOf(".") + 1));
+                                if(!"txt".equals(fileName.substring(fileName.lastIndexOf(".") + 1))){
+                                    return JsonUtils.genUpdateDataReturnJsonStr(false, "上传的文件不能为空");
+                                }
                                 //附件地址
-                                String path = ToolUtils.getPath(Constant.SOURCE_FILE_PATH) + separator + fileInfo.getFileCode();
+                                String path = ToolUtils.getPath(Constant.SOURCE_FILE_PATH) + separator + fileInfo.getFileId();
                                 fileInfo.setFilePath(path);
-                                //是否为分割的小文件
-                                fileInfo.setChildFile("0");
                                 Boolean isSuccess = fileService.insertFile(fileInfo, in);
                                 if (isSuccess) {
                                     fileInfos.add(fileInfo);
@@ -111,6 +111,78 @@ public class FileAction {
             return JsonUtils.genUpdateDataReturnJsonStr(false, "操作由于异常失败");
         }
     }
+
+//    @RequestMapping(path = "/upLoadFile.do", produces = "text/html;charset=UTF-8")
+//    public String upLoadFile(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            //获取解析器
+//            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+//
+//            //解析请求
+//            if (multipartResolver.isMultipart(request)) {
+//                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+//                //附件实体类
+//                List<FileInfo> fileInfos = new ArrayList<>();
+//                Iterator<String> iter = multiRequest.getFileNames();
+//                while (iter.hasNext()) {
+//                    MultipartFile multipartFile = multiRequest.getFile(iter.next());
+//                    InputStream in = multipartFile.getInputStream();
+//                    try {
+//
+//                        if (null != in) {
+//                            //获取附件名
+//                            String fileName = multipartFile.getOriginalFilename();
+//                            if (null != fileName && !"".equals(fileName)) {
+//                                FileInfo fileInfo = new FileInfo();
+//                                //附件关联标识号
+//                                fileInfo.setFileCode(new RandomGUID().toString());
+//                                //附件id
+//                                fileInfo.setFileId(new RandomGUID().toString());
+//                                //附件名：带后缀
+//                                fileInfo.setFileName(fileName);
+//                                //附件大小
+//                                fileInfo.setFileSize(String.valueOf(multipartFile.getSize()));
+//                                //附件类型
+//                                fileInfo.setFileType(fileName.substring(fileName.lastIndexOf(".") + 1));
+//                                if(!"txt".equals(fileName.substring(fileName.lastIndexOf(".") + 1))){
+//                                    return JsonUtils.genUpdateDataReturnJsonStr(false, "上传的文件不能为空");
+//                                }
+//                                //附件地址
+//                                String path = ToolUtils.getPath(Constant.SOURCE_FILE_PATH) + separator + fileInfo.getFileCode();
+//                                fileInfo.setFilePath(path);
+//                                //是否为分割的小文件
+//                                fileInfo.setChildFile("0");
+//                                Boolean isSuccess = fileService.insertFile(fileInfo, in);
+//                                if (isSuccess) {
+//                                    fileInfos.add(fileInfo);
+//                                }
+//
+//                            }
+//                        } else {
+//                            return JsonUtils.genUpdateDataReturnJsonStr(false, "上传的文件不能为空");
+//                        }
+//
+//                    } catch (Exception e) {
+//                        return JsonUtils.genUpdateDataReturnJsonStr(false, "读取文件时操作由于异常失败" + e.getMessage());
+//                    } finally {
+//                        if (in != null) {
+//                            in.close();
+//                        }
+//                    }
+//                }
+//                //检查是否有成功上传文件
+//                if (fileInfos.size() > 0) {
+//                    return JsonUtils.genUpdateDataReturnJsonStr(true, "上传文件成功", fileInfos);
+//                } else {
+//                    return JsonUtils.genUpdateDataReturnJsonStr(false, "文件上传失败", null, "404");
+//                }
+//            } else {
+//                return JsonUtils.genUpdateDataReturnJsonStr(false, "404", "当前表单不是文件上传表单");
+//            }
+//        } catch (Exception e) {
+//            return JsonUtils.genUpdateDataReturnJsonStr(false, "操作由于异常失败");
+//        }
+//    }
 
 
 

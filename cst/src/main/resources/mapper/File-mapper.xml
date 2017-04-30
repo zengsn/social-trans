@@ -7,6 +7,11 @@
         insert into p_file(fileCode,fileId,fileName,fileType,fileSize,filePath,childFile,createTime) VALUES (#{fileCode},#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath},#{childFile},NOW());
     </insert>
 
+    <insert id="insert1" parameterType="FileInfo">
+        insert into p_file1(fileId,fileName,fileType,fileSize,filePath) VALUES (#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath});
+    </insert>
+
+
     <!-- 批量添加任务 -->
     <insert id="insertFileBatch" parameterType="java.util.List">
         insert p_file(fileCode,fileId,fileName,fileType,filePath,createTime,childFile)

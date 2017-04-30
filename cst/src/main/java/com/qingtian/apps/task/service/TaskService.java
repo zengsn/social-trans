@@ -59,28 +59,29 @@ public class TaskService {
         //分割任务
         list = splitTask(task.getFilePath(),task.getFileCode());
         //将分割后的文件批量插入数据库
-        int fileInsertResult = sqlSession.insert("File.insertFileBatch",list);
-        //根据生成的文件来设置任务
-        //任务id
-        String taskId = task.getTaskId();
-        //任务提交者
-        String submitter = task.getSubmitter();
-        //任务提交者id
-        String submitterId = task.getSubmitterId();
-        List<ReceiveTask> receiveTasklist = new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            ReceiveTask rt = new ReceiveTask();
-            rt.setFileId(list.get(i).getFileId());
-            rt.setFileCode(list.get(i).getFileCode());
-            rt.setTaskId(taskId);
-            rt.setSubmitter(submitter);
-            rt.setSubmitterId(submitterId);
-            rt.setIsReceive("0");
-            receiveTasklist.add(rt);
-        }
-        //将任务插入数据库
-        int receiveTaskResult = sqlSession.insert("ReceiveTask.insertTaskBatch",receiveTasklist);
-        return (subbmitTaskResult & fileInsertResult & receiveTaskResult)>0? true:false;
+//        int fileInsertResult = sqlSession.insert("File.insertFileBatch",list);
+//        //根据生成的文件来设置任务
+//        //任务id
+//        String taskId = task.getTaskId();
+//        //任务提交者
+//        String submitter = task.getSubmitter();
+//        //任务提交者id
+//        String submitterId = task.getSubmitterId();
+//        List<ReceiveTask> receiveTasklist = new ArrayList<>();
+//        for(int i=0;i<list.size();i++){
+//            ReceiveTask rt = new ReceiveTask();
+//            rt.setFileId(list.get(i).getFileId());
+//            rt.setFileCode(list.get(i).getFileCode());
+//            rt.setTaskId(taskId);
+//            rt.setSubmitter(submitter);
+//            rt.setSubmitterId(submitterId);
+//            rt.setIsReceive("0");
+//            receiveTasklist.add(rt);
+//        }
+//        //将任务插入数据库
+//        int receiveTaskResult = sqlSession.insert("ReceiveTask.insertTaskBatch",receiveTasklist);
+//        return (subbmitTaskResult & fileInsertResult & receiveTaskResult)>0? true:false;
+        return subbmitTaskResult>0?true:false;
     }
 
     /**

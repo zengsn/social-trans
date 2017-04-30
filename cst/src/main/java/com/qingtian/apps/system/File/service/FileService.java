@@ -32,9 +32,7 @@ public class FileService {
     private static String separator = File.separator;
 
     public Boolean insertFile(FileInfo fileInfo, InputStream in) throws Exception {
-
-        sqlSession.insert("File.insert", fileInfo);
-
+        sqlSession.insert("File.insert1", fileInfo);
         String path = fileInfo.getFilePath();
         // 创建目标文件
         File file = new File(path);

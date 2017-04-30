@@ -86,6 +86,10 @@
     <script src="../assets/js/excanvas.min.js"></script>
     <![endif]-->
 
+    <!--MyDate97-->
+    <script src="../js/My97DatePicker/WdatePicker.js"></script>
+    <!--<script src="../js/My97DatePicker/calendar.js"></script>-->
+
     <!-- ace scripts -->
     <script src="../assets/js/ace-elements.min.js"></script>
     <script src="../assets/js/ace.min.js"></script>
@@ -95,7 +99,26 @@
     <script type="text/javascript" src="../js/commonJs/commonUtils.js"></script>
     <!--时间控件-->
     <!--<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>-->
-    <script type="text/javascript" src="../js/commonJs/ajaxfileupload.js" ></script>
+    <script type="text/javascript" src="../js/commonJs/ajaxfileupload.js"></script>
+    <script src="../js/layer/layer.js"></script>
+
+    <style>
+        #table_td td{
+            height: 35px;
+        }
+
+        .borderRadius4px {
+            border-radius: 4px;
+        }
+
+        .day,.hour,.minute,.second{
+            color:#FF0000
+        }
+
+
+    </style>
+
+
 </head>
 <body class="no-skip">
 <div class="page-content">
@@ -128,8 +151,8 @@
     </div>
 </div>
 
-<!--新增用户界面-->
-<div tabindex="-1" class="modal fade in" id="add-modal" aria-hidden="false" style="padding-right: 17px; display:none">
+<!--新增任务界面-->
+<div tabindex="-1" class="modal fade in" id="add-modal" aria-hidden="false" style="padding-right: 17px; display:none"  data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,7 +164,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <form class="form-horizontal" style="margin: 0px">
-                            <table style="width: 100%;margin-left: 4%" cellpadding="10" cellspacing="10">
+                            <table id="table_td" style="width: 100%;margin-left: 4%" cellpadding="10" cellspacing="10">
                                 <input id="add_submitterId" name="submitterId" hidden>
                                 <tr>
                                     <td align="right">
@@ -155,30 +178,54 @@
                                 </tr>
                                 <tr>
                                     <td align="right">
-                                        <label class="control-label" for="add_comment">任务内容:</label>
+                                        <label class="control-label" for="add_commentName">文本名:</label>
                                     </td>
-
                                     <td>
-                                        <textarea id="add_comment" name="comment" rows="3" cols="50"></textarea>
+                                        <input class="form-control" id="add_commentName" name="commentName" type="text"
+                                               style="width:168px"
+                                        >
                                     </td>
-
-
                                 </tr>
                                 <tr>
                                     <td align="right">
-                                        <label class="no-padding-right" for="add_fileId">翻译内容:</label>
+                                        <label class="control-label" for="add_comment">任务内容:</label>
+                                    </td>
+                                    <td>
+                                        <textarea id="add_comment" name="comment" rows="2" cols="50"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <label class="no-padding-right" for="add_fileId">上传文本（仅支持txt）:</label>
                                     </td>
                                     <td>
                                         <input id="add_fileId" name="fileId" type="file" style="width:168px">
                                     </td>
-
-
                                 </tr>
-                                <!--<tr>-->
-                                    <!--<td align="right">-->
-                                        <!--<label class="no-padding-right" for="add_finishedTime">任务截至时间:</label>-->
-                                    <!--</td>-->
-                                    <!--<td>-->
+                                <tr>
+                                    <!--<td align="right"><span class="red">*</span>处理时间：</td><td><input type="text" id="add_handleDate" name="handleDate" class="easyui-validatebox Wdate" data-options="required:true" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})"/></td>-->
+
+                                    <td align="right">
+                                        <label class="no-padding-right" for="add_startTime">任务开始时间:</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control Wdate" id="add_startTime" name="startTime"
+                                               type="text" style="width: 168px" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'add_finishedTime\')}'})">
+											<!--<span class="input-group">-->
+												<!---->
+													<!--&lt;!&ndash;<span class="input-group-addon" style="width: 0">&ndash;&gt;-->
+														<!--&lt;!&ndash;<i class="fa fa-calendar bigger-110"></i>&ndash;&gt;-->
+													<!--&lt;!&ndash;</span>&ndash;&gt;-->
+											<!--</span>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <label class="no-padding-right" for="add_startTime">任务截至时间:</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control Wdate" id="add_finishedTime" name="finishedTime"
+                                               type="text" style="width: 168px" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'add_startTime\')}'})">
 											<!--<span class="input-group">-->
 												<!--<input class="datetime" id="add_finishedTime" name="finishedTime"-->
                                                        <!--type="text" style="width: 128px">-->
@@ -186,8 +233,28 @@
 														<!--<i class="fa fa-calendar bigger-110"></i>-->
 													<!--</span>-->
 											<!--</span>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <label class="control-label" for="add_taskMoney">任务金额:</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" id="add_taskMoney" name="taskMoney" type="text"
+                                               style="width:168px"
+                                               >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <label class="control-label" for="add_receivePeopleNum">指定翻译人数:</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" id="add_receivePeopleNum" name="add_receivePeopleNum" type="text"
+                                               style="width:168px"
+                                        >
+                                    </td>
+                                </tr>
                             </table>
 
                         </form>
@@ -206,92 +273,93 @@
             </div>
         </div>
     </div>
+
 </div>
 
-<!--用户修改界面-->
-<div tabindex="-1" class="modal fade in" id="update-modal" aria-hidden="false"
-     style="padding-right: 17px; display:none">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>
-                <h3 class="smaller lighter blue no-margin">修改窗口</h3>
-            </div>
-            <input type="hidden" name="userId">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <form class="form-horizontal" style="margin: 0px" id="ff">
-                            <table style="width: 100%;margin-left: 4%" cellpadding="10" cellspacing="10">
+<!--&lt;!&ndash;用户修改界面&ndash;&gt;-->
+<!--<div tabindex="-1" class="modal fade in" id="update-modal" aria-hidden="false"-->
+<!--style="padding-right: 17px; display:none">-->
+<!--<div class="modal-dialog">-->
+<!--<div class="modal-content">-->
+<!--<div class="modal-header">-->
+<!--<button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>-->
+<!--<h3 class="smaller lighter blue no-margin">修改窗口</h3>-->
+<!--</div>-->
+<!--<input type="hidden" name="userId">-->
+<!--<div class="modal-body">-->
+<!--<div class="row">-->
+<!--<div class="col-xs-12">-->
+<!--<form class="form-horizontal" style="margin: 0px" id="ff">-->
+<!--<table style="width: 100%;margin-left: 4%" cellpadding="20" cellspacing="10">-->
 
-                                <tr>
-                                    <td align="right">
-                                        <label class="control-label" for="username">用户帐号:</label>
-                                    </td>
-                                    <td>
-                                        <input id="username" name="username" type="text" style="width:168px" disabled>
-                                    </td>
-                                    <td align="right">
-                                        <label class="control-label" for="nickname">用户名:</label>
-                                    </td>
-                                    <td>
-                                        <input id="nickname" name="nickname" type="text" required="required"
-                                               style="width:168px">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        <label class="no-padding-right" for="email">邮箱:</label>
-                                    </td>
-                                    <td>
-                                        <input id="email" name="email" type="text" style="width:168px">
-                                    </td>
-                                    <td align="right">
-                                        <label class="no-padding-right" for="phoneNumber">手机号码:</label>
-                                    </td>
-                                    <td>
-                                        <input id="phoneNumber" name="phoneNumber" type="text" style="width:168px">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        <label class="cno-padding-right" for="role">角色:</label>
-                                    </td>
-                                    <td>
-                                        <input id="role" name="role" type="text" style="width:168px" disabled>
-                                    </td>
-                                    <td align="right">
-                                        <label class="no-padding-right" for="add_birth_ymd">出生日期:</label>
-                                    </td>
-                                    <td>
-											<span class="input-group">
-												<input class="datetime" id="add_birth_ymd" name="birth_ymd" type="text"
-                                                       style="width: 128px">
-													<span class="input-group-addon" style="width: 0">
-														<i class="fa fa-calendar bigger-110"></i>
-													</span>
-											</span>
-                                    </td>
-                                </tr>
-                            </table>
+<!--<tr>-->
+<!--<td align="right">-->
+<!--<label class="control-label" for="username">用户帐号:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<input id="username" name="username" type="text" style="width:168px" disabled>-->
+<!--</td>-->
+<!--<td align="right">-->
+<!--<label class="control-label" for="nickname">用户名:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<input id="nickname" name="nickname" type="text" required="required"-->
+<!--style="width:168px">-->
+<!--</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td align="right">-->
+<!--<label class="no-padding-right" for="email">邮箱:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<input id="email" name="email" type="text" style="width:168px">-->
+<!--</td>-->
+<!--<td align="right">-->
+<!--<label class="no-padding-right" for="phoneNumber">手机号码:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<input id="phoneNumber" name="phoneNumber" type="text" style="width:168px">-->
+<!--</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td align="right">-->
+<!--<label class="cno-padding-right" for="role">角色:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<input id="role" name="role" type="text" style="width:168px" disabled>-->
+<!--</td>-->
+<!--<td align="right">-->
+<!--<label class="no-padding-right" for="add_birth_ymd">出生日期:</label>-->
+<!--</td>-->
+<!--<td>-->
+<!--<span class="input-group">-->
+<!--<input class="datetime" id="add_birth_ymd" name="birth_ymd" type="text"-->
+<!--style="width: 128px">-->
+<!--<span class="input-group-addon" style="width: 0">-->
+<!--<i class="fa fa-calendar bigger-110"></i>-->
+<!--</span>-->
+<!--</span>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</table>-->
 
-                        </form>
+<!--</form>-->
 
-                    </div>
+<!--</div>-->
 
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-lg btn-danger pull-left" onclick="closeUpdateWin()">
-                    <i class="ace-icon fa  fa-undo"></i> 取消
-                </button>
-                <button class="btn btn-lg btn-success" type="button" onclick="updateFn()">
-                    <i class="ace-icon fa fa-check"></i> 提交
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--</div>-->
+<!--</div>-->
+<!--<div class="modal-footer">-->
+<!--<button class="btn btn-lg btn-danger pull-left" onclick="closeUpdateWin()">-->
+<!--<i class="ace-icon fa  fa-undo"></i> 取消-->
+<!--</button>-->
+<!--<button class="btn btn-lg btn-success" type="button" onclick="updateFn()">-->
+<!--<i class="ace-icon fa fa-check"></i> 提交-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 
 
 <script>
@@ -304,14 +372,15 @@
     $(document).ready(function () {
         doSearch();
         //初始化时间控件
-//        initDateTimeModule();
+        initDateTimeModule();
     });
 
     function initDateTimeModule() {
         $('.datetime').datepicker({
             autoclose: true,
             todayHighlight: true,
-            format: 'yyyy-mm-dd'
+//            format: 'yyyy-mm-dd HH:mm:ss'
+            format:'yyyy-MM-dd HH:mm:ss'
         })
 
         $('.datetime').each(function () {
@@ -362,13 +431,65 @@
                                             "hidden": true
                                         },
                                         {
+                                            "name": "commentName",
+                                            "label": "翻译文本名",
+                                            "width": "200px"
+                                        },
+                                        {
                                             "name": "comment",
                                             "label": "任务内容",
                                             "width": "200px"
                                         },
                                         {
+                                            "name": "taskMoney",
+                                            "label": "悬赏金额",
+                                            "width": "200px",
+                                            formatter: function (value, options,
+                                                                 rowData) {
+                                                return "<b class='red'>"+value+"元</b>";
+                                            }
+                                        },
+                                        {
+                                            "name": "receivePeopleNum",
+                                            "label": "限制领取人数",
+                                            "width": "200px",
+                                            formatter: function (value, options,
+                                                                 rowData) {
+                                                return "<b class='green'>"+value+"人</b>";
+                                            }
+                                        },
+                                        {
                                             "name": "submitter",
-                                            "label": "任务提交者"
+                                            "label": "任务提交者",
+                                            "hidden":true
+                                        },
+                                        {
+                                            "name": "startTime",
+                                            "label": "任务开始时间",
+                                            formatter: function (value, options,
+                                                                 rowData) {
+                                                return "<b class='blue'>"+value+"</b>";
+                                            }
+                                        },
+                                        {
+                                            "name": "finishedTime",
+                                            "label": "任务结束时间",
+                                            formatter: function (value, options,
+                                                                 rowData) {
+                                                return "<b class='blue'>"+value+"</b>";
+                                            }
+                                        },
+                                        {
+                                            "name": "finishedTime",
+                                            "label": "剩余时间",
+//                                            "formatter": fnDate
+                                            formatter:function (value, options, rowData) {
+                                                countdown('add',value);
+//                                                return "<div id='add'><span id='add.day'>天</span><span id='add.hour'>小时</span><span id='add.minute'>分</span><span id='add.second'>秒</span></div>"
+                                                return "<div id='add' class='td-countdown'><span class='day'>00</span>天<span class='hour'>00</span>时<span class='minute'>00</span>分<span class='second'>00</span>秒</div>" ;
+
+//                                                return "<b class='red2'>"+value+"</b>";
+                                            }
                                         },
                                         {
                                             "name": "isReceive",
@@ -381,23 +502,24 @@
                                                     return "是";
                                                 }
                                             }
-
                                         },
                                         {
                                             "name": "fnDiv",
                                             "label": "功能",
                                             "formatter": function (value, options,
                                                                    rowData) {
-                                                return "<div style='margin-left: 8px;'>"
-//                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
-//                                                        + JSON
-//                                                                .stringify(rowData)
-//                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
-                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
-                                                        + rowData.taskId
-                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
-                                                ;
-
+//                                                return "<div style='margin-left: 8px;'>"
+////                                                        + "<div  class='ui-pg-div ui-inline-edit'  style='float: left; cursor: pointer;'  onclick='openUpdateWin("
+////                                                        + JSON
+////                                                                .stringify(rowData)
+////                                                        + ")'; ><span class='ui-icon ui-icon-pencil'></span></div>"
+//                                                        + "<div  class='ui-pg-div ui-inline-del' style='margin-left: 5px; float: left;'  onclick=\"delConfirm('"
+//                                                        + rowData.taskId
+//                                                        + "')\" data-original-title='Delete'><span class='ui-icon ui-icon-trash'></span></div></div>";
+//                                                ;
+                                                return "<button class='btn btn-sm btn-warning borderRadius4px' onclick='PayDep(" + JSON.stringify(rowData) + ")'>"
+                                                        + " 设置翻译团队 "
+                                                        + " </button>";
                                             }
                                         }],
                                     viewrecords: true,
@@ -427,7 +549,6 @@
     }
 
 
-
     /*打开修改界面*/
     function openUpdateWin(rowData) {
         $("#update-modal").modal('show');
@@ -440,7 +561,7 @@
         $("#update-modal").modal('hide');
     }
 
-    /*关闭新增用户界面*/
+    /*关闭新增任务界面*/
     function closeAddWin() {
         $("#add-modal").modal('hide');
         //数据清空
@@ -457,7 +578,7 @@
         });
     }
 
-    /*添加用户模块信息重置*/
+    /*添加任务模块信息重置*/
     function reset_add($dom) {
         //textarea select
         $dom.find(":input").each(function () {
@@ -468,28 +589,7 @@
     }
 
 
-    /*修改用户资料*/
-    function updateFn() {
-        var params = {};
-        /*从update-modal获取数据*/
-        params = formToJsonstr('update-modal');
-        var updateFnUrl_ = "/" + PROJECT_NAME + "/User/updateUser.do";
-//            var updateFnUrl_ = "/User/updateUser.do"
 
-        ajaxFunction(updateFnUrl_, params,
-                function (result) {
-                    if (result.success) {
-                        bootbox.alert("修改成功");
-                        closeUpdateWin();
-                        doSearch();
-                    } else {
-                        bootbox.alert("修改失败:");
-                        closeUpdateWin();
-                    }
-
-
-                })
-    }
 
     /*删除选中任务*/
     function delConfirm(rowDataId) {
@@ -516,67 +616,98 @@
         );
     }
 
-
     /*添加任务*/
-        function upLoadFile() {
-            var addFileFnUrl_ = "/" + PROJECT_NAME + "/FileAction/upLoadFile.do";
-            $.ajaxFileUpload
-            (
-                    {
-                        url: addFileFnUrl_, //用于文件上传的服务器端请求地址
-                        secureuri: false, //是否需要安全协议，一般设置为false*/
-                        fileElementId: 'add_fileId', //文件上传域的ID
-                        dataType: 'text', //返回值类型 一般设置为json
-                        success: function(data,status,e) {
-                            if(status){
-                                //获取上传的其他信息
-                                //提交者
-                                var add_submitter = $('#add_submitter').val();
-                                //任务内容
-                                var add_comment = $('#add_comment').val();
-                                //任务截至时间
-//                                var add_finishedTime = $('#add_finishedTime').val();
-                                //提交者id
-                                var userId = getCookieValue("userId");
-                                console.log(data);
-                                var data = eval("(" + data + ")");
-                                var params = {
-                                    comment:add_comment,
-                                    submitter:add_submitter,
-                                    submitterId:userId,
-                                    fileCode:data.data[0].fileCode,
-                                    filePath:data.data[0].filePath,
-                                    fileId:data.data[0].fileId,
-                                }
-                                var addFnUrl_ =  "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
-                                console.log(params);
-                                alert("准备添加任务");
-                                ajaxFunction(addFnUrl_, params,
-                                        function (result) {
-                                            if (result.success) {
-                                                bootbox.alert("添加任务成功");
-    //                                            doSearch();
-                                                closeAddWin();
-                                            } else {
-                                                bootbox.alert("添加任务失败");
-                                                closeAddWin();
-                                            }
-
-                                        }
-                                );
-
-                            }else{
-                                bootbox.alert("上传失败");
-                            }
-                        },
-                        error: function (data, status, e)//服务器响应失败处理函数
-                        {
-                            alert("上传失败"+e);
-                        }
-                    }
-            )
+    function upLoadFile() {
+        var addFileFnUrl_ = "/" + PROJECT_NAME + "/FileAction/upLoadFile.do";
+        //获取附件val
+        var file  = $('#add_fileId').val();
+        console.log(file);
+        if(file == ""){
+            bootbox.alert("请上传文件");
+            return;
+        }
+        //获取最后一个"."之后的长度
+        var a = file.lastIndexOf(".");
+        //获取文件名长度
+        var b = file.length;
+        //获取后缀
+        var fileType = file.substring(a+1,b);
+        if(fileType != "txt"){
+            bootbox.alert("上传的文件不是txt");
+            return;
         }
 
+        $.ajaxFileUpload
+        (
+                {
+                    url: addFileFnUrl_, //用于文件上传的服务器端请求地址
+                    secureuri: false, //是否需要安全协议，一般设置为false*/
+                    fileElementId: 'add_fileId', //文件上传域的ID
+                    dataType: 'text', //返回值类型 一般设置为json
+                    success: function (data, status, e) {
+                        if (status) {
+                            //获取上传的其他信息
+                            //提交者
+                            var add_submitter = $('#add_submitter').val();
+                            //任务内容
+                            var add_comment = $('#add_comment').val();
+                            //提交者id
+                            var userId = getCookieValue("userId");
+                            //文本名
+                            var add_commentName = $('#add_commentName').val();
+                            //任务开始时间
+                            var add_startTime = $('#add_startTime').val();
+//                            console.log(add_startTime);
+                            //任务截至时间
+                            var add_finishedTime = $('#add_finishedTime').val();
+//                            console.log(add_finishedTime);
+                            //任务悬赏金额
+                            var add_taskMoney = $('#add_taskMoney').val();
+                            //翻译人数
+                            var add_receivePeopleNum =$('#add_receivePeopleNum').val();
+//                            console.log(data);
+                            var data = eval("(" + data + ")");
+                            var params = {
+                                comment: add_comment,
+                                submitter: add_submitter,
+                                submitterId: userId,
+//                                fileCode: data.data[0].fileCode,
+                                filePath: data.data[0].filePath,
+                                fileId: data.data[0].fileId,
+                                taskMoney:add_taskMoney,
+                                startTime:add_startTime,
+                                finishedTime:add_finishedTime,
+                                commentName:add_commentName,
+                                receivePeopleNum:add_receivePeopleNum
+                            };
+                            var addFnUrl_ = "/" + PROJECT_NAME + "/TaskAction/saveTask.do";
+//                            console.log(params);
+//                            alert("准备添加任务");
+                            ajaxFunction(addFnUrl_, params,
+                                    function (result) {
+                                        if (result.success) {
+                                            bootbox.alert("添加任务成功");
+                                            doSearch();
+                                            closeAddWin();
+                                        } else {
+                                            bootbox.alert("添加任务失败");
+                                            closeAddWin();
+                                        }
+
+                                    }
+                            );
+
+                        } else {
+                            bootbox.alert("上传失败");
+                        }
+                    },
+                    error: function (data, status, e)//服务器响应失败处理函数
+                    {
+                        alert("上传失败" + e);
+                    }
+                }
+        )
+    }
 
 
     /*校验帐号唯一性*/
@@ -602,6 +733,89 @@
                     }
                 }
                 , false);
+    }
+
+
+
+    /**
+     * 倒计时
+     * author:junyuan.huang
+     * @param id
+     * @param timeStr
+     * @returns {number}
+     */
+    function countdown(id, timeStr) {
+//        alert("hello");
+//        timeStr = strReplace(timeStr, '-', '/');
+        var i;
+
+        function setCountdown() {
+            var endTime = new Date(timeStr);
+            var nowTime = new Date();
+            var t = endTime.getTime() - nowTime.getTime();
+            var d = 0;
+            var h = 0;
+            var m = 0;
+            var s = 0;
+
+            if (t >= 0) {
+                d = Math.floor(t / 1000 / 60 / 60 / 24);
+                h = Math.floor(t / 1000 / 60 / 60 % 24);
+                m = Math.floor(t / 1000 / 60 % 60);
+                s = Math.floor(t / 1000 % 60);
+                /*document.getElementById(id).innerHTML = d + "天 " + h + "时 " + m + "分 " + s + "秒";*/
+                $('#' + id + ' .day').text(d);
+                $('#' + id + ' .hour').text(h < 10 ? "0" + h : h);
+                $('#' + id + ' .minute').text(m < 10 ? "0" + m : m);
+                $('#' + id + ' .second').text(s < 10 ? "0" + s : s);
+            } else {
+                /*$('#'+id+' .day').html('00');
+                 $('#'+id+' .hour').html('00');
+                 $('#'+id+' .minute').html('00');
+                 $('#'+id+' .second').html('00');*/
+                $('#'+id).empty();
+                $('#'+id).text("已结束");
+                if (i != null && i != 'undefined') {
+                    clearInterval(i);
+                }
+            }
+        }
+
+        i = setInterval(setCountdown, 1000);
+        return i;
+    }
+
+    function strReplace(str, reallyDo, replaceWith) {
+        if(str==null || str=="" || typeof(str)==undefined){
+            return "";
+        }
+        var e = new RegExp(reallyDo, "g");
+        return str.replace(e, replaceWith);
+    }
+
+
+    function fnDate(value, options, rowData){
+//        var oDiv=document.getElementById("div1");
+//        console.log(value);
+        //1:系统当前时间
+        var date=new Date();
+//        var year=date.getFullYear();//当前年份
+        var month=date.getMonth();//当前月份
+        var data=date.getDate();//天
+        var hours=date.getHours();//小时
+        var minute=date.getMinutes();//分
+        var second=date.getSeconds();//秒
+        //2:格式化截止时间
+//        var year =
+        var time=fnW((month+1))+"-"+fnW(data)+" "+fnW(hours)+":"+fnW(minute)+":"+fnW(second);
+        return time;
+//        oDiv.innerHTML=time;
+    }
+
+    function fnW(str){
+        var num;
+        str>10?num=str:num="0"+str;
+        return num;
     }
 
     //    $('#add_finishedTime').datetimepicker({

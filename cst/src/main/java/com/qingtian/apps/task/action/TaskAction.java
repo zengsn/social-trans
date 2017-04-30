@@ -56,19 +56,14 @@ public class TaskAction {
         }
     }
 
+
     /**
-     * 提交
+     * 提交任务
      * @param task
      */
     @RequestMapping("saveTask.do")
     public String saveTask(SubbmitTask task){
 
-        //验证任务非空
-        String comment = task.getComment();
-        if(StringUtils.isEmpty(comment)){
-            logger.error("TaskAction ------- saveTask : comment 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"comment为空");
-        }
 
         //验证提交者非空
         String submitter = task.getSubmitter();
@@ -77,7 +72,7 @@ public class TaskAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"submitter为空");
         }
 
-        //验证提交者非空
+        //验证提交者id非空
         String submitterId = task.getSubmitterId();
         if(StringUtils.isEmpty(submitterId)){
             logger.error("TaskAction ------- saveTask : submitterId 为空");
@@ -91,12 +86,6 @@ public class TaskAction {
             return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath");
         }
 
-        //验证附件标识号非空
-        String fileCode = task.getFileCode();
-        if(StringUtils.isEmpty(fileCode)){
-            logger.error("TaskAction ------- saveTask : fileCode 为空");
-            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileCode 为空");
-        }
 
         String fileId = task.getFileId();
         if(StringUtils.isEmpty(fileId)){
@@ -117,6 +106,68 @@ public class TaskAction {
         }
 
     }
+
+//    /**
+//     * 提交任务
+//     * @param task
+//     */
+//    @RequestMapping("saveTask.do")
+//    public String saveTask(SubbmitTask task){
+//
+//        //验证任务非空
+//        String comment = task.getComment();
+//        if(StringUtils.isEmpty(comment)){
+//            logger.error("TaskAction ------- saveTask : comment 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"comment为空");
+//        }
+//
+//        //验证提交者非空
+//        String submitter = task.getSubmitter();
+//        if(StringUtils.isEmpty(submitter)){
+//            logger.error("TaskAction ------- saveTask : submitter 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"submitter为空");
+//        }
+//
+//        //验证提交者非空
+//        String submitterId = task.getSubmitterId();
+//        if(StringUtils.isEmpty(submitterId)){
+//            logger.error("TaskAction ------- saveTask : submitterId 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"submitterId");
+//        }
+//
+//        //验证文件路径非空
+//        String filePath = task.getFilePath();
+//        if(StringUtils.isEmpty(filePath)){
+//            logger.error("TaskAction ------- saveTask : filePath 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"filePath");
+//        }
+//
+//        //验证附件标识号非空
+//        String fileCode = task.getFileCode();
+//        if(StringUtils.isEmpty(fileCode)){
+//            logger.error("TaskAction ------- saveTask : fileCode 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileCode 为空");
+//        }
+//
+//        String fileId = task.getFileId();
+//        if(StringUtils.isEmpty(fileId)){
+//            logger.error("TaskAction ------- saveTask : fileId 为空");
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"fileId 为空");
+//        }
+//
+//        try{
+//            Boolean isSuccess = taskService.saveTask(task);
+//            if(isSuccess){
+//                return  JsonUtils.genUpdateDataReturnJsonStr(true,"任务提交成功");
+//            }else{
+//                return  JsonUtils.genUpdateDataReturnJsonStr(false,"任务提交失败");
+//            }
+//        }catch (Exception e){
+//            logger.error("TaskAction ------- saveTask : 操作由于异常而任务提交失败"+e.getMessage());
+//            return  JsonUtils.genUpdateDataReturnJsonStr(false,"操作由于异常而任务提交失败"+e.getMessage());
+//        }
+//
+//    }
 
     /**
      * 根据任务id来删除任务

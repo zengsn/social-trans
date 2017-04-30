@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50632
 File Encoding         : 65001
 
-Date: 2017-03-19 12:59:23
+Date: 2017-04-27 10:34:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -108,7 +108,7 @@ CREATE TABLE `p_menu` (
   PRIMARY KEY (`id`),
   KEY `level` (`level`),
   KEY `sort` (`sort`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_menu
@@ -188,11 +188,14 @@ CREATE TABLE `p_role` (
 -- Records of p_role
 -- ----------------------------
 INSERT INTO `p_role` VALUES ('1', '超级用户', '超级用户', '1');
+INSERT INTO `p_role` VALUES ('1AD0EB85-7F63-C2F1-ADAF-01DE9029A5B3', '很厉害的角色哦', '超级厉害哦', '0');
 INSERT INTO `p_role` VALUES ('2', '普通用户', '普通用户', '1');
 INSERT INTO `p_role` VALUES ('7125BF58-E00F-6F3A-8740-99AC1951525E', '后台管理员', '后台管理员', '1');
 INSERT INTO `p_role` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '树杰大帅B', '树杰大帅B', '1');
+INSERT INTO `p_role` VALUES ('8966C8AC-D35B-3D6C-1EB8-5499279FF7F2', '很厉害的角色哦', '很厉害哦', '0');
 INSERT INTO `p_role` VALUES ('9078176B-596E-C325-A6BB-57C57B6D8BFC', '俊坤小帅b', '俊坤小帅b', '0');
 INSERT INTO `p_role` VALUES ('B8F8217F-031D-0E47-0681-511A499F9B22', 'junkundashuaib', '此人为超级用户', '0');
+INSERT INTO `p_role` VALUES ('BA416F4F-89F1-AD6D-BEF7-22C556D4697D', '很厉害的角色哦', '很厉害哦', '0');
 
 -- ----------------------------
 -- Table structure for p_rolepermission
@@ -217,6 +220,10 @@ INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '
 INSERT INTO `p_rolepermission` VALUES ('74B2338E-7006-E11B-0700-CB8AD4D8D9B6', '4', '1');
 INSERT INTO `p_rolepermission` VALUES ('2', '1', '1');
 INSERT INTO `p_rolepermission` VALUES ('1', '2D32F4BA-0EC9-AE42-2D18-1C6368EAFC63', '1');
+INSERT INTO `p_rolepermission` VALUES ('1', '1', '1');
+INSERT INTO `p_rolepermission` VALUES ('1', '2', '1');
+INSERT INTO `p_rolepermission` VALUES ('1', '3', '1');
+INSERT INTO `p_rolepermission` VALUES ('1', '4', '1');
 
 -- ----------------------------
 -- Table structure for p_task_receive
@@ -291,7 +298,7 @@ CREATE TABLE `p_translate_result` (
 -- Records of p_translate_result
 -- ----------------------------
 INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '1', '\r\n二奶奶得到这个贿赂，这才答应出来和大家一同吃饭；她本想独自吃点什么，故意给大家下不来台的。\r\n把大家都运动好，瑞宣用最欢悦的声音叫：\"顺儿的妈！\r\n开饭哟！\"然后又叫瑞丰：\"老二！帮着拿菜！\"', '123');
-INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '10', '\r\n\"你乖乖的交了车份儿？\"\r\n\"我又不是车主儿的儿子，不能那么听话！一声没哼，我把车拉出去了，反正我心里有数儿！拉到过午，才拉了两个座儿；还不够车份儿钱呢！好吧，我弄了一斤大饼，两个子儿的葱酱，四两酱肘子，先吃他妈的一顿再说。吃完，我又在茶馆里泡了好大半天。泡够了，我把两个车胎全扎破，把车送了回去。进了车厂子，我神气十足的，喊了声：两边都放炮啦，明儿个见！说完，我就扭出来了！\"\r\n\"真有你的，小崔！你行！\"', null);
+INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '10', '\r\n\"你乖乖的交了车份儿？\"\r\n\"我又不是车主儿的儿子，不能那么听话！一声没哼，我把车拉出去了，反正我心里有数儿！拉到过午，才拉了两个座儿；还不够车份儿钱呢！好吧，我弄了一斤大饼，两个子儿的葱酱，四两酱肘子，先吃他妈的一顿再说。吃完，我又在茶馆里泡了好大半天。泡够了，我把两个车胎全扎破，把车送了回去。进了车厂子，我神气十足的，喊了声：两边都放炮啦，明儿个见！说完，我就扭出来了！\"\r\n\"真有你的，小崔！你行！\"', '123');
 INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '100', '\r\n瑞宣心里想：这个人的客气未免有点过火！他打了个转身。陈先生还跟着。到烟袋斜街的口上，他向陈先生告别。陈先生还跟着。瑞宣有些不大得劲儿了，可是不好意思说什么。最初，他以为陈先生好说话，所以舍不得分离。可是，陈先生并没说什么。他偷眼看看，陈先生的脸色还是惨绿的，分明已经十分疲乏。他纳闷：为什么已经这样的疲倦了，还陪着朋友走冤枉路呢？\r\n眼看已到斜街的西口，瑞宣实在忍不住了。\"陈先生！别陪我啦吧？你不是应该进后门？\"\r\n野求先生的头低得不能再低，用袖子擦了擦嘴。楞了半天。他的最灵巧的薄嘴唇开始颤动。最后，他的汗和话一齐出来：\"祁先生！\"他还低着头，眼珠刚往上一翻便赶紧落下去。\"祁先生！唉——\"他长叹了一口气。\"你，你，有一块钱没有？我得带回五斤杂合面去！八个孩子！唉——\"瑞宣很快的摸出五块一张的票子来，塞在野求的手里。他没说什么，因为找不到恰当的话。', null);
 INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '101', '\r\n野求又叹了口气。他想说很多的话，解释明白他的困难，和困难所造成的无耻。\r\n瑞宣没容野求解释，而只说了声：\"咱们都差不多！\"是的，在他心里，他的确看清楚：恐怕有那么一天，他会和野求一样的无耻与难堪，假若日本兵老占据住北平！他丝毫没有轻视野求先生的意思，而只求早早的结束了这小小的一幕悲喜剧。没再说什么，他奔了什刹海去。\r\n什刹海周围几乎没有什么行人。除了远远的，随着微风传来的，电车的铃声，他听不到任何的响声。\"海\"中的菱角，鸡头米，与荷花，已全只剩了一些残破的叶子，在水上漂着或立着。水边上柳树的叶子已很稀少，而且多半变成黄的。在水心里，立着一只象雕刻的，一动也不动的白鹭。\"海\"的秋意，好象在白鹭身上找到了集中点，它是那么静，那么白，那么幽独凄惨。瑞宣好象被它吸引住了，呆呆的立在一株秋柳的下面。他想由七七抗战起一直想到钱孟石的死亡，把还活在心中的一段亡国史重新温习一遍，以便决定此后的行动。可是，他的心思不能集中。在他刚要想起一件事，或拿定一个主意的时候，他的心中就好象有一个小人儿，掩着口在笑他：你想那个干吗？反正你永远不敢去抵抗敌人，永远不敢决定什么！他有许多事实上的困难，足以使他为自己辩护。但是心中那个小人儿不给他辩护的机会。那个小人儿似乎已给他判了案：\"不敢用血肉相拚的，只能臭死在地上！\"极快的，他从地上拔起腿来，沿着\"海\"岸疾走。到了家中，他想喝口茶，休息一会儿，便到钱家去看看。他觉得钱家的丧事仿佛给了他一点寄托，帮人家的忙倒能够暂时忘记了自己的忧愁。', null);
 INSERT INTO `p_translate_result` VALUES ('1057A444-21B5-6EB5-1F02-F1A12D0D7052', '102', '\r\n他的一杯茶还没吃完，瑞丰便找他来谈判。\r\n瑞宣听完二弟的话，本要动气。可是，他心中忽而一亮，从二弟身上找到了一个可以自谅自慰的理由——还有比我更没出息的人呢！这个理由可并没能教他心里快活；反之，他更觉得难过了。他想：有他这样的明白而过于老实的人，已足以教敌人如入无人之境的攻入北平；那么，再加上老二与冠晓荷这类的人，北平就恐怕要永难翻身了。由北平而想到全国，假若到处的知识分子都象他自己这样不敢握起拳头来，假若到处有老二与冠晓荷这样的蛆虫，中国又将怎样呢？想到了这个，他觉得无须和老二动气了。等老二说完，他声音极低的，象怕得罪了老二似的，说：\"分家的事，请你对父亲说吧，我不能作主！至于搬出去，还在这里吃饭，只要我有一碗，总会分给你一半的，不成问题！还有别的话吗？\"瑞丰反倒楞住了。他原是准备好和老大\"白刃相接\"的；老大的态度和语声使他没法不放下刺刀，而不知如何是好了。楞了一会儿，他的小干脸上发了亮，他想明白啦：他的决定必是无懈可击的完全合理，否则凭老大的精明，决不会这么容易点头吧！有了这点了解，他觉得老大实在有可爱的地方；于是，他决定乘热打铁，把话都说净。怪亲热的，他叫了声：\"大哥！\"\r\n瑞宣心中猛跳了一下，暗自说：我是\"他\"的大哥！\"大哥！\"老二又叫了声，仿佛决心要亲热到家似的。\"你知道不知道，钱家可有什么好的字画？\"他的声音相当的高，表示出内心的得意。', null);
@@ -1316,13 +1323,15 @@ CREATE TABLE `p_user` (
 -- ----------------------------
 INSERT INTO `p_user` VALUES ('362AF613-F441-0222-88CB-34D1BA33E43E', 'qingtian@163.com', '1', '晴天1993', null, '13613033671', '超级用户', '1', '2017-03-07 18:10:59', 'F:\\image\\1.jpg');
 INSERT INTO `p_user` VALUES ('410430DE-43EB-EF68-FACA-3A3895043F96', '马超', '1', '马超', null, null, '普通用户', '1', '2017-03-19 12:58:59', 'E:\\TestCst\\2017\\03\\19\\\\7A960730-9CEC-568B-65A1-58BF513BAAAE');
-INSERT INTO `p_user` VALUES ('7974A5E1-ADD2-7C72-A2E8-9204DD872180', '温四天', '1', null, null, null, '普通用户', '1', null, null);
+INSERT INTO `p_user` VALUES ('5CB04E12-3805-F39D-0BCB-63C69E3C304F', 'apple', '11', '乔布斯', null, '1567892156', '普通用户', '1', '2017-04-10 21:52:20', null);
+INSERT INTO `p_user` VALUES ('7974A5E1-ADD2-7C72-A2E8-9204DD872180', '温四天', '1', 'nihaoma', null, '120', '普通用户', '1', '2017-04-10 21:58:43', null);
 INSERT INTO `p_user` VALUES ('87680FF3-DB5E-A71B-F8EC-EC777991EA76', '马超哦', '1', null, null, null, '普通用户', '1', '2017-03-19 12:35:38', null);
 INSERT INTO `p_user` VALUES ('B3347B03-0646-5B00-38D6-CFDDA11970D5', '11', '11', '1', null, '1', '1', '1', '2017-02-10 23:34:39', null);
 INSERT INTO `p_user` VALUES ('CBB91C91-14AB-9BEE-F78E-15527DFB2E16', '123', '123', null, null, null, '普通用户', '0', '2017-02-07 23:59:10', null);
 INSERT INTO `p_user` VALUES ('CD1B3074-17B8-20AF-3FED-DCBFA565617A', '方旅生', '123456', null, null, null, '普通用户', '0', '2017-02-10 23:48:08', null);
 INSERT INTO `p_user` VALUES ('DC40A21C-A2E6-28E7-C2F8-0FC2BA6E7710', '晴天', '1', '晴天', null, '111', '普通用户', '1', null, null);
-INSERT INTO `p_user` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '1', '1', '陈杰', 'chenjie@163.com', '15767979002', '普通用户', '1', '2017-03-15 22:01:41', 'E:\\TestCst\\2017\\03\\15\\\\4C65AD99-8E35-9CE6-868D-6EF1530DEC8E');
+INSERT INTO `p_user` VALUES ('E3CCEC2A-9C5D-9F4D-1B23-6FCB524829C9', '2', '2', null, null, null, '普通用户', '0', '2017-04-10 21:57:06', null);
+INSERT INTO `p_user` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '1', '1', '陈杰', 'chenjie@163.com', '15767979002', '超级用户', '1', '2017-03-31 15:53:08', 'E:\\TestCst\\2017\\03\\15\\\\4C65AD99-8E35-9CE6-868D-6EF1530DEC8E');
 
 -- ----------------------------
 -- Table structure for p_userrole
@@ -1344,3 +1353,8 @@ INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '907817
 INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', 'B8F8217F-031D-0E47-0681-511A499F9B22');
 INSERT INTO `p_userrole` VALUES ('410430DE-43EB-EF68-FACA-3A3895043F96', '1');
 INSERT INTO `p_userrole` VALUES ('87680FF3-DB5E-A71B-F8EC-EC777991EA76', '1');
+INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '1');
+INSERT INTO `p_userrole` VALUES ('5CB04E12-3805-F39D-0BCB-63C69E3C304F', '7125BF58-E00F-6F3A-8740-99AC1951525E');
+INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '1AD0EB85-7F63-C2F1-ADAF-01DE9029A5B3');
+INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', 'BA416F4F-89F1-AD6D-BEF7-22C556D4697D');
+INSERT INTO `p_userrole` VALUES ('E452F2E3-D4B7-4498-25B1-72E9B925F752', '8966C8AC-D35B-3D6C-1EB8-5499279FF7F2');
