@@ -1,5 +1,6 @@
 package com.qingtian.apps.permission.action;
 
+
 import com.alibaba.fastjson.JSON;
 import com.qingtian.apps.permission.entity.Permission;
 import com.qingtian.apps.permission.service.PermissionService;
@@ -90,7 +91,7 @@ public class PermissionAction {
         //获取权限name的List
         List<String> permissionNameReList = (List<String>) JSON.parse(permissionNameList);
         //获取用户信息
-        Map userMap = (Map)JSON.parse(userParam);
+        Map userMap = (Map) JSON.parse(userParam);
 
         //验证userId非空
         String userId = (String)userMap.get("userId");

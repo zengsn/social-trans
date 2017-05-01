@@ -39,10 +39,7 @@
     </select>
 
     <select id="getMenuListByUserId" parameterType="String" resultType="Menu">
-            SELECT
-                        *
-                      FROM
-                p_menu
+            SELECT * FROM p_menu
             WHERE
                 id IN (
                     SELECT

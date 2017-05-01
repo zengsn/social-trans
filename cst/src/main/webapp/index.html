@@ -417,17 +417,17 @@
 			});
 		}
 
-//	function initMenu() {
-//
-//		var url = "/" + PROJECT_NAME + "/Menu/list.do";
-//		ajaxFunction(url, {}, function(data) {
-//
-//			if (data) {
-//				var menuTpl = spellMenu(data.data);
-//				$("#leftMenu").append(menuTpl);
-//			}
-//		});
-//	}
+	function initMenu() {
+
+		var url = "/" + PROJECT_NAME + "/Menu/list.do";
+		ajaxFunction(url, {}, function(data) {
+
+			if (data) {
+				var menuTpl = spellMenu(data.data);
+				$("#leftMenu").append(menuTpl);
+			}
+		});
+	}
 
 	var tempPermission = {};
 	function spellMenu(data) {

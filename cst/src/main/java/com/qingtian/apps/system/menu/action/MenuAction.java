@@ -42,19 +42,19 @@ public class MenuAction {
         return JsonUtils.genUpdateDataReturnJsonStr(true, "获取菜单列表成功", reList);
     }
 
-
+    /**
+     * 根据userId来查询菜单列表
+     * @param userId
+     * @return
+     */
     @RequestMapping("getMenuListByUserId.do")
     public String getMenuListByUserId(String userId) {
         if (StringUtils.isEmpty(userId)) {
             return JsonUtils.genUpdateDataReturnJsonStr(true, "userId为空");
         }
-
         List<Menu> list = menuService.getMenuListByUserId(userId);
         try {
-
             return JsonUtils.genUpdateDataReturnJsonStr(true, "获取菜单成功",list);
-
-
         } catch (Exception e) {
             e.printStackTrace();
             return JsonUtils.genUpdateDataReturnJsonStr(false, "操作由于以异常而失败" + e.getMessage());

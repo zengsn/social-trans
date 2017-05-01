@@ -29,6 +29,11 @@ public class MenuService {
         return list;
     }
 
+    /**
+     * 根据userId来查询菜单
+     * @param userId
+     * @return
+     */
     public List<Menu> getMenuListByUserId(String userId){
         List<Menu> list = sqlSession.selectList("Menu.getMenuListByUserId",userId);
         return list;
