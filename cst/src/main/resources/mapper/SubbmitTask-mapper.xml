@@ -9,84 +9,34 @@
     </select>
 
     <insert id="saveTask" parameterType="SubbmitTask">
-        insert into p_task_subbmit(
-        <trim suffixOverrides=",">
-            <if test="taskId != null and taskId != ''">
-                taskId,
-            </if>
-
-            <if test="comment != null and comment != ''">
-                comment,
-            </if>
-
-            <if test="submitter != null and submitter != ''">
-                submitter,
-            </if>
-
-            <if test="submitterId != null and submitterId != ''">
-                submitterId,
-            </if>
-
-            <if test="fileCode != null and fileCode != ''">
-                fileCode,
-            </if>
-
-            <if test="finishedTime != null and finishedTime != ''">
-                finishedTime,
-            </if>
-
-            <if test="isReceive != null and isReceive != ''">
-                isReceive,
-            </if>
-
-            <if test="fileId != null and fileId != ''">
-                fileId,
-            </if>
-
-        </trim>
-        )
-        values(
-        <trim suffixOverrides=",">
-
-            <if test="taskId != null and taskId != ''">
-                #{taskId},
-            </if>
-
-
-            <if test="comment != null and comment != ''">
-                #{comment},
-            </if>
-
-            <if test="submitter != null and submitter != ''">
-                #{submitter},
-            </if>
-
-            <if test="submitterId != null and submitterId != ''">
-                #{submitterId},
-            </if>
-
-            <if test="fileCode != null and fileCode != ''">
-                #{fileCode},
-            </if>
-
-            <if test="finishedTime != null and finishedTime!= ''">
-                #{finishedTime},
-            </if>
-
-            <if test="isReceive != null and isReceive!= ''">
-                #{isReceive},
-            </if>
-
-            <if test="fileId != null and fileId!= ''">
-                #{fileId},
-            </if>
-
-        </trim>
-        )
+        INSERT INTO p_task_subbmit
+        (taskId,commentName,comment,submitter,submitterId,fileCode,finishedTime,isReceive,fileId,taskMoney,receivePeopleNum,filePath,startTime)
+        VALUES
+        (#{taskId},#{commentName},#{comment},#{submitter},#{submitterId},#{fileCode},#{finishedTime},#{isReceive},#{fileId},#{taskMoney},#{receivePeopleNum},#{filePath},#{startTime})
     </insert>
 
     <delete id="deleteTaskById" parameterType="String">
         delete from P_task_subbmit where
         taskId=#{taskId}
     </delete>
+
+    <insert id="saveParentFile" parameterType="ParentFile">
+        INSERT INTO p_parentfile
+        (id,fileId,line,wordCount,lineText,filePath)
+        VALUES
+        (#{id},#{fileId},#{line},#{wordCount},#{lineText},#{filePath})
+    </insert>
+
+    <select id="getParentFileById" parameterType="String" resultType="ParentFile">
+        select * from p_parentfile where id = #{id}
+    </select>
+
+    <!-- 批量添加任务 -->
+    <insert id="insertChildFileBatch" parameterType="java.util.List">
+        insert p_chilefile(id,fileId,parentId,sort,filePath)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (#{item.id},#{item.fileId},#{item.parentId},#{item.sort},#{item.filePath})
+        </foreach>
+    </insert>
 </mapper>

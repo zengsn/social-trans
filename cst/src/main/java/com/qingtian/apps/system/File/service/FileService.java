@@ -1,11 +1,6 @@
 package com.qingtian.apps.system.File.service;
 
 import com.qingtian.apps.system.File.entity.FileInfo;
-import com.qingtian.apps.system.File.entity.TaskFile;
-import com.qingtian.apps.system.taskTranslate.SplitFile;
-import com.qingtian.utils.Constant;
-import com.qingtian.utils.StringUtils;
-import com.qingtian.utils.ToolUtils;
 import org.apache.commons.io.IOUtils;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by machao on 2017/1/15.
@@ -32,9 +22,7 @@ public class FileService {
     private static String separator = File.separator;
 
     public Boolean insertFile(FileInfo fileInfo, InputStream in) throws Exception {
-
-        sqlSession.insert("File.insert", fileInfo);
-
+        sqlSession.insert("File.insert1", fileInfo);
         String path = fileInfo.getFilePath();
         // 创建目标文件
         File file = new File(path);

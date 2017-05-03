@@ -9,6 +9,10 @@ public class ReceiveTask implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+    private String chilefileId;
+
+
+    private double taskMoney;
 
     private String fileCode;
 
@@ -16,6 +20,22 @@ public class ReceiveTask implements Serializable{
     private String comment;
 
     private String filePath;
+
+    public double getTaskMoney() {
+        return taskMoney;
+    }
+
+    public void setTaskMoney(double taskMoney) {
+        this.taskMoney = taskMoney;
+    }
+
+    public String getChilefileId() {
+        return chilefileId;
+    }
+
+    public void setChilefileId(String chilefileId) {
+        this.chilefileId = chilefileId;
+    }
 
     public String getFilePath() {
         return filePath;

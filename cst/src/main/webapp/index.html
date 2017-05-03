@@ -1,240 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta charset="utf-8" />
-	<title>众包翻译服务平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>众包翻译服务平台</title>
 
-	<meta name="description" content="overview &amp; stats" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	<!-- page specific plugin styles -->
-	<link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
-	<link rel="stylesheet" href="assets/css/datepicker.min.css" />
-	<link rel="stylesheet" href="assets/css/ui.jqgrid.min.css" />
-	<!-- bootstrap & fontawesome -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css" />
-	<!-- page specific plugin styles -->
-	<!-- text fonts -->
-	<link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css" />
+    <meta name="description" content="overview &amp; stats"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="assets/css/datepicker.min.css"/>
+    <link rel="stylesheet" href="assets/css/ui.jqgrid.min.css"/>
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css"/>
+    <!-- page specific plugin styles -->
+    <!-- text fonts -->
+    <link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css"/>
 
-	<!-- ace styles -->
-	<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style"/>
 
-	<!--[if lte IE 9]>
-	<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
-	<![endif]-->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet"/>
+    <![endif]-->
 
-	<!--[if lte IE 9]>
-	<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
-	<![endif]-->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-ie.min.css"/>
+    <![endif]-->
 
-	<!-- inline styles related to this page -->
+    <!-- inline styles related to this page -->
 
-	<!-- ace settings handler -->
-	<script src="assets/js/ace-extra.min.js"></script>
+    <!-- ace settings handler -->
+    <script src="assets/js/ace-extra.min.js"></script>
 
-	<script src="js/commonJs/common.js"></script>
-	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <script src="js/commonJs/common.js"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
-	<!--[if lte IE 8]>
-	<script src="assets/js/html5shiv.min.js"></script>
-	<script src="assets/js/respond.min.js"></script>
-	<![endif]-->
-	<style type="text/css">
-		ul {
-			display: block;
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
+    <!--[if lte IE 8]>
+    <script src="assets/js/html5shiv.min.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        ul {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
 
-		li {
-			display: block;
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
+        li {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
 
-		.topleft {
-			height: 88px;
-			/*background: url(img/bg/topleft.jpg) no-repeat;*/
-			background: url(image/top_left.png) no-repeat;
-			float: left;
-			width: 320px;
-		}
-		.sidebar{
-			width: 260px;
-		}
-		.sidebar + .main-content {
-			margin-left: 260px;
-		}
-		.topleft img {
-			margin-top: 12px;
-		}
+        .topleft {
+            height: 88px;
+            /*background: url(img/bg/topleft.jpg) no-repeat;*/
+            background: url(image/top_left.png) no-repeat;
+            float: left;
+            width: 320px;
+        }
 
-		.topright {
-			height: 88px;
-			/*background: url(img/bg/topright.jpg) no-repeat right;*/
-			/**background: url(img/bg/top_right.png) no-repeat right;**/
-			float: right;
-		}
+        .sidebar {
+            width: 260px;
+        }
 
-		.topright ul {
-			padding-top: 15px;
-			float: right;
-			padding-right: 12px;
-		}
+        .sidebar + .main-content {
+            margin-left: 260px;
+        }
 
-		.topright ul li {
-			float: left;
-			padding-left: 9px;
-			padding-right: 9px;
-			/*background: url(img/bg/line.gif) no-repeat right;*/
-		}
+        .topleft img {
+            margin-top: 12px;
+        }
 
-		.topright ul li:last-child {
-			background: none;
-		}
+        .topright {
+            height: 88px;
+            /*background: url(img/bg/topright.jpg) no-repeat right;*/
+            /**background: url(img/bg/top_right.png) no-repeat right;**/
+            float: right;
+        }
 
-		.topright ul li a {
-			font-size: 13px;
-			color: #e9f2f7;
-		}
+        .topright ul {
+            padding-top: 15px;
+            float: right;
+            padding-right: 12px;
+        }
 
-		.topright ul li a:hover {
-			color: #fff;
-		}
+        .topright ul li {
+            float: left;
+            padding-left: 9px;
+            padding-right: 9px;
+            /*background: url(img/bg/line.gif) no-repeat right;*/
+        }
 
-		.topright ul li span {
-			margin-top: 2px;
-			float: left;
-			padding-right: 3px;
-		}
+        .topright ul li:last-child {
+            background: none;
+        }
 
-		.user {
-			height: 30px;
-			background: url(image/ub1.png) repeat-x;
-			clear: both;
-			margin-top: 10px;
-			float: right;
-			margin-right: 12px;
-			border-radius: 30px;
-			/*behavior: url(js/PIE.htc);*/
-			white-space: nowrap;
-			position: relative;
-		}
+        .topright ul li a {
+            font-size: 13px;
+            color: #e9f2f7;
+        }
 
-		.user span {
-			display: inline-block;
-			padding-right: 10px;
-			background: url(image/user.png) no-repeat 15px 10px;
-			line-height: 30px;
-			font-size: 14px;
-			color: #b8ceda;
-			padding-left: 20px;
-			padding-left: 35px;
-		}
+        .topright ul li a:hover {
+            color: #fff;
+        }
 
-		.user b {
-			display: inline-block;
-			width: 20px;
-			height: 18px;
-			background: url(image/msg.png);
-			text-align: center;
-			font-weight: normal;
-			color: #fff;
-			font-size: 14px;
-			margin-right: 13px;
-			margin-top: 7px;
-			line-height: 18px;
-		}
+        .topright ul li span {
+            margin-top: 2px;
+            float: left;
+            padding-right: 3px;
+        }
 
-		.user i {
-			display: inline-block;
-			margin-right: 5px;
-			font-style: normal;
-			line-height: 30px;
-			font-size: 14px;
-			color: #b8ceda;
-		}
+        .user {
+            height: 30px;
+            background: url(image/ub1.png) repeat-x;
+            clear: both;
+            margin-top: 10px;
+            float: right;
+            margin-right: 12px;
+            border-radius: 30px;
+            /*behavior: url(js/PIE.htc);*/
+            white-space: nowrap;
+            position: relative;
+        }
 
-		.close-tab {
-			font-size: 10px;
-			position: absolute;
-			right: 5px;
-			top: 5px;
-			padding-left: 25px;
-			z-index: 100;
-			cursor: hand;
-			cursor: pointer;
-			color: #94A6B0;
-			display: none;
-		}
+        .user span {
+            display: inline-block;
+            padding-right: 10px;
+            background: url(image/user.png) no-repeat 15px 10px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #b8ceda;
+            padding-left: 20px;
+            padding-left: 35px;
+        }
 
-		.topbar-collapse {
-			float: right;
-		}
+        .user b {
+            display: inline-block;
+            width: 20px;
+            height: 18px;
+            background: url(image/msg.png);
+            text-align: center;
+            font-weight: normal;
+            color: #fff;
+            font-size: 14px;
+            margin-right: 13px;
+            margin-top: 7px;
+            line-height: 18px;
+        }
 
-		.iframeClass {
-			z-index: 1;
-			visibility: inherit;
-			width: 100%;
-			frameborder: 'no';
-			border: 0;
-			marginwidth: 0;
-			marginheight: 0;
-			scrolling-x: 'no';
-			scrolling-y: auto;
-			allowtransparency: true;
-		}
+        .user i {
+            display: inline-block;
+            margin-right: 5px;
+            font-style: normal;
+            line-height: 30px;
+            font-size: 14px;
+            color: #b8ceda;
+        }
 
-		.tab-content {
-			border-bottom-color: white;
-		}
+        .close-tab {
+            font-size: 10px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            padding-left: 25px;
+            z-index: 100;
+            cursor: hand;
+            cursor: pointer;
+            color: #94A6B0;
+            display: none;
+        }
 
-		#leftMenu li {
-			background-color: #f1f8fc;
-		}
+        .topbar-collapse {
+            float: right;
+        }
 
-		.no-skin .nav-list>li .submenu>li>a {
-			background-color: #f1f8fc;
-		}
+        .iframeClass {
+            z-index: 1;
+            visibility: inherit;
+            width: 100%;
+            frameborder: 'no';
+            border: 0;
+            marginwidth: 0;
+            marginheight: 0;
+            scrolling-x: 'no';
+            scrolling-y: auto;
+            allowtransparency: true;
+        }
 
-		.sidebar:before {
-			background-color: rgb(241, 248, 252);
-		}
+        .tab-content {
+            border-bottom-color: white;
+        }
 
-		.nav-list li>a:focus {
-			background-color: rgb(107, 198, 120);
-		}
+        #leftMenu li {
+            background-color: #f1f8fc;
+        }
 
-		.no-skin .nav-list>li>a {
-			background-color: rgb(241, 248, 252);
-		}
+        .no-skin .nav-list > li .submenu > li > a {
+            background-color: #f1f8fc;
+        }
 
-		.menu_select {
-			background-color: rgb(107, 198, 120) !important;
-			color: white !important;
-		}
+        .sidebar:before {
+            background-color: rgb(241, 248, 252);
+        }
 
-		.tab-content {
-			background-color: rgb(223, 232, 246) !important;;
-		}
-	</style>
+        .nav-list li > a:focus {
+            background-color: rgb(107, 198, 120);
+        }
+
+        .no-skin .nav-list > li > a {
+            background-color: rgb(241, 248, 252);
+        }
+
+        .menu_select {
+            background-color: rgb(107, 198, 120) !important;
+            color: white !important;
+        }
+
+        .tab-content {
+            background-color: rgb(223, 232, 246) !important;;
+        }
+    </style>
 </head>
 
 <body class="no-skin" style="background-color:white;">
 <div id="navbar" class="navbar top-left" style="background:url(image/top_bg.png) repeat-x;height: 88px">
-	<script type="text/javascript">
-		try {
-			ace.settings.check('navbar', 'fixed')
-		} catch (e) {
-		}
-	</script>
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
 
-	<div class="navbar-container" id="navbar-container" style="padding-left: 0px;padding-right: 0px;">
-		<!--<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+    <div class="navbar-container" id="navbar-container" style="padding-left: 0px;padding-right: 0px;">
+        <!--<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
                 <span class="sr-only">Toggle sidebar</span>
 
                 <span class="icon-bar"></span>
@@ -244,104 +247,106 @@
                 <span class="icon-bar"></span>
             </button>  -->
 
-		<div class="navbar-header topleft pull-left">
-			<!--<a href="index.html"> <img src="image/" style="height: 71px" title="系统首页" />-->
-			<!--</a>-->
-		</div>
+        <div class="navbar-header topleft pull-left">
+            <!--<a href="index.html"> <img src="image/" style="height: 71px" title="系统首页" />-->
+            <!--</a>-->
+        </div>
 
-		<div class="topright">
-			<ul>
-				<li><span>
+        <div class="topright">
+            <ul>
+                <li><span>
 							<img src="image/help.png" title="帮助" class="helpimg"> <a href="#">帮助</a>
 						</span></li>
-				<li><span>
+                <li><span>
 							<a href="#">关于</a>
 						</span></li>
-				<li><span>
+                <li><span>
 							<a href="signin.html" target="_parent">退出</a>
 						</span></li>
-			</ul>
-			<div class="user">
+            </ul>
+            <div class="user">
 
 					<span>
 						欢迎您，<a style="color: red" id="system_username"></a>
 					</span>
-				<!--  <i>消息</i>
+                <!--  <i>消息</i>
                 <b>5</b>-->
 
-			</div>
+            </div>
 
-		</div>
-	</div>
-	<!-- /.navbar-container -->
+        </div>
+    </div>
+    <!-- /.navbar-container -->
 </div>
 
 <div class="main-container" id="main-container">
-	<script type="text/javascript">
-		try {
-			ace.settings.check('main-container', 'fixed')
-		} catch (e) {
-		}
-	</script>
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
 
-	<div id="sidebar" class="sidebar                  responsive">
-		<script type="text/javascript">
-			try {
-				ace.settings.check('sidebar', 'fixed')
-			} catch (e) {
-			}
-		</script>
-
-
-		<ul class="nav nav-list" id="leftMenu">
-			<li style="background:url(image/left_top.png) repeat-x;height:35px;border:0px; color:#fff;font-size:14px;line-height:40px;">
-				<!-- <span style="background:url(img/bg/leftico.png) no-repeat;margin-left:8px; margin-top:10px;margin-right:8px; width:20px; height:21px;float:left;">
-                </span> --> <i class="menu-icon fa fa-list-ul" style="margin-left: 15px;" aria-hidden="true"></i> 众包翻译服务平台
-			</li>
-		</ul>
-		<!-- /.nav-list -->
-
-		<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-			<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-		</div>
-
-		<script type="text/javascript">
-			try {
-				ace.settings.check('sidebar', 'collapsed')
-			} catch (e) {
-			}
-		</script>
-	</div>
-
-	<div class="main-content">
-		<div class="main-content-inner" id="tabs">
-
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a></li>
+    <div id="sidebar" class="sidebar                  responsive">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('sidebar', 'fixed')
+            } catch (e) {
+            }
+        </script>
 
 
-			</ul>
+        <ul class="nav nav-list" id="leftMenu">
+            <li style="background:url(image/left_top.png) repeat-x;height:35px;border:0px; color:#fff;font-size:14px;line-height:40px;">
+                <!-- <span style="background:url(img/bg/leftico.png) no-repeat;margin-left:8px; margin-top:10px;margin-right:8px; width:20px; height:21px;float:left;">
+                </span> --> <i class="menu-icon fa fa-list-ul" style="margin-left: 15px;" aria-hidden="true"></i>
+                众包翻译服务平台
+            </li>
+        </ul>
+        <!-- /.nav-list -->
 
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane fade in active" id="home">
-					<div style="">欢迎 </div>
-				</div>
-			</div>
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
+               data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </div>
+
+        <script type="text/javascript">
+            try {
+                ace.settings.check('sidebar', 'collapsed')
+            } catch (e) {
+            }
+        </script>
+    </div>
+
+    <div class="main-content">
+        <div class="main-content-inner" id="tabs">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                          data-toggle="tab">首页</a></li>
 
 
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="home">
+                    <div style="">欢迎</div>
+                </div>
+            </div>
 
 
-			<!-- /.row -->
+            <!-- /.row -->
 
-		</div>
-		<!-- /.page-content -->
-	</div>
+        </div>
+        <!-- /.page-content -->
+    </div>
 </div>
 <!-- /.main-content -->
 
 
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i
+        class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 </a>
 <!-- /.main-container -->
 
@@ -358,251 +363,248 @@
 
 <!--[if !IE]> -->
 <script type="text/javascript">
-	window.jQuery
-	|| document.write("<script src='assets/js/jquery.min.js'>"
-			+ "<"+"/script>");
+    window.jQuery
+    || document.write("<script src='assets/js/jquery.min.js'>"
+            + "<" + "/script>");
 </script>
 
 <!-- <![endif]-->
 
 <!--[if IE]>
 <script type="text/javascript">
-	window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
+    window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>" + "<" + "/script>");
 </script>
 <![endif]-->
 <script type="text/javascript">
 
 
+    //初始化iframe 高度
+    $(function () {
+        var bool = true;
+        if (bool) {
+            initMenu();
+            $('#tabs').addtabs({
+                monitor: '.nav-list'
+            });
+        }
+        initAdd();
+        initData();
+    });
 
-	//初始化iframe 高度
-	$(function() {
-		var bool = true;
-		if (bool) {
-			initMenu();
-			$('#tabs').addtabs({
-				monitor : '.nav-list'
-			});
-		}
-		initAdd();
-		initData();
-	});
-
-	function initData() {
-		//获取登录的用户id
-		var userId = getCookieValue("userId");
-		var url = "/" + PROJECT_NAME + "/User/selectById.do";
-		var params = {
-			userId:userId
-		}
-		ajaxFunction(url,params,function (result) {
-			if(result){
+    function initData() {
+        //获取登录的用户id
+        var userId = getCookieValue("userId");
+        var url = "/" + PROJECT_NAME + "/User/selectById.do";
+        var params = {
+            userId: userId
+        }
+        ajaxFunction(url, params, function (result) {
+            if (result) {
 //				console.log(result);
-				$("#system_username").html(result.data.username);
-			}
-		});
-	}
+                $("#system_username").html(result.data.username);
+            }
+        });
+    }
 
 
-		function initMenu() {
-			var userId = getCookieValue("userId");
-			var params = {
-				userId:userId
-			};
-			var selectURL_ = "/" + PROJECT_NAME + "/Menu/getMenuListByUserId.do";
-			ajaxFunction(selectURL_, params, function(data) {
-				if (data) {
-					var menuTpl = spellMenu(data.data);
-					$("#leftMenu").append(menuTpl);
-				}
-			});
-		}
+//    function initMenu() {
+//        var userId = getCookieValue("userId");
+//        var params = {
+//            userId: userId
+//        };
+//        var selectURL_ = "/" + PROJECT_NAME + "/Menu/getMenuListByUserId.do";
+//        ajaxFunction(selectURL_, params, function (data) {
+//            if (data) {
+//                var menuTpl = spellMenu(data.data);
+//                $("#leftMenu").append(menuTpl);
+//            }
+//        });
+//    }
 
-	function initMenu() {
+    function initMenu() {
 
-		var url = "/" + PROJECT_NAME + "/Menu/list.do";
-		ajaxFunction(url, {}, function(data) {
+        var url = "/" + PROJECT_NAME + "/Menu/list.do";
+        ajaxFunction(url, {}, function (data) {
 
-			if (data) {
-				var menuTpl = spellMenu(data.data);
-				$("#leftMenu").append(menuTpl);
-			}
-		});
-	}
+            if (data) {
+                var menuTpl = spellMenu(data.data);
+                $("#leftMenu").append(menuTpl);
+            }
+        });
+    }
 
-	var tempPermission = {};
-	function spellMenu(data) {
-		var menus = data;
-		var menusObj = {};
-		var parentMenu = [];
-		var childMenu1 = {};
-		var childMenu2 = {};
-		for (var i = 0; i < menus.length; i++) {
-			var menu = menus[i];
-			//权限控制
+    var tempPermission = {};
+    function spellMenu(data) {
+        var menus = data;
+        var menusObj = {};
+        var parentMenu = [];
+        var childMenu1 = {};
+        var childMenu2 = {};
+        for (var i = 0; i < menus.length; i++) {
+            var menu = menus[i];
+            //权限控制
 //				if (!tempPermission[menu.id]) {
 //					continue;
 //				}
-			if (menu.level == "0") {
-				//放到父级菜单临时列表
-				parentMenu.push(menu);
-			} else if (menu.level == "1") {
+            if (menu.level == "0") {
+                //放到父级菜单临时列表
+                parentMenu.push(menu);
+            } else if (menu.level == "1") {
 
-				if (!childMenu1[menu.parentId]) {
-					childMenu1[menu.parentId] = [];
-				}
-				childMenu1[menu.parentId].push(menu);
-			} else if (menu.level == "2") {
+                if (!childMenu1[menu.parentId]) {
+                    childMenu1[menu.parentId] = [];
+                }
+                childMenu1[menu.parentId].push(menu);
+            } else if (menu.level == "2") {
 
-				if (!childMenu2[menu.parentId]) {
-					childMenu2[menu.parentId] = [];
-				}
-				childMenu2[menu.parentId].push(menu);
+                if (!childMenu2[menu.parentId]) {
+                    childMenu2[menu.parentId] = [];
+                }
+                childMenu2[menu.parentId].push(menu);
 
-			}
+            }
 
-		}
-		//draw
-		var menuTpl = '';
-		for (var i = 0; i < parentMenu.length; i++) {
-			var parentItem = parentMenu[i];
-			var icon = parentItem.iconCls;
-			var itemText = parentItem.menuName;
-			var isOpen = "false";
+        }
+        //draw
+        var menuTpl = '';
+        for (var i = 0; i < parentMenu.length; i++) {
+            var parentItem = parentMenu[i];
+            var icon = parentItem.iconCls;
+            var itemText = parentItem.menuName;
+            var isOpen = "false";
 
-			var itemTplBegin = '<li class=" repeat-x;">'
-					+ '<a href="#" class="dropdown-toggle" onclick="pMenuClick(this)">'
-					+ '<i class="menu-icon fa '+icon+'"></i>'
-					+ '<span class="menu-text">' + itemText + '</span>'
-					+ '<b class="arrow fa fa-angle-down"></b>' + '</a>'
-					+ '<b class="arrow"></b>';
-			var childs1 = childMenu1[parentItem.id] == undefined ? [] : childMenu1[parentItem.id];
-			var child1Tpl = '<ul class="submenu">';
+            var itemTplBegin = '<li class=" repeat-x;">'
+                    + '<a href="#" class="dropdown-toggle" onclick="pMenuClick(this)">'
+                    + '<i class="menu-icon fa ' + icon + '"></i>'
+                    + '<span class="menu-text">' + itemText + '</span>'
+                    + '<b class="arrow fa fa-angle-down"></b>' + '</a>'
+                    + '<b class="arrow"></b>';
+            var childs1 = childMenu1[parentItem.id] == undefined ? [] : childMenu1[parentItem.id];
+            var child1Tpl = '<ul class="submenu">';
 
-			for (var j = 0; j < childs1.length; j++) {
-				var child1 = childs1[j];
-				var childitemText1 = child1.menuName;
-				var childitemImg = child1.iconCls;
-				var href1 = child1.url;
-				child1Tpl += '<li class=""><a class="dropdown-toggle" onclick="pMenuClick(this)" data-addtab="'
-						+ childitemText1
-						+ '" url="'
-						+ href1
-						+ '"> <i class="menu-icon fa fa-caret-right"></i>'
-						+ childitemText1 + '</a> <b class="arrow"></b>'
-				var childs2 = childMenu2[child1.id] == undefined ? [] : childMenu2[child1.id];
-				var child2Tpl = '<ul class="submenu">';
+            for (var j = 0; j < childs1.length; j++) {
+                var child1 = childs1[j];
+                var childitemText1 = child1.menuName;
+                var childitemImg = child1.iconCls;
+                var href1 = child1.url;
+                child1Tpl += '<li class=""><a class="dropdown-toggle" onclick="pMenuClick(this)" data-addtab="'
+                        + childitemText1
+                        + '" url="'
+                        + href1
+                        + '"> <i class="menu-icon fa fa-caret-right"></i>'
+                        + childitemText1 + '</a> <b class="arrow"></b>'
+                var childs2 = childMenu2[child1.id] == undefined ? [] : childMenu2[child1.id];
+                var child2Tpl = '<ul class="submenu">';
 
-				child2Tpl += '<li style="height: 0px"><a style="height: 0px"></a></li>';
-				for (var k = 0; k < childs2.length; k++) {
-					var child2 = childs2[k];
-					var childitemText2 = child2.menuName;
-					var href2 = child2.url;
-					child2Tpl += '<li class=""><a href="javascript:void(0)" data-addtab="'
-							+ childitemText2
-							+ '" url="'
-							+ href2
-							+ '"> <i class="menu-icon fa fa-caret-right"></i>'
-							+ childitemText2 + '</a> <b class="arrow"></b></li>'
-				}
-				child2Tpl += '</ul>';
-				child1Tpl += child2Tpl + "</li>";
-			}
-			child1Tpl += '</ul>';
-			menuTpl += itemTplBegin + child1Tpl + '</li>'
+                child2Tpl += '<li style="height: 0px"><a style="height: 0px"></a></li>';
+                for (var k = 0; k < childs2.length; k++) {
+                    var child2 = childs2[k];
+                    var childitemText2 = child2.menuName;
+                    var href2 = child2.url;
+                    child2Tpl += '<li class=""><a href="javascript:void(0)" data-addtab="'
+                            + childitemText2
+                            + '" url="'
+                            + href2
+                            + '"> <i class="menu-icon fa fa-caret-right"></i>'
+                            + childitemText2 + '</a> <b class="arrow"></b></li>'
+                }
+                child2Tpl += '</ul>';
+                child1Tpl += child2Tpl + "</li>";
+            }
+            child1Tpl += '</ul>';
+            menuTpl += itemTplBegin + child1Tpl + '</li>'
 
-		}
-		return menuTpl;
-	}
-
-
+        }
+        return menuTpl;
+    }
 
 
-	function pMenuClick(dom) {
-		var $menuDiv = $(dom).parent();
-		var isOpen = $menuDiv.hasClass("open");
-		if (isOpen) {
-			$(dom).removeClass("menu_select");
-		} else {
-			$(".menu_select").each(function(dom) {
-				$(this).removeClass("menu_select");
-			})
-			$(dom).addClass("menu_select");
-		}
-	}
+    function pMenuClick(dom) {
+        var $menuDiv = $(dom).parent();
+        var isOpen = $menuDiv.hasClass("open");
+        if (isOpen) {
+            $(dom).removeClass("menu_select");
+        } else {
+            $(".menu_select").each(function (dom) {
+                $(this).removeClass("menu_select");
+            })
+            $(dom).addClass("menu_select");
+        }
+    }
 
-	var addTabs = function (obj) {
-		id = "tab_" + obj.id;
+    var addTabs = function (obj) {
+        id = "tab_" + obj.id;
 //		console.log(obj);
-		$(".active").removeClass("active");
+        $(".active").removeClass("active");
 
-		//如果TAB不存在，创建一个新的TAB
-		if (!$("#" + id)[0]) {
-			//固定TAB中IFRAME高度
+        //如果TAB不存在，创建一个新的TAB
+        if (!$("#" + id)[0]) {
+            //固定TAB中IFRAME高度
 //                mainHeight = $(document.body).height() - 95;
-			mainHeight = $(document).height() - 123;
-			//创建新TAB的title
-			title = '<li role="presentation" id="tab_' + id + '"><a href="#' + id + '" aria-controls="' + id + '" role="tab" data-toggle="tab">' + obj.title;
-			//是否允许关闭
-			if (obj.close) {
-				title += ' <i class="close-tab fa fa-times" tabclose="' + id + '"></i>';
-			}
-			title += '</a></li>';
-			//是否指定TAB内容
-			if (obj.content) {
-				content = '<div role="tabpanel" class="tab-pane" id="' + id + '">' + obj.content + '</div>';
-			} else {//没有内容，使用IFRAME打开链接
-				content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe src="' + obj.url + '" width="100%" height="' + mainHeight +
-						'" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
-			}
-			//加入TABS
-			$(".nav-tabs").append(title);
-			$(".tab-content").append(content);
-		}
+            mainHeight = $(document).height() - 123;
+            //创建新TAB的title
+            title = '<li role="presentation" id="tab_' + id + '"><a href="#' + id + '" aria-controls="' + id + '" role="tab" data-toggle="tab">' + obj.title;
+            //是否允许关闭
+            if (obj.close) {
+                title += ' <i class="close-tab fa fa-times" tabclose="' + id + '"></i>';
+            }
+            title += '</a></li>';
+            //是否指定TAB内容
+            if (obj.content) {
+                content = '<div role="tabpanel" class="tab-pane" id="' + id + '">' + obj.content + '</div>';
+            } else {//没有内容，使用IFRAME打开链接
+                content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe src="' + obj.url + '" width="100%" height="' + mainHeight +
+                        '" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
+            }
+            //加入TABS
+            $(".nav-tabs").append(title);
+            $(".tab-content").append(content);
+        }
 
-		//激活TAB
-		$("#tab_" + id).addClass('active');
-		$("#" + id).addClass("active");
-	};
+        //激活TAB
+        $("#tab_" + id).addClass('active');
+        $("#" + id).addClass("active");
+    };
 
-	var closeTab = function (id) {
-		//如果关闭的是当前激活的TAB，激活他的前一个TAB
-		if ($("li.active").attr('id') == "tab_" + id) {
-			$("#tab_" + id).prev().addClass('active');
-			$("#" + id).prev().addClass('active');
-		}
-		//关闭TAB
-		$("#tab_" + id).remove();
-		$("#" + id).remove();
-	};
+    var closeTab = function (id) {
+        //如果关闭的是当前激活的TAB，激活他的前一个TAB
+        if ($("li.active").attr('id') == "tab_" + id) {
+            $("#tab_" + id).prev().addClass('active');
+            $("#" + id).prev().addClass('active');
+        }
+        //关闭TAB
+        $("#tab_" + id).remove();
+        $("#" + id).remove();
+    };
 
-	function initAdd(){
+    function initAdd() {
 
 //                $("#tabs1 a").click(function (e) {
 //                    $(this).tab('show');
 //                });
-		mainHeight = $(document.body).height() - 45;
-		$('.main-left,.main-right').height(mainHeight);
-		$("[addtabs]").click(function () {
-			addTabs({id: $(this).attr("id"), title: $(this).attr('title'), close: true});
-		});
+        mainHeight = $(document.body).height() - 45;
+        $('.main-left,.main-right').height(mainHeight);
+        $("[addtabs]").click(function () {
+            addTabs({id: $(this).attr("id"), title: $(this).attr('title'), close: true});
+        });
 
-		$(".nav-tabs").on("click", "[tabclose]", function (e) {
-			id = $(this).attr("tabclose");
-			closeTab(id);
-		});
+        $(".nav-tabs").on("click", "[tabclose]", function (e) {
+            id = $(this).attr("tabclose");
+            closeTab(id);
+        });
 
 
-	}
+    }
 
-	if ('ontouchstart' in document.documentElement)
-		document
-				.write("<script src='assets/js/jquery.mobile.custom.min.js'>"
-						+ "<"+"/script>");
+    if ('ontouchstart' in document.documentElement)
+        document
+                .write("<script src='assets/js/jquery.mobile.custom.min.js'>"
+                        + "<" + "/script>");
 
-	function initiFrameHeight() {
-		var height = $(document).height();
-	}
-	
+    function initiFrameHeight() {
+        var height = $(document).height();
+    }
+
 
 </script>
 <script src="assets/js/bootstrap.min.js"></script>
@@ -620,7 +622,6 @@
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
 <script src="js/bootstrp-tab.js"></script>
-
 
 
 </body>

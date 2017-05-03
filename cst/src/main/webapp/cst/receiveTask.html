@@ -96,6 +96,22 @@
     <!--时间控件-->
     <!--<script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>-->
     <script type="text/javascript" src="../js/commonJs/ajaxfileupload.js" ></script>
+
+    <style>
+        #table_td td{
+            height: 35px;
+        }
+
+        .borderRadius4px {
+            border-radius: 4px;
+        }
+
+        .day,.hour,.minute,.second{
+            color:#FF0000
+        }
+
+
+    </style>
 </head>
 <body class="no-skip">
 <div class="page-content">
@@ -170,7 +186,7 @@
 
     /*查询所有任务*/
     function doSearch() {
-        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getReceiveTaskList.do";
+        var selectAllUrl_ = "/" + PROJECT_NAME + "/TaskAction/getReceiveTaskList1.do";
 //            var selectAllUrl_ = "/User/selectAll.do";
 
         ajaxFunction(
@@ -202,7 +218,24 @@
                                         },
                                         {
                                             "name": "submitter",
-                                            "label": "任务提交者"
+                                            "label": "任务提交者",
+                                            "hidden":true,
+                                        },
+                                        {
+                                            "name": "commentName",
+                                            "label": "文本名",
+//                                            formatter: function (value, options,
+//                                                                 rowData) {
+//                                                return "<b class='blue'>"+value+"</b>";
+//                                            }
+                                        },
+                                        {
+                                            "name": "comment",
+                                            "label": "任务内容",
+                                        },
+                                        {
+                                            "name": "taskMoney",
+                                            "label": "任务奖金",
                                         },
                                         {
                                             "name": "isReceive",
@@ -216,6 +249,19 @@
                                                 }
                                             }
 
+                                        },
+                                        {
+                                            "name": "finishedTime",
+                                            "label": "剩余时间",
+//                                            "formatter": fnDate
+                                            formatter:function (value, options, rowData) {
+//                                                console.log(value);
+                                                countdown('add'+rowData.taskId,value);
+//                                                return "<div id='add'><span id='add.day'>天</span><span id='add.hour'>小时</span><span id='add.minute'>分</span><span id='add.second'>秒</span></div>"
+                                                return "<div id='add" + rowData.taskId + "' class='td-countdown'><span class='day'>00</span>天<span class='hour'>00</span>时<span class='minute'>00</span>分<span class='second'>00</span>秒</div>" ;
+
+//                                                return "<b class='red2'>"+value+"</b>";
+                                            }
                                         },
                                         {
                                             "name": "fnDiv",
@@ -261,7 +307,53 @@
     }
 
 
+    /**
+     * 倒计时
+     * author:junyuan.huang
+     * @param id
+     * @param timeStr
+     * @returns {number}
+     */
+    function countdown(id, timeStr) {
+//        alert("hello");
+//        timeStr = strReplace(timeStr, '-', '/');
+        var i;
 
+        function setCountdown() {
+            var endTime = new Date(timeStr);
+            var nowTime = new Date();
+            var t = endTime.getTime() - nowTime.getTime();
+            var d = 0;
+            var h = 0;
+            var m = 0;
+            var s = 0;
+
+            if (t >= 0) {
+                d = Math.floor(t / 1000 / 60 / 60 / 24);
+                h = Math.floor(t / 1000 / 60 / 60 % 24);
+                m = Math.floor(t / 1000 / 60 % 60);
+                s = Math.floor(t / 1000 % 60);
+                /*document.getElementById(id).innerHTML = d + "天 " + h + "时 " + m + "分 " + s + "秒";*/
+                $('#' + id + ' .day').text(d);
+                $('#' + id + ' .hour').text(h < 10 ? "0" + h : h);
+                $('#' + id + ' .minute').text(m < 10 ? "0" + m : m);
+                $('#' + id + ' .second').text(s < 10 ? "0" + s : s);
+            } else {
+                /*$('#'+id+' .day').html('00');
+                 $('#'+id+' .hour').html('00');
+                 $('#'+id+' .minute').html('00');
+                 $('#'+id+' .second').html('00');*/
+                $('#'+id).empty();
+                $('#'+id).text("已结束");
+                if (i != null && i != 'undefined') {
+                    clearInterval(i);
+                }
+            }
+        }
+
+        i = setInterval(setCountdown, 1000);
+        return i;
+    }
 
 
 

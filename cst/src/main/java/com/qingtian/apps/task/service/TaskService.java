@@ -2,12 +2,11 @@ package com.qingtian.apps.task.service;
 
 import com.github.pagehelper.Page;
 import com.qingtian.apps.system.File.entity.FileInfo;
-import com.qingtian.apps.system.File.entity.TaskFile;
+import com.qingtian.apps.task.entity.*;
 import com.qingtian.apps.system.taskTranslate.SplitFile;
-import com.qingtian.apps.task.entity.ReceiveTask;
-import com.qingtian.apps.task.entity.SubbmitTask;
-import com.qingtian.apps.task.entity.TranslateComment;
 import com.qingtian.utils.Constant;
+import com.qingtian.utils.StringUtils;
+import net.sf.jsqlparser.expression.StringValue;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.workSpace.utils.RandomGUID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qingtian on 2017/1/25.
@@ -37,9 +37,16 @@ public class TaskService {
         return lists;
     }
 
+
     public List<ReceiveTask> getReceiveTaskList(){
         List<ReceiveTask> list = null;
         list = sqlSession.selectList("ReceiveTask.select");
+        return list;
+    }
+
+    public List<Map<String,String>> getReceiveTaskList1(){
+        List<Map<String,String>> list = null;
+        list = sqlSession.selectList("ReceiveTask.select1");
         return list;
     }
 
@@ -56,10 +63,16 @@ public class TaskService {
         task.setIsReceive("0");
         //插入任务信息
         int subbmitTaskResult = sqlSession.insert("SubbmitTask.saveTask",task);
-        //分割任务
-        list = splitTask(task.getFilePath(),task.getFileCode());
-        //将分割后的文件批量插入数据库
-        int fileInsertResult = sqlSession.insert("File.insertFileBatch",list);
+        //分割任务并存库
+        int receivePeopleNum = Integer.parseInt(task.getReceivePeopleNum());
+        Map<String, Object> map = splitTask(task.getFileId(), task.getFilePath(),receivePeopleNum);
+        List<ChildFile> childFileList = (ArrayList)map.get("childFileList");
+        //计算任务金钱
+        //任务总钱
+        double totalMoney = task.getTaskMoney();
+        //领取人数：receivePeopleNum
+        //取平均
+        double taskMoney = StringUtils.div(totalMoney,(double)receivePeopleNum);
         //根据生成的文件来设置任务
         //任务id
         String taskId = task.getTaskId();
@@ -68,19 +81,22 @@ public class TaskService {
         //任务提交者id
         String submitterId = task.getSubmitterId();
         List<ReceiveTask> receiveTasklist = new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            ReceiveTask rt = new ReceiveTask();
-            rt.setFileId(list.get(i).getFileId());
-            rt.setFileCode(list.get(i).getFileCode());
+        ReceiveTask rt= null;
+        for(int i=0;i<childFileList.size();i++){
+            rt = new ReceiveTask();
+            rt.setFileId(childFileList.get(i).getFileId());
+            rt.setChilefileId(childFileList.get(i).getId());
             rt.setTaskId(taskId);
             rt.setSubmitter(submitter);
             rt.setSubmitterId(submitterId);
             rt.setIsReceive("0");
+            rt.setTaskMoney(taskMoney);
             receiveTasklist.add(rt);
         }
         //将任务插入数据库
         int receiveTaskResult = sqlSession.insert("ReceiveTask.insertTaskBatch",receiveTasklist);
-        return (subbmitTaskResult & fileInsertResult & receiveTaskResult)>0? true:false;
+        return (subbmitTaskResult & receiveTaskResult)>-1? true:false;
+//        return subbmitTaskResult>0? true:false;
     }
 
     /**
@@ -99,14 +115,25 @@ public class TaskService {
      * @return
      * @throws Exception
      */
-    public List<FileInfo> splitTask(String sourceFilePath,String fileCode) throws Exception{
+    public Map<String,Object> splitTask(String fileId,String sourceFilePath,int receivePeopleNum) throws Exception{
         List<FileInfo> list = null;
-        //获取文件行数和文件内容
+        //获取文件行数，字数和文件内容
         SplitFile splitFile = new SplitFile();
-        TaskFile taskFile = splitFile.getFileCountByFilePath(sourceFilePath);
-        //对文件进行分割，获取分割后的文件信息
-        list = splitFile.sqlitFile1(taskFile,sourceFilePath,fileCode);
-        return list;
+        ParentFile parentFile = splitFile.getFileCountByFilePath(sourceFilePath);
+        parentFile.setId(new RandomGUID().toString());
+        parentFile.setFileId(fileId);
+        parentFile.setFilePath(sourceFilePath);
+        //父文本存库
+        sqlSession.insert("SubbmitTask.saveParentFile", parentFile);
+        //对父文件进行分割，获取分割后的文件信息
+        Map<String, Object> map = splitFile.sqlitFile1(parentFile,receivePeopleNum);
+        //获取子文本，批量存库
+        List<ChildFile> childFileList = (ArrayList)map.get("childFileList");
+        sqlSession.insert("SubbmitTask.insertChildFileBatch",childFileList);
+        //获取附件，批量存库
+        List<FileInfo> fileInfoList = (ArrayList)map.get("fileInfoList");
+        sqlSession.insert("File.insertFileBatch1",fileInfoList);
+        return map;
     }
 
     /**
@@ -172,6 +199,12 @@ public class TaskService {
         tc.setCommentId(commentId);
         List<TranslateComment> list = sqlSession.selectList("TranslateComment.selectListByFC",tc);
         return list;
+    }
+
+    public ParentFile getParentFile() throws Exception{
+        String id = "F7E3D3E2-4FC4-B6FD-3CB0-E7923A14772A";
+        ParentFile parentFile = sqlSession.selectOne("SubbmitTask.getParentFileById", id);
+        return parentFile;
     }
 
 

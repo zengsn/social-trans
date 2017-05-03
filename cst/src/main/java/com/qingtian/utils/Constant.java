@@ -27,7 +27,7 @@ public class Constant {
     //文件编码
     public final static String FILE_ENCODING = "GBK";
     //分割粒度
-    public final static int SIZE = 500;
+    public final static int SIZE = 1000;
     //文件存放地址
     public final static String SOURCE_FILE_PATH = "E:" + File.separator + "TestCst";
 
@@ -35,4 +35,6 @@ public class Constant {
     public final static int HEADIMAGE_WIDTH = 650;
     //头像高度
     public final static int HEADIMAGE_HEIGHT = 650;
+    //根据行数手动设置章节
+    public final static int CHAPTER_LINE = 2;
 }
