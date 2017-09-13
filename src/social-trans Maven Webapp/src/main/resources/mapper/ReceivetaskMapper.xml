@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.crowd.dao.ReceiveTaskDao">
+
+	<insert id="insertTask" parameterType="com.crowd.bean.ReceiveTask">
+        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,receiveNum,fileId,fileCode) 
+        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{receiveNum},#{fileId},#{fileCode});
+    </insert>
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <!-- 批量添加任务 -->
+   <!-- <insert id="insertTaskBatch" parameterType="java.util.List">
+        insert p_task(taskId,taskName,describe,publisher,publishId,startTime,finishTime,isReceive,taskMoney,receiveNum)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.taskId},#{item.isReceive},#{item.submitter},#{item.submitterId},#{item.fileId},#{item.chilefileId},#{item.taskMoney})
+        </foreach>
+    </insert>
+     --> 
+    
+    <select id="getReceiveTaskList" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task
+    </select>
+    
+    <select id="selectTaskByTaskId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where taskId = #{taskId}
+    </select>
+ 
+  	<select id="selectReceiveTaskByuserId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task WHERE publishId = #{userId}
+    </select>
+ 
+    <update id="updateReTask" parameterType="com.crowd.bean.ReceiveTask">
+        UPDATE p_task SET isReceive = #{isReceive},receiveNum = ${receiveNum} WHERE taskId = #{taskId}
+    </update>
+    
+    <delete id="deleteTaskById" parameterType="String">
+    		DELETE FROM p_task WHERE taskId = #{taskId}
+    </delete>
+    
+   
+<!--
+    <select id="selectTaskByUerId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT
+            a.id,
+            a.taskId,
+            a.receiver,
+            a.receiverId,
+            a.isReceive,
+            a.submitter,
+            a.submitterId,
+            a.fileId,
+            b.`comment`,
+            c.filePath
+            FROM
+            p_task_receive AS a ,
+            p_task_subbmit AS b ,
+            p_file AS c
+            WHERE
+            a.taskId = b.taskId AND
+            a.fileId = c.fileId AND
+            a.receiverId = #{userId}
+    </select>
+
+    <select id="select1" resultType="java.util.HashMap">
+        SELECT
+      	        a.commentName,
+            	a.`comment`,
+            	a.finishedTime,
+            	b.taskMoney,
+            	b.id,
+            	b.taskId,
+            	b.receiver,
+            	b.receiverId,
+            	b.isReceive,
+            	b.submitter,
+            	b.submitterId,
+            	b.fileId,
+            	b.chileFileId
+            FROM
+            	p_task_subbmit AS a,
+            	p_task_receive AS b
+            WHERE
+            	a.taskId = b.taskId
+    </select>
+    
+     -->
+</mapper>

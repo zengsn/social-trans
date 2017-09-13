@@ -1,0 +1,58 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	width:100%;
+	height: 100%;
+}
+.form{
+	width: 30%;
+	margin: 5% auto;
+	border: 1px solid #02491B;
+	border-radius: 0.5em;
+
+}
+#upload div{
+	margin: 2% 0;
+	font-size: 0.875em;
+}
+#upload div label{
+	width: 120px;
+	display: inline-block;
+	text-align: right;
+	margin: 2% 1%;
+}
+
+#tittle label{
+	display: block;
+	padding: 1%;
+	background-color: #11682B;
+	color: white;
+	border-radius: 0.5em 0.5em 0 0;
+}
+input[type="radio"]{
+	margin-left: 4px;
+}
+#upload div span{
+	font-size: 0.875em;
+}
+#upload .button{
+		margin: 4% 20% 6% 40%;
+}
+input[type="submit"]{
+	float: left;
+	width: 50%;
+	height: 30px;
+	background-color: #11682B;
+	color: white;
+	border:none;
+	border-radius: 0.5em;
+}
+#upload div a{
+	text-decoration: none;
+	display: inline-block;
+	font-size: 0.875em;
+	vertical-align: bottom;
+	margin-left: 5%;
+}

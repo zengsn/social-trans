@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.crowd.dao.UserDao">
+    <update id="UpdateUserByUserId" parameterType="com.crowd.bean.User">
+       		 update p_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username !='' and username !=null">
+                `username` = #{username},
+            </if>
+            <if test="password !='' and password !=null">
+                `password` = #{password},
+            </if>
+
+            <if test="phoneNumber !='' and phoneNumber !=null">
+                `phoneNumber` = #{phoneNumber},
+            </if>
+
+            <if test="role !='' and role !=null">
+                `role` = #{role},
+            </if>
+            
+			<if test="hobby != null and hobby != ''">
+               `hobby` = #{hobby},
+            </if>
+            
+            <if test="email !='' and email !=null">
+                `email` = #{email},
+            </if>
+
+            <if test="headImage !='' and headImage !=null">
+                `headImage` = #{headImage},
+            </if>
+        </trim>
+        where userId=#{userId}
+    </update>
+
+ 	<select id="getUserIdByAccount" parameterType="String" resultType="String">
+        select userId from p_user WHERE account = #{account}
+    </select>
+
+    <delete id="deleteUserByUserId" parameterType="String">
+        delete from p_user where
+        userId=#{userId}
+    </delete>
+
+    <insert id="insertUser" parameterType="User">
+        insert into p_user(
+        <trim suffixOverrides=",">
+            <if test="userId != null and userId != ''">
+                userId,
+            </if>
+
+            <if test="username != null and username != ''">
+                username,
+            </if>
+
+            <if test="password != null and password != ''">
+                password,
+            </if>
+
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phoneNumber,
+            </if>
+
+            <if test="role != null and role != ''">
+                role,
+            </if>
+            
+             <if test="hobby != null and hobby != ''">
+                hobby,
+            </if>
+
+            <if test="account != null and account != ''">
+                account,
+            </if>
+            createTime,
+        </trim>
+        )
+        values(
+        <trim suffixOverrides=",">
+
+            <if test="userId != null and userId != ''">
+                #{userId},
+            </if>
+
+
+            <if test="username != null and username != ''">
+                #{username},
+            </if>
+
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+
+            <if test="phoneNumber != null and phoneNumber != ''">
+                #{phoneNumber},
+            </if>
+
+            <if test="role != null and role != ''">
+                #{role},
+            </if>
+            
+ 			<if test="hobby != null and hobby != ''">
+                #{hobby},
+            </if>
+            
+            <if test="account != null and account!= ''">
+                #{account},
+            </if>
+            NOW(),
+        </trim>
+        )
+    </insert>
+
+
+    <select id="verifyAccount" parameterType="String" resultType="com.crowd.bean.User">
+        select * from p_user WHERE account = #{account}
+    </select>
+
+
+    <select id="Userlogin"  resultType="com.crowd.bean.User">
+        select * FROM p_user WHERE account = #{account} AND password = #{password}
+    </select>
+
+    <select id="selectUserById" parameterType="String" resultType="com.crowd.bean.User">
+        select * FROM p_user WHERE userId = #{userId}
+    </select>
+    
+     <select id="selectAllUser" parameterType="User" resultType="User">
+        select * from p_user
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="userId !='' and userId !=null">
+                and `userId` = #{userId}
+            </if>
+
+            <if test="username !='' and username !=null">
+                and `username` = #{username}
+            </if>
+
+            <if test="password !='' and password !=null">
+                and `password` = #{password}
+            </if>
+
+            <if test="email !='' and email !=null">
+                and `email` = #{email}
+            </if>
+
+            <if test="phoneNumber !='' and phoneNumber !=null">
+                and `phoneNumber` = #{phoneNumber}
+            </if>
+
+            <if test="role !='' and role !=null">
+                and `role` = #{role}
+            </if>
+            
+            <if test="hobby !='' and hobby !=null">
+                and `hobby` = #{hobby}
+            </if>
+
+
+        </trim>
+    </select>
+</mapper>
