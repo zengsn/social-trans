@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/Userindex.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/admin.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/checkAccept.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/login.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/release.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/roleManage.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/taskList.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/unfinish.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/updateUser.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/uploadTask.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/userManage.jsp=UTF-8
+encoding//src/main/webapp/index.jsp=UTF-8
+encoding/<project>=UTF-8

@@ -1,0 +1,91 @@
+*{
+    margin:0;
+    padding:0;
+}
+header{
+    background-color: #F8F8F8;
+    height:50px;
+    border-bottom: 1px solid #E7E7E7;
+}
+header nav{
+    float:left;
+}
+header .logo{
+    display:inline-block;
+    line-height: 50px;
+    margin-left:20px;
+    font-size:18px;
+    color:#777;
+    text-decoration: none;
+}
+header ul{
+    float:right;
+}
+header li{
+    margin-right:40px;
+    line-height: 50px;
+    display: inline-block;
+    list-style: none;
+}
+header ul li a{
+    color:#777;
+    text-decoration: none;
+}
+.context{
+    width:100%;
+    height:600px;
+}
+.context .left{
+    float:left;
+    width:20%;
+    height:100%;
+    background-color: #F8F8F8;
+}
+.context .left .search{
+    padding-top:20px;
+    margin-left: 20px;
+}
+.context .left .search .searchText{
+    height:20px;
+    border-radius:5px;
+}
+.context .left .search .searchIcon{
+    width:40px;
+    height:25px;
+    border-radius:5px;
+    background-color: #2480c2;
+}
+.context .left .sysFeature{
+    margin-top:25px;
+    margin-left:20px;
+}
+.context .left .sysFeature .title{
+    width:100%;
+    height:30px;
+    color:#337ab7;
+}
+.context .left .sysFeature ul{
+    list-style:none;
+}
+.context .left .sysFeature ul li{
+    margin-left:10px;
+
+}
+.context .left .sysFeature ul a{
+    text-decoration:none;
+    color:#337ab7;
+    font-size:15px;
+}
+.context .left .norFeature{
+    margin-top:15px;
+    margin-left:20px;
+}
+.context .left .norFeature a{
+    text-decoration: none;
+    color:#337ab7;
+}
+.context .right{
+    float:right;
+    width:80%;
+    height:100%;
+}

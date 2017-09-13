@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.crowd.dao.RoleDao">
+	<insert id="addUserRole">
+        INSERT INTO p_userrole
+         (userId,roleId)
+         VALUES
+         (#{userId},#{roleId})
+    </insert>
+    
+    <select id="getRoleIdByRolename" parameterType="String" resultType="String">
+        SELECT roleId FROM p_role WHERE roleName = #{roleName}
+    </select>
+    
+     <select id="selectAllRole" resultType="com.crowd.bean.Role">
+        select * from p_role
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="roleId !='' and roleId !=null">
+                    and `roleId` = #{roleId}
+            </if>
+
+            <if test="rolename !='' and rolename !=null">
+                    and `rolename` = #{rolename}
+            </if>
+
+            <if test="description !='' and description !=null">
+                    and `description` = #{description}
+            </if>
+
+            <if test="disabled !='' and disabled !=null">
+                    and `disabled` = #{disabled}
+            </if>
+
+        </trim>
+    </select>
+    
+    <insert id="insertRole" parameterType="com.crowd.bean.Role">
+        INSERT INTO P_role
+        (roleId,disabled,rolename,description)
+        VALUES
+        (#{roleId},#{disabled},#{rolename},#{description})
+    </insert>
+    
+     <select id="verifyCode" parameterType="com.crowd.bean.Role" resultType="com.crowd.bean.Role">
+        select * from P_role WHERE code = #{code}
+
+    </select>
+    
+     <update id="updateById" parameterType="com.crowd.bean.Role">
+        update p_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId !='' and roleId !=null">
+                `roleId` = #{roleId},
+            </if>
+            <if test="rolename !='' and rolename !=null">
+                `rolename` = #{rolename},
+            </if>
+            <if test="description !='' and description !=null">
+                `description` = #{description},
+            </if>
+            <if test="disabled !='' and disabled !=null">
+                `disabled` = #{disabled},
+            </if>
+        </trim>
+        where roleId=#{roleId}
+    </update>
+    
+     <delete id="deleteRoleById" parameterType="String">
+        DELETE FROM P_role where id=#{id}
+    </delete>
+    
+     <delete id="deletePermissionByRoleId" parameterType="String">
+        DELETE FROM p_rolepermission WHERE roleId = #{roleId}
+    </delete>
+    
+    <select id="getLevelByRoleId" parameterType="String" resultType="int">
+        select rolelevel from p_role WHERE roleId = #{roleId}
+
+    </select>
+</mapper>
