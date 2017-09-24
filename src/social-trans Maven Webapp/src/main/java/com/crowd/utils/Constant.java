@@ -24,10 +24,12 @@ public class Constant {
 	// 文件编码
 	public final static String FILE_ENCODING = "GBK";
 	// 分割粒度
-	public final static int SIZE = 1000;
+	public final static int SIZE = 500;
 	// 文件存放地址
 	public final static String SOURCE_FILE_PATH = "C:" + File.separator
 			+ "TestCst";
+	public final static String DOWLOAD_FILE_PATH = "C:" + File.separator
+			+ "socialTrans\\";
 
 	// 头像宽度
 	public final static int HEADIMAGE_WIDTH = 650;

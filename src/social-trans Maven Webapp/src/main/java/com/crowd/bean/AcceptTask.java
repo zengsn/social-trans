@@ -6,7 +6,7 @@ public class AcceptTask {
 	private String acceptId;
 	private String accepter;
 	private int isSubmit;
-	private String submitFileId;
+	private String submitText;
 	
 	private int goods;
 
@@ -58,10 +58,13 @@ public class AcceptTask {
 	public void setIsSubmit(int isSubmit) {
 		this.isSubmit = isSubmit;
 	}
-	public String getSubmitFileId() {
-		return submitFileId;
+
+	public String getSubmitText() {
+		return submitText;
 	}
-	public void setSubmitFileId(String submitFileId) {
-		this.submitFileId = submitFileId;
+
+	public void setSubmitText(String submitText) {
+		this.submitText = submitText;
 	}
+	
 }

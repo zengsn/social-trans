@@ -75,15 +75,7 @@
         </tx:attributes>  
     </tx:advice>  
   
-    <!-- 配置AOP事务 -->  
-    <aop:config>  
-        <!-- 配置事务切点 -->  
-        <aop:pointcut expression="execution(* com.crowd.service.*Service.*(..))"  
-                      id="appPoint" />  
-        <!-- 结合事务切点与切面 -->  
-        <aop:advisor advice-ref="appAdvice" pointcut-ref="appPoint" />  
-    </aop:config>  
-  
+   
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
         <property name="dataSource" ref="dataSource"></property>  
     </bean>  

@@ -35,7 +35,45 @@ public class ReceiveTask {
 	 
 	 private int state;
 	 
-	
+	 private int totalNum;
+	 
+	 private int isChild;
+	 
+	 private String taskText;
+	 
+	 private String parentId;
+
+	public String getTaskText() {
+		return taskText;
+	}
+
+	public void setTaskText(String taskText) {
+		this.taskText = taskText;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public int getIsChild() {
+		return isChild;
+	}
+
+	public void setIsChild(int isChild) {
+		this.isChild = isChild;
+	}
+
+	public int getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(int totalNum) {
+		this.totalNum = totalNum;
+	}
 
 	public String getTaskId() {
 		return taskId;

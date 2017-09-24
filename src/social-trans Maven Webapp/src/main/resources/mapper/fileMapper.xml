@@ -14,4 +14,8 @@
             (#{item.fileCode},#{item.fileId},#{item.fileName},#{item.fileType},#{item.filePath},NOW(),#{item.childFile})
         </foreach>
     </insert>
+    
+    <select id="selectFileById" parameterType="String" resultType="com.crowd.bean.FileInfo">
+        SELECT * FROM p_file WHERE fileId = #{fileId}
+    </select>
  </mapper>

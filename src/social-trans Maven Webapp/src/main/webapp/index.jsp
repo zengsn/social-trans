@@ -7,6 +7,8 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	String wsPath = "ws://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+
 %>
 
 <!DOCTYPE html>
@@ -93,10 +95,28 @@ ul li a {
 	font-weight: 500;
 	color: #55C1F0;
 }
+#cancle{
+	text-decoration:none;
+	display:block;
+	position:absolute;
+	right:40px;
+	top:40px;
+	margin-left: 20px;
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, .6);
+	color: #434343;
+	font-size:1em;
+	text-align:center;
+}
 </style>
 
 </head>
 <body onload="checkCookie()">
+	<script type="text/javascript" src="<%=path%>/js/jquery-1.12.2.min.js"></script>
+	<script type="text/javascript" src="<%=path%>/js/sockjs.min.js"></script>
 	<div class="logo">Social-trans</div>
 	<div class="signin-up">
 		<ul>
@@ -104,15 +124,18 @@ ul li a {
 			<li><a href="user/register">注册</a></li>
 		</ul>
 	</div>
+	
 	<div class="user">
 		<h3>
 			欢迎您，<span class="accountCookie"><a href="user/userData">${cookie.accountCookie.value }</a></span>
 		</h3>
+		<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
 	</div>
 	<div class="task">
 		<ul>
 			<li><a href="task/uploadTask">发布任务</a></li>
 			<li><a href="task/getReceiveTaskList">我要接任务</a></li>
+			
 		</ul>
 	</div>
 	<script>
@@ -146,6 +169,38 @@ ul li a {
 			}
 		
 		}
+
+		
+
+
+
+  
+  $(function(){
+    //建立socket连接
+    var sock;
+    if ('WebSocket' in window) {
+      sock = new WebSocket("<%=wsPath%>socketServer");
+      } else if ('MozWebSocket' in window) {
+        sock = new MozWebSocket("<%=wsPath%>socketServer");
+      } else {
+        sock = new SockJS("<%=basePath%>sockjs/socketServer");
+      }
+    sock.onopen = function (e) {
+      console.log(e);
+      };
+      sock.onmessage = function (e) {
+        console.log(e)
+          $("#message").append("<p><font color='red'>"+e.data+"</font>")
+      };
+      sock.onerror = function (e) {
+        console.log(e);
+      };
+      sock.onclose = function (e) {
+        console.log(e);
+      }
+  });
+  
+
 	</script>
 </body>
 </html>

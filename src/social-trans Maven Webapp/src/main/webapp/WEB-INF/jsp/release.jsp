@@ -12,37 +12,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Title</title>
-<style>
-table {
-	margin-top: 30px;
-	background-color: #72A4F7;
-}
-
-thead {
-	
-}
-</style>
+<link rel="stylesheet" href="<%=path %>/css/table.css">
 </head>
 <body>
-<style>
-.errormsg {
-	margin-left: 130px;
-	margin-top: 35px;
-	width: 400px;
-	height: 50px;
-	text-align: center;
-	font-size: 40px;
-	font-weight: 700;
-	text-shadow: 0px -1px 2px #408AC7;
-}
-</style>
-	<table align="center" width="900px">
+	<table>
 		<thead>
 			<tr>
 				<th>任务名</th>
 				<th>描述</th>
-				<th>发布时间</th>
 				<th>提交时间</th>
+				<th>结束时间</th>
 				<th>悬赏</th>
 				<th>状态</th>
 				<th>查看</th>
@@ -52,7 +31,7 @@ thead {
 		<tbody>
 		
 			<c:forEach items="${reList}" var="item">
-				<tr align="center">
+				<tr>
 					<td><c:out value="${item.taskName}" /></td>
 					<td><c:out value="${item.description}" /></td>
 					<td><c:out value="${item.startTime}" /></td>
@@ -64,7 +43,7 @@ thead {
 							<input type="hidden" name="taskId" value="${item.taskId}" /> <input
 								type="submit" value="查看">
 						</form></td>
-					<td align="right">
+					<td>
 					
 						<form method="post" action="<%=basePath %>/task/deleteTask"
 							enctype="multipart/form-data">
@@ -72,8 +51,9 @@ thead {
 								type="submit" value="撤销任务">
 						</form>
 					</td>
-					<td>
+					<td><a href="<%=basePath %>/task/adoptBigTrans?taskId=${item.taskId}">采纳</a></td>
 				</tr>
+				
 			</c:forEach>
 		</tbody>
 	</table>

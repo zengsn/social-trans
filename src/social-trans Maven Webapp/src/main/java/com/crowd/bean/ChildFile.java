@@ -5,7 +5,15 @@ import org.apache.ibatis.type.Alias;
  * 子文件
  */
 public class ChildFile {
-	 	private String id;
+	 	@Override
+	public String toString() {
+		return "ChildFile [id=" + id + ", parentId=" + parentId
+				+ ", chapterId=" + chapterId + ", chapterName=" + chapterName
+				+ ", content=" + content + ", sort=" + sort + ", fileId="
+				+ fileId + ", filePath=" + filePath + "]";
+	}
+
+		private String id;
 	    private String parentId;
 	    private int chapterId;
 	    private String chapterName;   //章节名

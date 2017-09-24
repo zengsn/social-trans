@@ -12,25 +12,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Title</title>
+<link rel="stylesheet" href="<%=path %>/css/table.css">
 <style>
-.errormsg {
-	margin-left: 130px;
-	margin-top: 35px;
-	width: 400px;
-	height: 50px;
-	text-align: center;
-	font-size: 40px;
-	font-weight: 700;
-	text-shadow: 0px -1px 2px #408AC7;
-}
-table {
-	margin-top: 30px;
-	background-color: #72A4F7;
-}
-
-thead {
-	
-}
 </style>
 </head>
 <body>
@@ -60,12 +43,13 @@ thead {
 				<td align="right">
 					<form method="post" action="<%=basePath %>/task/submitTask"
 						enctype="multipart/form-data">
-						<input type="file" name="file"> <input type="hidden"
+						<a href="#" class="upload">选择文件<input type="file" name="file" class="change" multiple="multiple"></a>
+						<input type="hidden"
 							name="taskId" value="${item.taskId}" /> <input type="submit"
 							value="提交">
 					</form>
 				</td>
-				<td>
+				
 			</tr>
 		</c:forEach> </tboay>
 	</table>

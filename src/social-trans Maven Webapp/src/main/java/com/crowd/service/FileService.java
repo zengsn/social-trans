@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,4 +35,8 @@ public class FileService {
 	        fileOutputStream.close();
 	        return true;
 	    } 
+	 
+	 public FileInfo selectFileById(@Param("fileId")String fileId){
+		 return fileDao.selectFileById(fileId);
+	 }
 }

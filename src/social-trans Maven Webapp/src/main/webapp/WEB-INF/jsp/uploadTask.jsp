@@ -11,8 +11,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta charset="UTF-8">
 	<title>发布任务</title>
 	<link rel="stylesheet" href="<%=path %>/css/upload.css">
+	<link rel="stylesheet" href="<%=path %>/css/showMyTask.css" type="text/css">
 </head>
 <body>
+	<header>
+        <nav><a class= "logo" href="<%=basePath %>user/userData">用户主页</a></nav>
+        <ul>
+      		<li><a href="<%=path%>/index.jsp">Home</a></li>
+            <li><a href="<%=basePath%>/message/showMessage">消息(${sessionScope.messageNum })</a></li>
+            <li><a href="<%=basePath%>/user/login">注销</a></li>
+        </ul>
+    </header>
 	<div class="form">
 		<div id="tittle">
 			<label>上传任务</label>
@@ -32,16 +41,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<input type="radio" name="description"  value="人文" /> <span>人文</span>
     	</div>	
     	<div>
-    		<label>悬赏：</label>
+    		<label>个人悬赏：</label>
     			<form:input path="taskMoney"/>
     	</div>			
     	<div>
     		<label>结束时间：</label>
-    			<form:input path="finishTime"/>
+    			<input type="date" name="finishTime"/>
     	</div>	
     	<div>
     		<label>任务人数：</label>
-    			<form:input path="receiveNum"/>
+    			<form:input path="totalNum"/>
     	</div>	
     	<div>
     		<label>选择文件：</label>

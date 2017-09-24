@@ -35,7 +35,7 @@ public class AcceptTaskService {
 	public int updateAcceptTask(@Param("acceptTask")AcceptTask acceptTask){
 		return  acceptTaskDao.updateAcceptTask(acceptTask);
 	}
-	public int selectStateByUTID(@Param("userId")String userId,@Param("taskId")String taskId){
+	public AcceptTask selectStateByUTID(@Param("userId")String userId,@Param("taskId")String taskId){
 		return acceptTaskDao.selectStateByUTID(userId, taskId);
 	}
 	public int deleteAcceptTaskById(@Param("taskId")String taskId){

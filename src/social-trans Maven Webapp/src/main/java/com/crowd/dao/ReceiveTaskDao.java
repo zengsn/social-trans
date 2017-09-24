@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
 import com.crowd.bean.AcceptTask;
+import com.crowd.bean.ChildTask;
 import com.crowd.bean.ReceiveTask;
 import com.github.pagehelper.Page;
 
@@ -48,5 +49,7 @@ public interface ReceiveTaskDao {
 	    
 	    List<ReceiveTask> selectReceiveTaskByuserId(@Param("userId")String userId);
 	    
+	    int insertChildTask(ChildTask childTask);
 	    
+	    List<ReceiveTask> selectChildTaskByParentTaskId(@Param("parentId")String parentId);
 }

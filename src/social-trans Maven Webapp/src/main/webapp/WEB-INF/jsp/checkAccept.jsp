@@ -1,62 +1,55 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>任务</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
-  <body>
-    <body>
-	<table align="center" width="900px">
-		<thead>
-			<tr>
-				<th>提交者</th>
-				<th>文件</th>
-				
-			</tr>
-		</thead>
-		
-		<tboay>
-
-		<c:forEach items="${acList}" var="item">
-			<tr align="center">
-				<td><c:out value="${item.accepter}" /></td>
-					<td align="center">
-						<form method="post" action=""
-							enctype="multipart/form-data"> <input type="hidden"
-							name="taskId" value="${item.submitFileId}" /> <input type="submit"
-							value="查看">
-						</form>
-						</td>
-						<td>
-						<form method="post" action="<%=path %>/task/goods"
-							enctype="multipart/form-data"> <input type="hidden"
-							name="acceptId" value="${item.acceptId}" /> <input type="submit"
-							value="赞">${item.goods}人觉得赞
-						</form>
-					</td>
-			</tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>任务列表</title>
+<script type="text/javascript" src="<%=path%>/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/taskDetail.js"></script>
+<link rel="stylesheet" href="<%=path%>/css/taskDetail.css">
+<link rel="stylesheet" href="<%=path %>/css/showMyTask.css" type="text/css">
+<style>
+	input[type="submit"]{
+		float:right;
+		padding:5px 10px;
+		border-radius:2em;
+		background-color:#808080;
+		color:white;
+		border:none;
+	}
+	#like a{
+		display:inline-block;
+	}
+	.list{
+	padding-top:7%;
+	}
+</style>
+</head>
+<body>
+<div class="list">
+		<c:forEach items="${acList}" var="item" varStatus="re">
+			<div class="section">
+				<img src="<%=path%>/img/bird.jpg" alt="">
+				<ul class="header">
+					<li class="taskName"><a href="#"><c:out value="${item.accepter}" /></a></li>
+					<li class="number" id="like"> <a href="#"><img src="/social-trans/img/like.png"></a>${item.goods}	
+					<li class="number" id="like"> <a href="<%=path %>/task/adoptTrans?acceptId=${item.acceptId}">采纳</a>		
+					</li>
+				</ul>
+				<div class="detail">
+					<span class="context"> ${item.submitText } </span> ...<a href="#">[更多]</a>
+				</div>
+			</div>
+			
+			<hr>
 		</c:forEach>
-		 </tboay>
-	</table>
+	</div>
 </body>
-  </body>
 </html>

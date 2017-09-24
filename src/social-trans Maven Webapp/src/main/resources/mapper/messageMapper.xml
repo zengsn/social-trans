@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.crowd.dao.MessageDao">
+     <insert id="insertMessage" parameterType="com.crowd.bean.Message">
+        insert into p_message(
+        <trim suffixOverrides=",">
+            <if test="userId != null and userId != ''">
+                userId,
+            </if>
+
+            <if test="taskId != null and taskId != ''">
+                taskId,
+            </if>
+
+            <if test="message != null and message != ''">
+               message,
+            </if>
+            <if test="state != null and state != ''">
+                state,
+            </if>
+        </trim>
+        )
+        values(
+        <trim suffixOverrides=",">
+
+            <if test="userId != null and userId != ''">
+                #{userId},
+            </if>
+
+
+             <if test="taskId != null and taskId != ''">
+                #{taskId},
+            </if>
+
+           <if test="message != null and message != ''">
+              #{message},
+            </if>
+            <if test="state != null and state != ''">
+                #{state},
+            </if>
+        </trim>
+        )
+    </insert>
+    
+    <select id="selectMessageByUserId" parameterType="String" resultType="com.crowd.bean.Message">
+        select * from p_message WHERE userId = #{userId}
+    </select>
+    
+    <update id="updateState" parameterType="String">
+       		 UPDATE p_message SET state=1 WHERE userId = #{userId} AND taskId = #{taskId}
+    </update>
+    
+    
+</mapper>

@@ -1,92 +1,51 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<style>
-	body{
-		background-color:;
-		padding:0;
-		margin:0;
-	}
-	
-	li{
-		display:block;
-		float:left;
-		margin-left:20px
-	}
-	.input{
-		font-family:微软雅黑;
-		width:80px;
-		height:30px;
-		background-color:#ffffff;
-		border:none;
-	}
-	table td{
-		text-align:center;
-		border:1px solid #0066ff;
-	}
-
-</style>
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'taskList.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
-  <body>
-  
-  <table width="706" border="0" height="50px" align="center" cellspacing="1" style="background-color:#a0c6e5;color:white;">
-  <tr >
-     <td colspan="6" align="center" >任务列表</td>
-   </tr>
-   </table>
-   
-	<table width="706" border-collapse:collapse="" align="center" cellspacing="1">
-   <tr align="center" style="height:50px">
-     <td width="100" align="center">任务名</td>
-     <td width="100" align="center">描述</td>
-     <td width="180" align="center">发布时间</td>
-     <td width="180" align="center">提交时间</td>
-     <td width="65" align="center">悬赏</td>
-     <td width="83" align="center">领取人数</td>
-     <td width="83" align="center">查看提交</td>
-   </tr>
-   <c:forEach items="${reList}" var="item">
-	<tr>	 
-    <td><c:out value="${item.taskName}" /></td>
-    <td><c:out value="${item.description}" /></td>
-    <td><c:out value="${item.startTime}" /></td>
-    <td><c:out value="${item.finishTime}" /></td>
-    <td><c:out value="${item.taskMoney}" /></td>
-    <td><c:out value="${item.receiveNum}" /></td>
-    <td><form method="post" action="<%=basePath %>/task/checkAccept"
-							enctype="multipart/form-data">
-							<input type="hidden" name="taskId" value="${item.taskId}" /> <input
-								type="submit" value="查看提交">
-						</form></td>
-    <td align="right"> <form  method="post" action="task/acceptTask"> 
-      <input type="hidden" name="taskId" value="${item.taskId}" />
-      <input type="submit"  value="领取" ></form></td>
-</tr>
-</c:forEach>
- </table>
- 
- <br>
- <a href="<%=path%>/index.jsp">返回主页</a><br>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>任务列表</title>
+<script type="text/javascript" src="<%=path%>/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/taskDetail.js"></script>
+<link rel="stylesheet" href="<%=path%>/css/taskDetail.css">
+<link rel="stylesheet" href="<%=path %>/css/showMyTask.css" type="text/css">
+</head>
+<body>
+	 <header>
+        <nav><a class= "logo" href="<%=basePath %>user/userData">用户主页</a></nav>
+        <ul>
+      		<li><a href="<%=path%>/index.jsp">Home</a></li>
+           <li><a href="<%=basePath%>/message/showMessage">消息(${sessionScope.messageNum })</a></li>
+            <li><a href="<%=basePath%>/user/login">注销</a></li>
+        </ul>
+    </header>
+	<div>
+		<c:forEach items="${reList}" var="item" varStatus="re">
+			<div class="section">
+				<img src="<%=path%>/img/bird.jpg" alt="">
+				<ul class="header">
+					<li class="taskName"><a href="<%=basePath %>task/taskDetail?taskId=${item.taskId}">${item.taskName}</a></li>
+					<li class="reward"><c:out value="${item.taskMoney}" /></li>
+					<li class="number"><a href="#"><span><c:out value="${item.receiveNum}" /></a><span>个人领取</span></li>
+				</ul>
+				<div class="detail">
+					<span class="para"> ${textList[re.count-1] } </span> ...<a href="<%=basePath %>/task/taskDetail?taskId=${item.taskId}">[更多]</a>
+				</div>
+				<ul class="footer">
+					<li class="tab"><span>标签：</span><a href="#"><c:out
+								value="${item.description}" /></a></li>
+					<li class="time"><c:out value="${item.finishTime}" /></li>
+				</ul>
+			</div>
+			
+			<hr>
+		</c:forEach>
+	</div>
+</body>
 </html>
