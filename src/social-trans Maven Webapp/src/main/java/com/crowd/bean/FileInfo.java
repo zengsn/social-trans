@@ -8,7 +8,7 @@ public class FileInfo {
     private String filePath;
     private String createTime;
     private String fileId;
-    private String childFile;
+    private int childFile;
     
 	public String getFileCode() {
 		return fileCode;
@@ -52,10 +52,10 @@ public class FileInfo {
 	public void setFileId(String fileId) {
 		this.fileId = fileId;
 	}
-	public String getChildFile() {
+	public int getChildFile() {
 		return childFile;
 	}
-	public void setChildFile(String childFile) {
+	public void setChildFile(int childFile) {
 		this.childFile = childFile;
 	}
 }

@@ -18,7 +18,7 @@ public interface AcceptTaskDao {
 	//根据用户ID和任务ID查找接收任务的ID
 	String selectAcceptIdByUTID(@Param("userId")String userId,@Param("taskId")String taskId);
 	int updateAcceptTask(AcceptTask acceptTask);
-	int selectStateByUTID(@Param("userId")String userId,@Param("taskId")String taskId);
+	AcceptTask selectStateByUTID(@Param("userId")String userId,@Param("taskId")String taskId);
 	int deleteAcceptTaskById(@Param("taskId")String taskId);
 	List<AcceptTask> selectAccpetTaskByTaskId(@Param("taskId")String taskId);
 	List<AcceptTask> selectcheckAcceptByTaskId(@Param("taskId")String taskId);

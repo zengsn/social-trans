@@ -13,4 +13,6 @@ public interface FileDao {
 	 //  Boolean saveFile(FileInfo fileInfo, InputStream in) throws Exception;
 	   
 	   int insertFileBatch(List<FileInfo> list)throws Exception;
+	   
+	   FileInfo selectFileById(@Param("fileId")String fileId);
 }

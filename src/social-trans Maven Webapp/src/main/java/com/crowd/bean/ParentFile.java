@@ -74,4 +74,11 @@ public class ParentFile {
     public void setLists(List<String> lists) {
         this.lists = lists;
     }
+
+	@Override
+	public String toString() {
+		return "ParentFile [id=" + id + ", line=" + line + ", lists=" + lists
+				+ ", wordCount=" + wordCount + ", lineText=" + lineText
+				+ ", fileId=" + fileId + ", filePath=" + filePath + "]";
+	}
 }

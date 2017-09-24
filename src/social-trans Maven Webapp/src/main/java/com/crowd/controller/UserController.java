@@ -1,6 +1,8 @@
 package com.crowd.controller;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.crowd.bean.Message;
 import com.crowd.bean.Role;
 import com.crowd.bean.User;
+import com.crowd.service.MessageService;
 import com.crowd.service.RoleService;
 import com.crowd.service.UserService;
 @Controller  
@@ -34,7 +38,8 @@ public class UserController {
 	    private UserService userService;  
 	    @Autowired
 	    private RoleService roleService;
-	    
+	    @Autowired
+		private MessageService messageService;
 //	    @RequestMapping(value="query", method=RequestMethod.POST)
 //	public ModelAndView selectUserById(@RequestParam("userId") String userId) {
 //		User user = new User();
@@ -99,8 +104,11 @@ public class UserController {
 	    @RequestMapping(value="updateUser",method=RequestMethod.GET)
 	    public String UpdateUser1(HttpSession session,Model model)throws Exception{
 	    	String account=(String) session.getAttribute("account");
+	    	System.out.println(account);
 	    	String userId = userService.getUserIdByAccount(account);
+	    	System.out.println(userId);
 	    	User user = userService.selectUserById(userId);
+	    	System.out.println(user);
 	    	String hobby = user.getHobby();
 	    	System.out.println(hobby);
 	    	model.addAttribute("user", user);
@@ -182,16 +190,23 @@ public class UserController {
 	}
 	//用户登录
 	 @RequestMapping(value="login",method=RequestMethod.GET)
-	    public ModelAndView login1(User user)throws Exception{
-	    	ModelAndView mv =new ModelAndView();
-	    	mv.setViewName("login");
-	    	return mv;
+	    public String login1(User user,HttpServletRequest request,HttpServletResponse response)throws Exception{
+	    
+	    	return "login";
+//		 	HttpSession session = request.getSession(); 
+//		 	session.setAttribute("account", "dam");
+//			Cookie cookieAccount = new Cookie("accountCookie","dam");
+//			cookieAccount.setMaxAge(3600); //Cookie保存时间
+//			cookieAccount.setPath(request.getContextPath());
+//			response.addCookie(cookieAccount);
+//			return "redirect:/index.jsp";
 	    }
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	public String Login(String account,String password,HttpServletRequest request,HttpServletResponse response){
-		
+		HttpSession session = request.getSession(); 
 		System.out.println(account);
-		boolean isSuccess = userService.Userlogin(account, password);	
+		boolean isSuccess = userService.Userlogin(account, password);
+		if(isSuccess){
 		Cookie cookieAccount = new Cookie("accountCookie",account);
 		cookieAccount.setMaxAge(3600); //Cookie保存时间
 		cookieAccount.setPath(request.getContextPath());
@@ -202,14 +217,27 @@ public class UserController {
 		//添加到客户端
 		response.addCookie(cookieAccount);
 		response.addCookie(cookiePassword);
-		HttpSession session = request.getSession(); 
 		session.setAttribute("account", account);
+		String userId = userService.getUserIdByAccount(account);
+		System.out.println(userId);
+		List<Message> messageList = messageService.selectMessageByUserId(userId);
+		List<Message> mList = new ArrayList<>();
+		Iterator<Message> Lists = messageList.iterator();
+		while(Lists.hasNext()){
+			Message message = Lists.next();
+			if(message.getState()==0){
+				mList.add(message);
+			}
+		}
+		session.setAttribute("messageNum", mList.size());
+		//创建用户密码Cookie对象
 		System.out.println(isSuccess);
-		if(isSuccess){
+		
 			return  "redirect:/index.jsp";
 		}else{
 			return "login";
 		}
+		
 	}
 	
 	

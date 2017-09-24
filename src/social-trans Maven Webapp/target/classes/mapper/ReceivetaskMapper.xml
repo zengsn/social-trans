@@ -4,8 +4,8 @@
 <mapper namespace="com.crowd.dao.ReceiveTaskDao">
 
 	<insert id="insertTask" parameterType="com.crowd.bean.ReceiveTask">
-        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,receiveNum,fileId,fileCode) 
-        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{receiveNum},#{fileId},#{fileCode});
+        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,totalNum,isChild,taskText,parentId) 
+        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{totalNum},#{isChild},#{taskText},#{parentId});
     </insert>
     <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
     <!-- 批量添加任务 -->
@@ -25,6 +25,10 @@
     <select id="selectTaskByTaskId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
         SELECT * FROM p_task where taskId = #{taskId}
     </select>
+    
+    <select id="selectChildTaskByParentTaskId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where parentId = #{parentId}
+    </select>
  
   	<select id="selectReceiveTaskByuserId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
         SELECT * FROM p_task WHERE publishId = #{userId}
@@ -38,7 +42,10 @@
     		DELETE FROM p_task WHERE taskId = #{taskId}
     </delete>
     
-   
+   <insert id="insertChildTask" parameterType="com.crowd.bean.ChildTask">
+        insert into p_childtask(parentTaskId,childTaskId,part) 
+        VALUES (#{parentTaskId},#{childTaskId},#{part});
+    </insert>
 <!--
     <select id="selectTaskByUerId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
         SELECT

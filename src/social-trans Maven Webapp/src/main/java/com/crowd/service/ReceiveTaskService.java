@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.crowd.bean.ChildTask;
 import com.crowd.bean.ReceiveTask;
 import com.crowd.dao.ReceiveTaskDao;
 @Service
@@ -48,8 +49,14 @@ public class ReceiveTaskService {
     public int deleteTaskById(String taskId){
     	return receiveTaskDao.deleteTaskById(taskId);
     }
+    public int insertChildTask(ChildTask childTask)
+    {
+    	return receiveTaskDao.insertChildTask(childTask);
+    }
     
-    
+    public List<ReceiveTask> selectChildTaskByParentTaskId(@Param("parentId")String parentId){
+    	return receiveTaskDao.selectChildTaskByParentTaskId(parentId);
+    }
 //
 //    /**
 //     * 切割任务
