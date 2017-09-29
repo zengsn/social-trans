@@ -24,16 +24,17 @@ public class SortTask {
 //	RoleService roleService = new RoleService();
 //	UserService userService = new UserService();
 	public static void main(String[] args) {
-		int level1 = 3;
-		int level2 = 1;
+		int level1 = 1;
+		int level2 = 3;
 		int good1Num = 3;
-		int good2Num = 12;
+		int good2Num = 0;
 				
 		
 					if( level2-level1==1){
 						if(good2Num==0&&good1Num-good2Num<=3||good1Num/good2Num<=3){
 							System.out.println("level2-level1 1 +1");
 						}
+						
 						else{
 							System.out.println("level2-level1 1 -1");
 						}

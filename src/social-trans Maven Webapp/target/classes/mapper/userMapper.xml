@@ -30,6 +30,18 @@
             <if test="headImage !='' and headImage !=null">
                 `headImage` = #{headImage},
             </if>
+            <if test="transNum !='' and transNum !=null">
+                `transNum` = #{transNum},
+            </if>
+            <if test="wordNum !='' and wordNum !=null">
+                `wordNum` = #{wordNum},
+            </if>
+            <if test="historyTrans!='' and historyTrans !=null">
+                `historyTrans` = #{historyTrans},
+            </if>
+            <if test="adoptNum !='' and adoptNum !=null">
+                `adoptNum` = #{adoptNum},
+            </if>
         </trim>
         where userId=#{userId}
     </update>

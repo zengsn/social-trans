@@ -31,6 +31,8 @@
 	padding-top:7%;
 	}
 </style>
+
+
 </head>
 <body>
  <header>
@@ -64,6 +66,7 @@
 			<form  method="post" action="<%=path %>/task/acceptTask"> 
       		<input type="hidden" name="taskId" value="${reTask.taskId}" />
      		 <input type="submit"  value="领取" ></form>${error }
+     		 
 
 	</div>
 			
@@ -73,6 +76,11 @@
 				<img src="<%=path%>/img/bird.jpg" alt="">
 				<ul class="header">
 					<li class="taskName"><a href="#"><c:out value="${item.accepter}" /></a></li>
+					<li><c:choose>
+						<c:when test="${item.score==0}">
+						</c:when>
+						<c:otherwise>专家评分：${item.score}</c:otherwise>
+						</c:choose></li>
 					<li class="number" id="like"> <a href="<%=path %>/task/goods?acceptId=${item.acceptId}"><img src="/social-trans/img/like.png"></a>${item.goods}	
 						
 					</li>
@@ -81,7 +89,10 @@
 					<span class="context"> ${item.submitText } </span> ...<a href="#">[更多]</a>
 				</div>
 			</div>
-			
+			<form  method="post" action="<%=path %>/task/gradeTask" onsubmit="return checkNum();"> 
+      			<input type="hidden" name="acceptId" value="${item.acceptId}"/>
+      			<input type="number" name="score" id="score"/>
+     		 <input type="submit"  value="评分" ></form>${gradeError}
 			<hr>
 		</c:forEach>
 	</div>

@@ -37,7 +37,13 @@
 					<td><c:out value="${item.startTime}" /></td>
 					<td><c:out value="${item.finishTime}" /></td>
 					<td><c:out value="${item.taskMoney}" /></td>
-					<td><c:out value="${item.state}" /></td>
+				<!--  	<td><c:out value="${item.state}" /></td> -->
+					<td><c:choose>
+						<c:when test="${item.state==0}">
+							未完成
+						</c:when>
+						<c:otherwise>已完成</c:otherwise>
+						</c:choose></td>
 					<td><form method="post" action="<%=basePath %>/task/checkAccept"
 							enctype="multipart/form-data">
 							<input type="hidden" name="taskId" value="${item.taskId}" /> <input

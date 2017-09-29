@@ -7,11 +7,20 @@ public class AcceptTask {
 	private String accepter;
 	private int isSubmit;
 	private String submitText;
-	
 	private int goods;
-
+	private int score;
+	
+	
 	public int getGoods() {
 		return goods;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	public void setGoods(int goods) {

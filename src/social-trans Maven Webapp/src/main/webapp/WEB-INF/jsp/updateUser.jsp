@@ -54,7 +54,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <label>用户角色:</label>
                     <input type="text" name="role"  value="${user.role}" disabled/>
                 </div>
-                
+                <div>
+                    <label>翻译作品数:</label>
+                    <input type="text" value="${user.transNum}" name="transNum" disabled/>
+                </div>
+                <div>
+                    <label>翻译字数:</label>
+                    <input type="text" value="${user.wordNum}" name="wordNum" disabled/>
+                </div>
+                <div>
+                    <label>被采纳次数:</label>
+                    <input type="text" value="${user.adoptNum}" name="adoptNum" disabled/>
+                </div>
                 <div class="button">
                     <input type="submit" value="保存" />
                 </div>

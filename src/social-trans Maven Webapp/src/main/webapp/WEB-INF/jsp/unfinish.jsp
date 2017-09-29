@@ -43,7 +43,7 @@
 				<td align="right">
 					<form method="post" action="<%=basePath %>/task/submitTask"
 						enctype="multipart/form-data">
-						<a href="#" class="upload">选择文件<input type="file" name="file" class="change" multiple="multiple"></a>
+						<input type="file" name="file" multiple="multiple">
 						<input type="hidden"
 							name="taskId" value="${item.taskId}" /> <input type="submit"
 							value="提交">

@@ -15,8 +15,8 @@
         SELECT taskId FROM p_accept WHERE userId = #{userId}
     </select>
     
-    <select id="selectAcceptIdByUTID"  resultType="com.crowd.bean.AcceptTask" >
-        SELECT * FROM p_accept WHERE userId = #{userId} AND taskId = #{taskId}
+    <select id="selectAcceptIdByUTID"  resultType="String" >
+        SELECT acceptId FROM p_accept WHERE userId = #{userId} AND taskId = #{taskId}
     </select>
     
      <select id="selectAccepTaskByATID"  resultType="com.crowd.bean.AcceptTask" >
@@ -83,4 +83,23 @@
         </trim>
         where AcceptId=#{acceptId}
     </update>
+    
+    <update id="updateScore" >
+       		 update p_accept
+        <trim prefix="SET" suffixOverrides=",">
+
+            <if test="score !='' and score !=null">
+                `score` = #{score},
+            </if>
+ 
+        </trim>
+        where AcceptId=#{acceptId}
+    </update>
+     <select id="selectScore"  resultType="com.crowd.bean.Score">
+        SELECT * FROM p_score WHERE acceptId = #{acceptId} AND userId = #{userId}
+    </select>
+    <insert id="insertScore" parameterType="com.crowd.bean.Score">
+		insert into p_score(acceptId,userId,score) 
+        VALUES (#{acceptId},#{userId},#{score})
+	</insert>
 </mapper>
