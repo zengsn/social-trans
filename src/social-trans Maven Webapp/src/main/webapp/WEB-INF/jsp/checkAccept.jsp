@@ -50,6 +50,7 @@
 			
 			<hr>
 		</c:forEach>
+		${msg }
 	</div>
 </body>
 </html>

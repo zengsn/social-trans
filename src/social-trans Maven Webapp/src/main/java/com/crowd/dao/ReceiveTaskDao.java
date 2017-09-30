@@ -52,4 +52,8 @@ public interface ReceiveTaskDao {
 	    int insertChildTask(ChildTask childTask);
 	    
 	    List<ReceiveTask> selectChildTaskByParentTaskId(@Param("parentId")String parentId);
+	    
+	    boolean updateReTaskState(ReceiveTask receiveTask) throws Exception;
+	    
+	    
 }

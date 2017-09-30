@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.crowd.bean.AcceptTask;
 import com.crowd.bean.Good;
+import com.crowd.bean.Score;
 import com.crowd.dao.AcceptTaskDao;
 @Service
 public class AcceptTaskService {
@@ -64,5 +65,14 @@ public class AcceptTaskService {
     }
     public int selectGoods(@Param("acceptId")String acceptId){
     	return acceptTaskDao.selectGoods(acceptId);
+    }
+    public int updateScore(@Param("acceptId")String acceptId,@Param("score")int score){
+    	return acceptTaskDao.updateScore(acceptId, score);
+    }
+    public List<Score> selectScore(@Param("acceptId")String acceptId,@Param("userId")String userId){
+    	return acceptTaskDao.selectScore(acceptId, userId);
+    }
+    public int insertScore(Score score){
+    	return acceptTaskDao.insertScore(score);
     }
 }

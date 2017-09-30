@@ -24,7 +24,7 @@ public class Constant {
 	// 文件编码
 	public final static String FILE_ENCODING = "GBK";
 	// 分割粒度
-	public final static int SIZE = 500;
+	public final static int SIZE = 50;
 	// 文件存放地址
 	public final static String SOURCE_FILE_PATH = "C:" + File.separator
 			+ "TestCst";

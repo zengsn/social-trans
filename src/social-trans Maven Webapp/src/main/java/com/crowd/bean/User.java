@@ -35,13 +35,7 @@ public class User {
 		     *用户邮箱
 		     */
 		    private String email;
-			public String getEmail() {
-				return email;
-			}
-
-			public void setEmail(String email) {
-				this.email = email;
-			}
+			
 
 			/**
 		     *用户手机号
@@ -57,12 +51,60 @@ public class User {
 		     *兴趣
 		     */
 		    private String hobby;
+		    
 		    /**
-		     * 获取属性 
-		     * @param userId
+		     * 翻译的次数
 		     */
+		    private int transNum;
+		    
+		    /**
+		     * 翻译总数字
+		     */
+		    private int wordNum;
+		    
+		    /**
+		     * 历史翻译
+		     */
+		    private String historyTrans;
+		    /**
+		     *被采纳的次数 
+		     */
+		    private int adoptNum;
+		    
+			public int getAdoptNum() {
+				return adoptNum;
+			}
+
+			public void setAdoptNum(int adoptNum) {
+				this.adoptNum = adoptNum;
+			}
+
 			public String getRoleId() {
 				return roleId;
+			}
+
+			public int getTransNum() {
+				return transNum;
+			}
+
+			public void setTransNum(int transNum) {
+				this.transNum = transNum;
+			}
+
+			public int getWordNum() {
+				return wordNum;
+			}
+
+			public void setWordNum(int wordNum) {
+				this.wordNum = wordNum;
+			}
+
+			public String getHistoryTrans() {
+				return historyTrans;
+			}
+
+			public void setHistoryTrans(String historyTrans) {
+				this.historyTrans = historyTrans;
 			}
 
 			public void setRoleId(String roleId) {
@@ -135,7 +177,13 @@ public class User {
 				public void setUsername(String username) {
 					this.username = username;
 				}
+				public String getEmail() {
+					return email;
+				}
 
+				public void setEmail(String email) {
+					this.email = email;
+				}
 			public User() {
 				super();
 				// TODO Auto-generated constructor stub

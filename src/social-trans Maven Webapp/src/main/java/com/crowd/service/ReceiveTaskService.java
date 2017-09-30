@@ -57,6 +57,10 @@ public class ReceiveTaskService {
     public List<ReceiveTask> selectChildTaskByParentTaskId(@Param("parentId")String parentId){
     	return receiveTaskDao.selectChildTaskByParentTaskId(parentId);
     }
+    
+    public  boolean updateReTaskState(ReceiveTask receiveTask) throws Exception{
+    	return receiveTaskDao.updateReTaskState(receiveTask);
+    }
 //
 //    /**
 //     * 切割任务

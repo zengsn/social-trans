@@ -4,8 +4,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +28,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.crowd.bean.AcceptTask;
 import com.crowd.bean.ChildFile;
 import com.crowd.bean.ChildTask;
+import com.crowd.bean.ChildText;
 import com.crowd.bean.FileInfo;
 import com.crowd.bean.Good;
 import com.crowd.bean.Message;
 import com.crowd.bean.ParentFile;
 import com.crowd.bean.ReceiveTask;
+import com.crowd.bean.Score;
 import com.crowd.bean.User;
 import com.crowd.service.AcceptTaskService;
+import com.crowd.service.ChildTextService;
 import com.crowd.service.FileService;
 import com.crowd.service.MessageService;
 import com.crowd.service.ReceiveTaskService;
@@ -60,7 +65,8 @@ public class TaskController {
 	private RoleService roleService;
 	@Autowired
 	private MessageService messageService;
-	
+	@Autowired
+	private ChildTextService childTextService;
 	 String encoding = Constant.FILE_ENCODING;
 
 	/**
@@ -79,19 +85,39 @@ public class TaskController {
 	//上传任务
 	@RequestMapping(value = "uploadTask", method = RequestMethod.POST)
 	public String InsertTask(ReceiveTask receiveTask, HttpSession session,
-			HttpServletRequest request,@RequestParam("file") MultipartFile myfile) throws IllegalStateException,
+			HttpServletRequest request,@RequestParam("file") MultipartFile myfile,Model model) throws IllegalStateException,
 			IOException {
 		SplitFile spiltFile = new SplitFile();
 		String taskId = UUID.randomUUID().toString();
 		receiveTask.setTaskId(taskId);
 		String account = (String) session.getAttribute("account");
+		if (account != null && account != "") {
 		String publishId = userService.getUserIdByAccount(account);
 		receiveTask.setPublishId(publishId);
 		String publisher = userService.selectUserById(publishId).getUsername();
 		receiveTask.setPublisher(publisher);
-		 byte[] bs= myfile.getBytes();
-		 System.out.println(new String(bs));
-		receiveTask.setTaskText(new String(bs));
+		String taskText = request.getParameter("taskText");
+		System.out.println(taskText);
+		if(taskText==null||taskText.equals("")){
+			User user = userService.selectUserById(publishId);
+			String role = user.getRole();
+			String roleId = roleService.getRoleIdByRolename(role);
+			System.out.println("roleId:"+roleId);
+			int level = roleService.getLevelByRoleId(roleId);
+			System.out.println(level);
+			if(level>1){
+				byte[] bs= myfile.getBytes();
+//				System.out.println(new String(bs));
+				receiveTask.setTaskText(new String(bs));
+			}
+			else{
+				model.addAttribute("upLoadError", "升级为会员后可以文件上传！");
+				return "uploadTask";
+			}
+		}
+		else{
+			receiveTask.setTaskText(taskText);
+		}
 		retaskService.insertTask(receiveTask);
 		List<User> userList = userService.selectAllUser();
 		String describe = receiveTask.getDescription();
@@ -100,48 +126,96 @@ public class TaskController {
 		while(users.hasNext()){
 			User user= users.next();
 			String hobby = user.getHobby();
-			if(hobby.contains(describe)){
+			//System.out.println("hobby:"+hobby);
+			//System.out.println("de:"+describe);
+			String historyTrans = user.getHistoryTrans();
+			//System.out.println("his:"+historyTrans);
+			if(historyTrans!=null){
+				if(historyTrans.contains(describe)||hobby.contains(describe)){
+					Message message = new Message();
+					message.setTaskId(taskId);
+					message.setUserId(user.getUserId());
+					message.setState(0);
+					message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"+receiveTask.getTaskName()+"’非常适合你！");
+					System.out.println(message);
+					messageService.insertMessage(message);
+				}
+			}else if(hobby!=null&&hobby.contains(describe)){
 				Message message = new Message();
 				message.setTaskId(taskId);
-				System.out.println(taskId);
 				message.setUserId(user.getUserId());
-				System.out.println(publishId);
 				message.setState(0);
-				message.setMessage("根据您的兴趣爱好，觉得‘"+receiveTask.getTaskName()+"’非常适合你！");
+				message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"+receiveTask.getTaskName()+"’非常适合你！");
 				System.out.println(message);
 				messageService.insertMessage(message);
-			}
+				}
+			
 		}
 		if(receiveTask.getTotalNum()>1){
-			List<String> textList = spiltFile.spiltString(receiveTask.getTaskText(), receiveTask.getTotalNum());
-			Iterator<String> list = textList.iterator();
-			int i=1;
-			while(list.hasNext()){
-				ReceiveTask childReTask = new ReceiveTask();
+
+			HashMap<Integer,String> textMap = (HashMap<Integer, String>) spiltFile.spiltText(receiveTask.getTaskText());
+			Set set = textMap.keySet();
+			Iterator t = set.iterator();
+			for(Iterator iter = set.iterator(); iter.hasNext();){
+				int key = (int)iter.next();
+				System.out.println(key);
+			   	String value = (String)textMap.get(key);
+			   	ReceiveTask childReTask = new ReceiveTask();
 				String childTaskId = UUID.randomUUID().toString();
 				childReTask.setTaskId(childTaskId);
-				childReTask.setTaskName(receiveTask.getTaskName()+ "[卷"+ i + "]");
+				childReTask.setTaskName(receiveTask.getTaskName()+ "[卷"+ key + "]");
 				childReTask.setDescription(receiveTask.getDescription());
 				childReTask.setFinishTime(receiveTask.getFinishTime());
 				childReTask.setPublisher(receiveTask.getPublisher());
 				childReTask.setPublishId(receiveTask.getPublishId());
 				childReTask.setTaskMoney(receiveTask.getTaskMoney());
-				childReTask.setIsChild(i);
-				childReTask.setTaskText(list.next());
+				childReTask.setIsChild(key);
+				childReTask.setTaskText(value);
 				childReTask.setParentId(receiveTask.getTaskId());
 				childReTask.setTotalNum(1);
 				retaskService.insertTask(childReTask);
-				i++;
-			}
+			  }
 		}
 		return "redirect:/index.jsp";
+		}
+		else {
+			model.addAttribute("error", "您未登陆 ，请登陆后再发布任务");
+			return "error";
+		}
 	}
-	/**
-	 * 查询任务列表
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
+//	ChildText childText = new ChildText();
+//	childText.setTaskId(taskId);
+//			for(Iterator iter = set.iterator(); iter.hasNext();)
+//			  {
+//			   int key = (int)iter.next();
+//			   childText.setPart(key);
+//			   String value = (String)textMap.get(key);
+//			   childText.setChildText(value);
+//			   childTextService.insertChildText(childText);
+//			  }
+//			List<ChildText> childList = childTextService.selectChildTextByTaskId(taskId);
+//			List<String> textList = spiltFile.spiltString(receiveTask.getTaskText(), receiveTask.getTotalNum());
+//			Iterator<String> list = textList.iterator();
+//			int i=1;
+//			while(list.hasNext()){
+//				ReceiveTask childReTask = new ReceiveTask();
+//				String childTaskId = UUID.randomUUID().toString();
+//				childReTask.setTaskId(childTaskId);
+//				childReTask.setTaskName(receiveTask.getTaskName()+ "[卷"+ i + "]");
+//				childReTask.setDescription(receiveTask.getDescription());
+//				childReTask.setFinishTime(receiveTask.getFinishTime());
+//				childReTask.setPublisher(receiveTask.getPublisher());
+//				childReTask.setPublishId(receiveTask.getPublishId());
+//				childReTask.setTaskMoney(receiveTask.getTaskMoney());
+//				childReTask.setIsChild(i);
+//				childReTask.setTaskText(list.next());
+//				childReTask.setParentId(receiveTask.getTaskId());
+//				childReTask.setTotalNum(1);
+//				retaskService.insertTask(childReTask);
+//				i++;
+//			}
+		
+	
 	// 查看所有接收任务
 	@RequestMapping("getReceiveTaskList")
 	public String getTaskList(Model model) throws IOException {
@@ -153,11 +227,14 @@ public class TaskController {
 			Iterator<ReceiveTask> ac = lists.iterator();
 			System.out.println(ac);
 			while (ac.hasNext()) {
+				
 				ReceiveTask reTask = ac.next();
+				if(reTask.getState()==0){
 				if(reTask.getIsChild()==0){
 					reList.add(reTask);
 					String taskText = reTask.getTaskText();
 					text.add(taskText);
+					}
 				}
 			}
 			model.addAttribute("textList", text);
@@ -222,7 +299,7 @@ public class TaskController {
 
 	// 查看自己领取的任务
 	@RequestMapping("unfinish")
-	public String showMyTask(Model model, HttpSession session) {
+	public String  showMyTask(Model model, HttpSession session) {
 
 		String account = (String) session.getAttribute("account");
 		String userId = userService.getUserIdByAccount(account);
@@ -252,7 +329,7 @@ public class TaskController {
 		}
 		return "unfinish";
 	}
-
+	//查看自己完成的任务
 	@RequestMapping("finish")
 	public String finish(Model model, HttpSession session) {
 		String account = (String) session.getAttribute("account");
@@ -280,7 +357,6 @@ public class TaskController {
 		}
 		return "finish";
 	}
-
 	// 查看发布的任务
 	@RequestMapping("release")
 	public String release(Model model, HttpSession session) {
@@ -305,8 +381,6 @@ public class TaskController {
 		}
 		return "release";
 	}
-
-
 	//提交任务
 	@RequestMapping("submitTask")
 	public String submitTask(Model model, HttpServletRequest request,
@@ -324,82 +398,131 @@ public class TaskController {
 		acceptTask.setIsSubmit(1);
 		acceptTaskService
 				.updateAcceptTask(acceptTask);
-		return "unfinish";
+		User user = userService.selectUserById(userId);
+		
+		user.setTransNum(user.getTransNum()+1);
+		user.setWordNum(acceptTask.getSubmitText().length()+user.getWordNum());
+		String historyTrans = user.getHistoryTrans();
+		String describe = retaskService.selectTaskByTaskId(taskId).getDescription();
+		if(historyTrans==null||historyTrans.equals(""))
+		{
+			user.setHistoryTrans(describe);
+		}
+		else if(!historyTrans.contains(describe)){
+			historyTrans = historyTrans+","+retaskService.selectTaskByTaskId(taskId).getDescription();
+			user.setHistoryTrans(historyTrans);
+		}
+		userService.UpdateUserByUserId(user);
+		return "redirect:/task/unfinish";
 	}
-	
+	//查看别人提交的翻译
 	@RequestMapping("checkAccept")
 	public String checkAccept(String taskId, Model model) throws IOException {
 //		SortTask sortTask = new SortTask();
 		System.out.println(taskId);
 		List<AcceptTask> acList = new ArrayList<>();
 		acList = acceptTaskService.selectcheckAcceptByTaskId(taskId);
-		Collections.sort(acList, new Comparator() {
-			@Override
-			public int compare(Object o1, Object o2) {
-				AcceptTask actask1 = (AcceptTask) o1;
-				AcceptTask actask2 = (AcceptTask) o2;
-				System.out.println(actask1.getUserId());
-				System.out.println(userService
-						.selectUserById(actask1.getUserId()));
-				String roleId1 = roleService.getRoleIdByRolename(userService
-						.selectUserById(actask1.getUserId()).getRole());
-				System.out.println(roleId1);
-				int good1Num = actask1.getGoods();
-				int good2Num = actask2.getGoods();
-				System.out.println(actask2.getUserId());
-				String roleId2 = roleService.getRoleIdByRolename(userService
-						.selectUserById(actask2.getUserId()).getRole());
-				System.out.println(roleId2);
-				int level1 = roleService.getLevelByRoleId(roleId1);
-				int level2 = roleService.getLevelByRoleId(roleId2);
-				if( level2-level1==1){
-					if((good2Num==0&&good1Num-good2Num<=3)||good1Num/good2Num<=3){
-						return 1;
+		if(acList.size()>0){
+		if(acList.size()>1){
+			Collections.sort(acList, new Comparator() {
+				@Override
+				public int compare(Object o1, Object o2) {
+					AcceptTask actask1 = (AcceptTask) o1;
+					AcceptTask actask2 = (AcceptTask) o2;
+					System.out.println(actask1.getUserId());
+					System.out.println(userService
+							.selectUserById(actask1.getUserId()));
+					String roleId1 = roleService.getRoleIdByRolename(userService
+							.selectUserById(actask1.getUserId()).getRole());
+					System.out.println(roleId1);
+					int good1Num = actask1.getGoods();
+					int good2Num = actask2.getGoods();
+					System.out.println(actask2.getUserId());
+					String roleId2 = roleService.getRoleIdByRolename(userService
+							.selectUserById(actask2.getUserId()).getRole());
+					System.out.println(roleId2);
+					int level1 = roleService.getLevelByRoleId(roleId1);
+					int level2 = roleService.getLevelByRoleId(roleId2);
+					if( level2-level1==1){
+						if(good2Num==0){
+							if(good1Num-good2Num<=3)
+								return 1;
+							else
+								return -1;
+						}
+						else{
+							if(good1Num/good2Num<=3)
+								return 1;
+							else
+								return -1;
+						}
+						
 					}
-					else{
-						return -1;
+					else if (level2-level1==2 ){
+						if(good2Num==0){
+							if(good1Num-good2Num<=5)
+								return 1;
+							else
+								return -1;
+						}
+						else{
+							if(good1Num/good2Num<=5)
+								return 1;
+							else
+								return -1;
+						}
+					}
+//						return 1;
+					else if (level1-level2==1){
+						if(good1Num==0){
+							if(good2Num-good1Num<=3)
+								return -1;
+							else
+								return 1;
+						}
+						else{
+							if(good2Num/good1Num<=3)
+								return -1;
+							else
+								return 1;
+						}
+					}
+					else if (level1-level2==2){
+						if(good1Num==0){
+							if(good2Num-good1Num<=5)
+								return -1;
+							else
+								return 1;
+						}
+						else{
+							if(good2Num/good1Num<=5)
+								return -1;
+							else
+								return 1;
+						}
+					}
+					else {
+						
+						if (good1Num < good2Num)
+							return 1;
+						else if (good1Num > good2Num)
+							return -1;
+						else
+							return 0;
 					}
 				}
-				else if (level2-level1==2 ){
-					if((good2Num==0&&good1Num-good2Num<=5)||good1Num/good2Num<=5){
-						return 1;
-					}
-					else{
-						return -1;
-					}
-				}
-//					return 1;
-				else if (level1-level2==1){
-					if((good1Num==0&&good2Num-good1Num<=3)||good2Num/good1Num<=3){
-						return -1;
-					}
-					else{
-						return 1;
-					}
-				}
-				else if (level1-level2==2){
-					if((good1Num==0&&good2Num-good1Num<=5)||good2Num/good1Num<=5){
-						return -1;
-					}
-					else{
-						return 1;
-					}
-				}
-				else {
-					
-					if (good1Num < good2Num)
-						return 1;
-					else if (good1Num > good2Num)
-						return -1;
-					else
-						return 0;
-				}
-			}
 
-		});
+			});
+			}
 		System.out.println(acList);
 		model.addAttribute("acList", acList);
+			}
+		else{
+			model.addAttribute("msg", "暂时未有任何人提交");
+		}
 		return "checkAccept";
+		
+		
 	}
 	// 删除任务
 	@RequestMapping("deleteTask")
@@ -412,11 +535,8 @@ public class TaskController {
 			if (is > 0)
 				return "redirect:showMyTask";
 		}
-		return "redirect:showMyTask";
+		return "redirect:/task/release";
 	}
-
-
-
 	// 点赞
 	@RequestMapping("goods")
 	public String Goods(Model model, HttpSession session,
@@ -448,8 +568,6 @@ public class TaskController {
 		}
 
 	}
-
-
 	// 查看任务信息情况，并根据角色等级对翻译作品的排序
 	@RequestMapping("taskDetail")
 	public @ResponseBody ModelAndView taskDetail(HttpServletRequest request)
@@ -460,14 +578,14 @@ public class TaskController {
 		String taskId = request.getParameter("taskId");
 		// 获取发布任务的信息
 		taskId = new String(taskId.getBytes("ISO-8859-1"), "utf-8");
-		System.out.println(taskId);
+		//System.out.println(taskId);
 		ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
 		if(reTask.getTotalNum()==1){
 		// 获取提交的任务
 		acList = acceptTaskService.selectcheckAcceptByTaskId(taskId);
-		System.out.println("排序前：" + acList);
-		
-//		acList = sortTask.sortAccept(acList);
+		//System.out.println("排序前：" + acList);
+		if(acList.size()>1){
+		//		acList = sortTask.sortAccept(acList);
 		Collections.sort(acList, new Comparator() {
 			@Override
 			public int compare(Object o1, Object o2) {
@@ -488,36 +606,61 @@ public class TaskController {
 				int level1 = roleService.getLevelByRoleId(roleId1);
 				int level2 = roleService.getLevelByRoleId(roleId2);
 				if( level2-level1==1){
-					if((good2Num==0&&good1Num-good2Num<=3)||good1Num/good2Num<=3){
-						return 1;
+					if(good2Num==0){
+						if(good1Num-good2Num<=3)
+							return 1;
+						else
+							return -1;
 					}
 					else{
-						return -1;
+						if(good1Num/good2Num<=3)
+							return 1;
+						else
+							return -1;
 					}
+					
 				}
 				else if (level2-level1==2 ){
-					if((good2Num==0&&good1Num-good2Num<=5)||good1Num/good2Num<=5){
-						return 1;
+					if(good2Num==0){
+						if(good1Num-good2Num<=5)
+							return 1;
+						else
+							return -1;
 					}
 					else{
-						return -1;
+						if(good1Num/good2Num<=5)
+							return 1;
+						else
+							return -1;
 					}
 				}
 //					return 1;
 				else if (level1-level2==1){
-					if((good1Num==0&&good2Num-good1Num<=3)||good2Num/good1Num<=3){
-						return -1;
+					if(good1Num==0){
+						if(good2Num-good1Num<=3)
+							return -1;
+						else
+							return 1;
 					}
 					else{
-						return 1;
+						if(good2Num/good1Num<=3)
+							return -1;
+						else
+							return 1;
 					}
 				}
 				else if (level1-level2==2){
-					if((good1Num==0&&good2Num-good1Num<=5)||good2Num/good1Num<=5){
-						return -1;
+					if(good1Num==0){
+						if(good2Num-good1Num<=5)
+							return -1;
+						else
+							return 1;
 					}
 					else{
-						return 1;
+						if(good2Num/good1Num<=5)
+							return -1;
+						else
+							return 1;
 					}
 				}
 				else {
@@ -532,11 +675,17 @@ public class TaskController {
 			}
 
 		});
-		System.out.println("排序后："+acList);
+		}
+		//System.out.println("排序后："+acList);
 		String error = request.getParameter("error");
 		if(error!=null){
 			error = new String(error.getBytes("ISO-8859-1"), "utf-8");
 			mv.addObject("error", error);
+		}
+		String gradeError = request.getParameter("gradeError");
+		if(gradeError!=null){
+			gradeError = new String(gradeError.getBytes("ISO-8859-1"), "utf-8");
+			mv.addObject("gradeError", gradeError);
 		}
 		mv.addObject("acList", acList);
 		mv.addObject("reTask", reTask);
@@ -546,7 +695,7 @@ public class TaskController {
 		else{
 			List<ReceiveTask> reList = new ArrayList<>();
 			String parentId = reTask.getTaskId();
-			System.out.println(parentId);
+			//System.out.println(parentId);
 			reList = retaskService.selectChildTaskByParentTaskId(parentId);
 			System.out.println(reList);
 			mv.addObject("reList", reList);
@@ -555,9 +704,9 @@ public class TaskController {
 			return mv;
 		}
 	}
-
+	//采纳翻译
 	@RequestMapping("adoptTrans")
-	public String adoptTrans(String acceptId) throws IOException{
+	public String adoptTrans(String acceptId) throws Exception{
 		AcceptTask acceptTask = acceptTaskService.selectAccepTaskByATID(acceptId);
 		ReceiveTask receiveTask = retaskService.selectTaskByTaskId(acceptTask.getTaskId());
 		  String targetPath = Constant.DOWLOAD_FILE_PATH+ receiveTask.getTaskName()+"." + Constant.SUFFIX;
@@ -572,11 +721,20 @@ public class TaskController {
           bufferedWriter.append(acceptTask.getSubmitText());
           bufferedWriter.flush();
           bufferedWriter.close();
+          
+          receiveTask.setState(1);
+          retaskService.updateReTaskState(receiveTask);
+          
+          String userId = acceptTask.getUserId();
+          User user = userService.selectUserById(userId);
+          user.setAdoptNum(user.getAdoptNum()+1);
+          userService.UpdateUserByUserId(user);
           return "redirect:/task/release";
 	}
-	
+	//大型翻译采纳
 	@RequestMapping("adoptBigTrans")
-	public String adoptBigTrans(String taskId) throws IOException{
+	public String adoptBigTrans(String taskId) throws Exception{
+
 		List<ReceiveTask> reList = new ArrayList<>();
 		ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
 		reList = retaskService.selectChildTaskByParentTaskId(taskId);
@@ -636,36 +794,61 @@ public class TaskController {
 				int level1 = roleService.getLevelByRoleId(roleId1);
 				int level2 = roleService.getLevelByRoleId(roleId2);
 				if( level2-level1==1){
-					if((good2Num==0&&good1Num-good2Num<=3)||good1Num/good2Num<=3){
-						return 1;
+					if(good2Num==0){
+						if(good1Num-good2Num<=3)
+							return 1;
+						else
+							return -1;
 					}
 					else{
-						return -1;
+						if(good1Num/good2Num<=3)
+							return 1;
+						else
+							return -1;
 					}
+					
 				}
 				else if (level2-level1==2 ){
-					if((good2Num==0&&good1Num-good2Num<=5)||good1Num/good2Num<=5){
-						return 1;
+					if(good2Num==0){
+						if(good1Num-good2Num<=5)
+							return 1;
+						else
+							return -1;
 					}
 					else{
-						return -1;
+						if(good1Num/good2Num<=5)
+							return 1;
+						else
+							return -1;
 					}
 				}
 //					return 1;
 				else if (level1-level2==1){
-					if((good1Num==0&&good2Num-good1Num<=3)||good2Num/good1Num<=3){
-						return -1;
+					if(good1Num==0){
+						if(good2Num-good1Num<=3)
+							return -1;
+						else
+							return 1;
 					}
 					else{
-						return 1;
+						if(good2Num/good1Num<=3)
+							return -1;
+						else
+							return 1;
 					}
 				}
 				else if (level1-level2==2){
-					if((good1Num==0&&good2Num-good1Num<=5)||good2Num/good1Num<=5){
-						return -1;
+					if(good1Num==0){
+						if(good2Num-good1Num<=5)
+							return -1;
+						else
+							return 1;
 					}
 					else{
-						return 1;
+						if(good2Num/good1Num<=5)
+							return -1;
+						else
+							return 1;
 					}
 				}
 				else {
@@ -679,13 +862,58 @@ public class TaskController {
 				}
 			}
 
-		});
+		});;
           bufferedWriter.append(acList.get(0).getSubmitText());
           
 		}
 			bufferedWriter.flush();
           bufferedWriter.close();
+         
+          reTask.setState(1);
+          retaskService.updateReTaskState(reTask);
           return "redirect:/task/release";
+	}
+	//翻译评分
+	@RequestMapping("gradeTask")
+	public String gradeTask(Model model,int score,HttpSession session,HttpServletRequest request){
+		
+		String account = (String) session.getAttribute("account");
+		String userId = userService.getUserIdByAccount(account);
+		User user = userService.selectUserById(userId);
+		String acceptId = request.getParameter("acceptId");
+		AcceptTask acceptTask = acceptTaskService.selectAccepTaskByATID(acceptId);
+		ReceiveTask reTask  = retaskService.selectTaskByTaskId(acceptTask.getTaskId());
+		List<Score> scoreList = acceptTaskService.selectScore(acceptId, userId);
+		if(scoreList.size()>0){
+			model.addAttribute("gradeError", "您已经评论了此翻译");
+		}else{
+			String roleId = roleService.getRoleIdByRolename(user.getRole());
+			int level = roleService.getLevelByRoleId(roleId);
+			System.out.println(user.getUserId());
+			System.out.println(reTask.getPublishId());
+			int totleScore=0;
+			if(user.getUserId().equals(reTask.getPublishId())||level>2)
+			{
+				int preScore = acceptTask.getScore();
+				if(preScore!=0){
+				totleScore = (preScore+score)/2; 
+			}
+			else{
+				totleScore = score;
+			}
+			acceptTaskService.updateScore(acceptId,totleScore);
+			Score grade =new Score();
+			grade.setAcceptId(acceptId);
+			grade.setScore(score);
+			grade.setUserId(userId);
+			acceptTaskService.insertScore(grade);
+		}
+		else{
+			model.addAttribute("gradeError", "您不能参与评论");
+		}
+		}
+		model.addAttribute("taskId", reTask.getTaskId());
+		return "redirect:/task/taskDetail";
 	}
 	// 上传任务
 //	@RequestMapping(value = "uploadTask", method = RequestMethod.POST)

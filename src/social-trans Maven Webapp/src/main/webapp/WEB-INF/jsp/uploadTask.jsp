@@ -12,6 +12,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<title>发布任务</title>
 	<link rel="stylesheet" href="<%=path %>/css/upload.css">
 	<link rel="stylesheet" href="<%=path %>/css/showMyTask.css" type="text/css">
+	
+	<script>
+function a(){
+		var hd=document.getElementById('zf').value;
+		var cot=hd.length;
+		if(cot>140){
+			document.getElementById('le').innerHTML="太多了！我翻译不来。可选择文件上传翻译";
+			return false;
+		}
+		else{
+			document.getElementById('le').innerHTML="你当前输入了"+cot+"字符";
+			return true;
+		}
+	}
+
+</script>
 </head>
 <body>
 	<header>
@@ -26,12 +42,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="tittle">
 			<label>上传任务</label>
 		</div>
-		<form:form id="upload" action="uploadTask" method="post"  enctype="multipart/form-data" commandName="receiveTask">
+		<form id="upload" action="uploadTask" method="post"  enctype="multipart/form-data"  onSubmit="return a()" >
 		
 		<hr>
     	<div>
     		<label>任务名：</label>
-    			<form:input path="taskName"/>
+    			<input type="text" name="taskName">
     	</div>
     	<div>
     		<label>类型：</label>
@@ -42,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	</div>	
     	<div>
     		<label>个人悬赏：</label>
-    			<form:input path="taskMoney"/>
+    			<input type="number" name="taskMoney">
     	</div>			
     	<div>
     		<label>结束时间：</label>
@@ -50,11 +66,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	</div>	
     	<div>
     		<label>任务人数：</label>
-    			<form:input path="totalNum"/>
+    			<input type="number" name="totalNum">
     	</div>	
     	<div>
     		<label>选择文件：</label>
-    			<input type="file"  name="file">
+    			<input type="file"  name="file">${upLoadError}
+    	</div>
+    	<div>
+    		<label></label>
+    		<textarea cols="30" rows="10" id="zf" onkeyup="a()" name="taskText"  placeholder="输入翻译内容"></textarea><br>
+		<span id="le"></span>
     	</div>
     	<div class="button">
     		<input type="submit" value="提交"></input>
@@ -62,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		<a href="<%=path%>/index.jsp">返回主页</a>
     	</div>	
 	
-    	 </form:form>
+    	 </form>
 	</div>
     
   </body>

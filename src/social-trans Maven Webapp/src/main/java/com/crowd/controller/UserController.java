@@ -104,6 +104,7 @@ public class UserController {
 	    @RequestMapping(value="updateUser",method=RequestMethod.GET)
 	    public String UpdateUser1(HttpSession session,Model model)throws Exception{
 	    	String account=(String) session.getAttribute("account");
+	    	if (account != null && account != "") {
 	    	System.out.println(account);
 	    	String userId = userService.getUserIdByAccount(account);
 	    	System.out.println(userId);
@@ -113,6 +114,10 @@ public class UserController {
 	    	System.out.println(hobby);
 	    	model.addAttribute("user", user);
 	    	return "updateUser";
+	    	}else {
+				model.addAttribute("error", "请登陆后查看");
+				return "error";
+			}
 	    }
 	    
 	    @RequestMapping(value="updateUser", method=RequestMethod.POST)
@@ -229,6 +234,7 @@ public class UserController {
 				mList.add(message);
 			}
 		}
+		System.out.println(mList);
 		session.setAttribute("messageNum", mList.size());
 		//创建用户密码Cookie对象
 		System.out.println(isSuccess);
