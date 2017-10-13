@@ -9,10 +9,8 @@ public class ToolUtils {
 	
 	public static void main(String args[]) 
 	{ 
-	Date nowTime=new Date(); 
-	System.out.println(nowTime); 
-	
-	System.out.println(ToolUtils.dateToString(nowTime)); 
+		String text = "dsadsad+ dasdsa!@#$%^&*()_+";
+		System.out.println(ToolUtils.exchange(text)); 
 	} 
 	public static String separator = File.separator;
     /**
@@ -44,6 +42,25 @@ public class ToolUtils {
         formatter = new SimpleDateFormat ("yyyy-MM-dd"); 
         String ctime = formatter.format(time); 
         return ctime; 
-    } 
+    } /*
+//    //\t 水平制表符(\u0009)
+//    注：\n 回车(\u000a)
+//	\t 水平制表符(\u0009)
+//	\s 空格(\u0008) 
+//	\r 换行(\u000d)*/
+    
+    public static String exchange(String str){ 
+    	return str.replaceAll("\\ ","%20")
+    			.replaceAll("\\+","%2B")
+    			.replaceAll("\\/","%2F")
+    			.replaceAll("\\?","%3F")
+    			.replaceAll("\\#","%23")
+    			.replaceAll("\\&","%26")
+    			.replaceAll("\\=","%3D")
+    			.replaceAll("\\r", "%0D")
+    			.replaceAll("\\n", "%0A")
+    			.replaceAll("\\t", "%09")
+    			.replaceAll("\\s", "%08");
+    }
    
 }

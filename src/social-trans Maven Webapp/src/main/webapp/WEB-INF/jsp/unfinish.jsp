@@ -48,11 +48,13 @@
 							name="taskId" value="${item.taskId}" /> <input type="submit"
 							value="提交">
 					</form>
+				
 				</td>
 				
 			</tr>
 		</c:forEach> </tboay>
 	</table>
 	 <div class="errormsg">${acmsg}</div>
+	 	${subError}
 </body>
 </html>

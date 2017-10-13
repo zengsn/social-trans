@@ -28,54 +28,29 @@ import com.crowd.utils.StringUtils;
 
 public class SplitFile {
 
-	public static void main(String[] args) throws IOException {
-		SplitFile sf = new SplitFile();
-//		String filePath1 = "C:\\Users\\Administrator\\Desktop\\测试\\测试.txt";
-		// String filePath2 = "C:\\Users\\Administrator\\Desktop\\测试\\测试2.txt";
-		// String filePath3 = "C:\\Users\\Administrator\\Desktop\\测试\\测试3.txt";
-//		ParentFile parentFile1 = sf.getFileCountByFilePath(filePath1);
-		// ParentFile parentFile2 = sf.getFileCountByFilePath(filePath2);
-		// ParentFile parentFile3 = sf.getFileCountByFilePath(filePath3);
-		// List<String> textList = new ArrayList<>();
-		// textList.add(parentFile1.getLists().toString());
-		// textList.add(parentFile2.getLists().toString());
-		// textList.add(parentFile3.getLists().toString());
-		// String text = sf.combineText(textList);
-		// System.out.println();
-//		String text = "如果我说一直不甘示弱、总以为自己是世界第一富豪的安德鲁·卡内基先生来拜访我，并向我讨教了一个非常严肃的问题，你会不会感到惊讶？事实上，那位伟大的铁匠就是这么做的。两天前，卡内基先生来到我们的基奎特。或许是我笑容可掬的态度，和我们轻松的谈话气氛，熔化了卡内基先生钢铁般的自尊，让他放下架子问我：“约翰，我知道，你领导着一群很能干的人。不过，我不认为他们的才干不可匹敌，但令我疑惑的是，他们似乎无坚不摧，总能轻松击败你们的竞争对手。我想知道，你施了什么魔法让他们有那种精神的，难道是金钱的力量？”我告诉他，金钱的力量当然不可低估，但责任的力量更是巨大。有时，行动并非源于想法，而是源自揽起责任。标准石油公司的人都有负责精神，都知道“我的责任是什么？我做什么可以把事情做得更好？”但我从不高谈阔论责任或义务，我只是通过我的领导方式来创造具有责任感的企业。";
-//		String s[] = text.split("\n");
-//		for (int i = 0; i < s.length; i++) {
-//			System.out.println(s[i]);
-//		}
-//		
-//		  BitSet bs = new BitSet(100);  
-//	        for (int count = 0; count < 99;) {  
-//	            int random = (int) (Math.random() * 100);  
-//	            if (!bs.get(random)) {  
-//	                bs.set(random);  
-//	                count++;  
-//	            }  
-//	        }  
-//	        //输出没有被取出的数字  
-//	        System.out.println(bs.nextClearBit(0));  
-//	        System.out.println();  
-//	        for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {  
-//	            //输出不重复的随机数  
-//	            System.out.print(i + " ");  
-//	        }  
-//	  
-//	    }  
-		// List<String> list = sf.spiltString(parentFile.getLists().toString(),
-		// 3);
-		// Iterator<String> l = list.iterator();
-		// int i=1;
-		// while(l.hasNext()){
-		// System.out.println(i++ + l.next());
-		// }
-		int s[] = sf.randomCommon(0, 31, 30);
-		
-	}
-
+	 public static void main(String[] args) throws IOException {
+	        ArrayList<String> res = new ArrayList<String>();// 段落切分结果
+	        StringBuilder sb = new StringBuilder();// 拼接读取的内容
+	        String temp = null;// 临时变量，存储sb去除空格的内容
+	       // BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\Users\\Administrator\\Desktop\\测试\\测试.txt")));
+	        FileInputStream in = new FileInputStream("C:\\Users\\Administrator\\Desktop\\测试\\测试.txt");
+			// 获取reader,设置编码格式
+			InputStreamReader inputStreamReader = new InputStreamReader(in,
+					Constant.FILE_ENCODING);
+			BufferedReader reader = new BufferedReader(inputStreamReader);
+	        int ch = 0;
+	        
+	        while ((ch = reader.read()) != -1) {
+	                sb.append((char) ch);
+	            }
+	        String text = new String(sb);
+	        text.replaceAll("(?m)^\\s*$"+System.lineSeparator(), "");
+	        text.replaceAll("((\r\n)|\n)[\\s\t ]*(\\1)+", "$1").replaceAll("^((\r\n)|\n)", "");
+	        System.out.print(text);
+	        SplitFile  sf = new SplitFile();
+	        sf.spiltText1(text);
+	    
+	 }
 	String encoding = Constant.FILE_ENCODING;
 
 	// 文章拆分
@@ -95,7 +70,7 @@ public class SplitFile {
 		return textList;
 	}
 
-	public Map<Integer,String> spiltText(String text) {
+	public Map<Integer,String> spiltText1(String text) {
 		HashMap<Integer,String> textMap = new HashMap<Integer, String>();;
 		String s[] = text.split("\n");
 		int num = s.length / Constant.SIZE;
@@ -122,6 +97,40 @@ public class SplitFile {
 //		   System.out.println("第"+key +"段：");
 		   String value = (String)textMap.get(key);
 //		   System.out.println(value);
+		  }
+		return textMap;
+	}
+	
+	public Map<Integer,String> spiltText(String text) {
+		HashMap<Integer,String> textMap = new HashMap<Integer, String>();
+		text.replaceAll("((\r\n)|\n)[\\s\t ]*(\\1)+", "$1").replaceAll("^((\r\n)|\n)", "");
+		String s[] = text.split("\n");
+		
+		 System.out.println(text);
+		int tmp = 0;
+		int i =1;
+			StringBuilder sb = new StringBuilder();
+			for (int j = tmp; j < s.length; j++) {
+				if(new String(sb).length()<140){
+		                	sb.append(s[j]);
+		                	sb.append("\n");
+		                	
+				}
+				 else{
+					 	tmp = ++j;
+						textMap.put(i++, new String(sb));
+						System.out.println(i+new String(sb));
+						sb.delete(0, sb.length());
+				 }
+		}
+		Set set = textMap.keySet();
+		Iterator t = set.iterator();
+		for(Iterator iter = set.iterator(); iter.hasNext();)
+		  {
+		   int key = (int)iter.next();
+		   System.out.println("第"+key +"段：");
+		   String value = (String)textMap.get(key);
+		   System.out.println(value);
 		  }
 		return textMap;
 	}

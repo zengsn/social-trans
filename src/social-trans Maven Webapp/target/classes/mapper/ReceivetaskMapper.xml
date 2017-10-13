@@ -4,8 +4,8 @@
 <mapper namespace="com.crowd.dao.ReceiveTaskDao">
 
 	<insert id="insertTask" parameterType="com.crowd.bean.ReceiveTask">
-        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,totalNum,isChild,taskText,parentId) 
-        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{totalNum},#{isChild},#{taskText},#{parentId});
+        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,totalNum,isChild,taskText,parentId,tranText) 
+        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{totalNum},#{isChild},#{taskText},#{parentId},#{tranText});
     </insert>
     <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
     <!-- 批量添加任务 -->
