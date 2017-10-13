@@ -42,6 +42,16 @@ public class ReceiveTask {
 	 private String taskText;
 	 
 	 private String parentId;
+	 
+	 private String tranText;
+
+	public String getTranText() {
+		return tranText;
+	}
+
+	public void setTranText(String tranText) {
+		this.tranText = tranText;
+	}
 
 	public String getTaskText() {
 		return taskText;

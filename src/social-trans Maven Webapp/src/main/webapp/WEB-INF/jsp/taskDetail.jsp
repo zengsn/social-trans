@@ -71,6 +71,7 @@
 	</div>
 			
 	<div class="list">
+		${gradeError}
 		<c:forEach items="${acList}" var="item" varStatus="re">
 			<div class="section">
 				<img src="<%=path%>/img/bird.jpg" alt="">
@@ -92,7 +93,7 @@
 			<form  method="post" action="<%=path %>/task/gradeTask" onsubmit="return checkNum();"> 
       			<input type="hidden" name="acceptId" value="${item.acceptId}"/>
       			<input type="number" name="score" id="score"/>
-     		 <input type="submit"  value="评分" ></form>${gradeError}
+     		 <input type="submit"  value="评分" ></form>
 			<hr>
 		</c:forEach>
 	</div>
