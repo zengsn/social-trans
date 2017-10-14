@@ -42,6 +42,10 @@
         UPDATE p_task SET state=#{state} WHERE taskId = #{taskId}
     </update>
     
+     <update id="updateSchedule" parameterType="com.crowd.bean.ReceiveTask">
+        UPDATE p_task SET schedule=#{schedule} WHERE taskId = #{taskId}
+    </update>
+    
     <delete id="deleteTaskById" parameterType="String">
     		DELETE FROM p_task WHERE taskId = #{taskId}
     </delete>

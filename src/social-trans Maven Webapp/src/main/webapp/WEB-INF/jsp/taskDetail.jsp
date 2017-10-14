@@ -15,6 +15,21 @@
 <script type="text/javascript" src="<%=path%>/js/taskDetail.js"></script>
 <link rel="stylesheet" href="<%=path%>/css/taskDetail.css">
 <link rel="stylesheet" href="<%=path %>/css/showMyTask.css" type="text/css">
+	<script>
+function check(){
+		var hd=document.getElementById('zf').value;
+		var cot=hd.length;
+		if(cot>140){
+			document.getElementById('le').innerHTML="评论限制140字内";
+			return false;
+		}
+		else{
+			document.getElementById('le').innerHTML="你当前输入了"+cot+"字";
+			return true;
+		}
+	}
+
+</script>
 <style>
 	input[type="submit"]{
 		float:right;
@@ -94,6 +109,28 @@
       			<input type="hidden" name="acceptId" value="${item.acceptId}"/>
       			<input type="number" name="score" id="score"/>
      		 <input type="submit"  value="评分" ></form>
+			<hr>
+			<!--  -->
+			<form  method="post" action="<%=path %>/task/comment" > 
+				<div class="detail">
+				<!-- 在下面的文本框加一个js判断是否输入了内容，并且限制数字为140内，没有内容提示一下，不跳转 -->
+					<textarea cols="40" rows="5" id="zf" onkeyup="check()" name="comment"  placeholder="输入评论内容"></textarea><br>
+					<span id="le"></span>
+				</div>
+				<input type="hidden" name="acceptId" value="${item.acceptId}"/>
+			
+				 <input type="submit"  value="评论" >
+			</form>
+			<c:forEach items="${commentMap[item.acceptId]}" var="map">
+				<ul class="header">
+					<li ><span></span><c:out value="${map.num}" />.</li>
+					<li ><span><c:out value="${map.username}" /></span></li><br>
+					<li ><span class="context"> ${map.comment } </span></li>
+				</ul>
+				<div class="detail">
+					
+				</div>
+			</c:forEach>
 			<hr>
 		</c:forEach>
 	</div>

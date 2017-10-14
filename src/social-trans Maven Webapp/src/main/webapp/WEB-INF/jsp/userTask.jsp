@@ -26,7 +26,7 @@
         </ul>
     </header>
 	<div>
-		<c:forEach items="${reList}" var="item" varStatus="re">
+		<c:forEach items="${pushList}" var="item" varStatus="re">
 			<div class="section">
 				<img src="<%=path%>/img/bird.jpg" alt="">
 				<ul class="header">

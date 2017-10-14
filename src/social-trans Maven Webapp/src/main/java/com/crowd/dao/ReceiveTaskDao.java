@@ -44,6 +44,8 @@ public interface ReceiveTaskDao {
 	     * @return
 	     */
 	    boolean updateReTask(ReceiveTask receiveTask) throws Exception;
+	    
+	    boolean updateSchedule(ReceiveTask receiveTask) throws Exception;
 
 	   // Page selectTaskByUerId(String userId,RowBounds rowBounds)throws Exception;
 	    

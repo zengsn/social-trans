@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,17 +30,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.crowd.bean.AcceptTask;
-import com.crowd.bean.ChildFile;
-import com.crowd.bean.ChildTask;
-import com.crowd.bean.ChildText;
-import com.crowd.bean.FileInfo;
-import com.crowd.bean.Good;
-import com.crowd.bean.Message;
-import com.crowd.bean.ParentFile;
-import com.crowd.bean.ReceiveTask;
-import com.crowd.bean.Score;
-import com.crowd.bean.User;
+import com.crowd.bean.*;
 import com.crowd.service.AcceptTaskService;
 import com.crowd.service.ChildTextService;
 import com.crowd.service.FileService;
@@ -174,40 +165,40 @@ public class TaskController {
 			}
 			// 发送一个HTTP请求获取机器翻译的翻译文本
 			retaskService.insertTask(receiveTask);
-			List<User> userList = userService.selectAllUser();
-			String describe = receiveTask.getDescription();
-			Iterator<User> users = userList.iterator();
-			System.out.println(users);
-			while (users.hasNext()) {
-				User user = users.next();
-				String hobby = user.getHobby();
-				// System.out.println("hobby:"+hobby);
-				// System.out.println("de:"+describe);
-				String historyTrans = user.getHistoryTrans();
-				// System.out.println("his:"+historyTrans);
-				if (historyTrans != null) {
-					if (historyTrans.contains(describe)
-							|| hobby.contains(describe)) {
-						Message message = new Message();
-						message.setTaskId(taskId);
-						message.setUserId(user.getUserId());
-						message.setState(0);
-						message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"
-								+ receiveTask.getTaskName() + "’非常适合你！");
-						System.out.println(message);
-						messageService.insertMessage(message);
-					}
-				} else if (hobby != null && hobby.contains(describe)) {
-					Message message = new Message();
-					message.setTaskId(taskId);
-					message.setUserId(user.getUserId());
-					message.setState(0);
-					message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"
-							+ receiveTask.getTaskName() + "’非常适合你！");
-					System.out.println(message);
-					messageService.insertMessage(message);
-				}
-			}
+//			List<User> userList = userService.selectAllUser();
+//			String describe = receiveTask.getDescription();
+//			Iterator<User> users = userList.iterator();
+//			System.out.println(users);
+//			while (users.hasNext()) {
+//				User user = users.next();
+//				String hobby = user.getHobby();
+//				// System.out.println("hobby:"+hobby);
+//				// System.out.println("de:"+describe);
+//				String historyTrans = user.getHistoryTrans();
+//				// System.out.println("his:"+historyTrans);
+//				if (historyTrans != null) {
+//					if (historyTrans.contains(describe)
+//							|| hobby.contains(describe)) {
+//						Message message = new Message();
+//						message.setTaskId(taskId);
+//						message.setUserId(user.getUserId());
+//						message.setState(0);
+//						message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"
+//								+ receiveTask.getTaskName() + "’非常适合你！");
+//						System.out.println(message);
+//						messageService.insertMessage(message);
+//					}
+//				} else if (hobby != null && hobby.contains(describe)) {
+//					Message message = new Message();
+//					message.setTaskId(taskId);
+//					message.setUserId(user.getUserId());
+//					message.setState(0);
+//					message.setMessage("根据您的兴趣爱好，历史翻译情况。觉得‘"
+//							+ receiveTask.getTaskName() + "’非常适合你！");
+//					System.out.println(message);
+//					messageService.insertMessage(message);
+//				}
+//			}
 			return "redirect:/index.jsp";
 		} else {
 			model.addAttribute("error", "您未登陆 ，请登陆后再发布任务");
@@ -215,62 +206,27 @@ public class TaskController {
 		}
 	}
 
-	// ChildText childText = new ChildText();
-	// childText.setTaskId(taskId);
-	// for(Iterator iter = set.iterator(); iter.hasNext();)
-	// {
-	// int key = (int)iter.next();
-	// childText.setPart(key);
-	// String value = (String)textMap.get(key);
-	// childText.setChildText(value);
-	// childTextService.insertChildText(childText);
-	// }
-	// List<ChildText> childList =
-	// childTextService.selectChildTextByTaskId(taskId);
-	// List<String> textList = spiltFile.spiltString(receiveTask.getTaskText(),
-	// receiveTask.getTotalNum());
-	// Iterator<String> list = textList.iterator();
-	// int i=1;
-	// while(list.hasNext()){
-	// ReceiveTask childReTask = new ReceiveTask();
-	// String childTaskId = UUID.randomUUID().toString();
-	// childReTask.setTaskId(childTaskId);
-	// childReTask.setTaskName(receiveTask.getTaskName()+ "[卷"+ i + "]");
-	// childReTask.setDescription(receiveTask.getDescription());
-	// childReTask.setFinishTime(receiveTask.getFinishTime());
-	// childReTask.setPublisher(receiveTask.getPublisher());
-	// childReTask.setPublishId(receiveTask.getPublishId());
-	// childReTask.setTaskMoney(receiveTask.getTaskMoney());
-	// childReTask.setIsChild(i);
-	// childReTask.setTaskText(list.next());
-	// childReTask.setParentId(receiveTask.getTaskId());
-	// childReTask.setTotalNum(1);
-	// retaskService.insertTask(childReTask);
-	// i++;
-	// }
-
 	// 查看所有接收任务
 	@RequestMapping("getReceiveTaskList")
 	public String getTaskList(Model model) throws IOException {
 		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
 		List<ReceiveTask> reList = new ArrayList<>();
 		System.out.println(lists.size());
-		List<String> text = new ArrayList<>();
+//		List<String> text = new ArrayList<>();
 		if (lists != null && lists.size() > 0) {
 			Iterator<ReceiveTask> ac = lists.iterator();
 			System.out.println(ac);
 			while (ac.hasNext()) {
-
 				ReceiveTask reTask = ac.next();
 				if (reTask.getState() == 0) {
 					if (reTask.getIsChild() == 0) {
 						reList.add(reTask);
-						String taskText = reTask.getTaskText();
-						text.add(taskText);
+//						String taskText = reTask.getTaskText();
+//						text.add(taskText);
 					}
 				}
 			}
-			model.addAttribute("textList", text);
+//			model.addAttribute("textList", text);
 			model.addAttribute("reList", reList);
 			return "taskList";
 		} else {
@@ -290,13 +246,16 @@ public class TaskController {
 			System.out.println(userId);
 			String taskId = request.getParameter("taskId");
 			ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
+			List<AcceptTask> List = acceptTaskService.selectAccpetTaskByTaskId(taskId);
 			AcceptTask acd = acceptTaskService
 					.selectStateByUTID(userId, taskId);
 			List<AcceptTask> acList = acceptTaskService
 					.selectAccpetTaskByuserId(userId);
 			if (acd != null) {
 				model.addAttribute("error", "您已领取了此任务！");
-			} else if (reTask.getParentId() != null&&acList.size() > 0) {
+			}else if(List.size()>=reTask.getTotalNum()){
+				model.addAttribute("error", "此任务已经被领完了");
+			}else if (reTask.getParentId() != null&&acList.size() > 0) {
 					String parentId = reTask.getParentId();
 					System.out.println(parentId);
 					Iterator<AcceptTask> ac = acList.iterator();
@@ -464,7 +423,6 @@ public class TaskController {
 		List<ReceiveTask> reList = new ArrayList<>();
 		List<ReceiveTask> lists = retaskService
 				.selectReceiveTaskByuserId(userId);
-
 		if (lists != null && lists.size() > 0) {
 			Iterator<ReceiveTask> ac = lists.iterator();
 			System.out.println(ac);
@@ -474,6 +432,7 @@ public class TaskController {
 					reList.add(reTask);
 				}
 			}
+
 			model.addAttribute("reList", reList);
 		} else {
 			model.addAttribute("remsg", "暂时未发布任何任务");
@@ -556,9 +515,35 @@ public class TaskController {
 				}
 			}
 		}
+
 		acceptTask.setSubmitText(new String(bs));
 		acceptTask.setIsSubmit(1);
 		acceptTaskService.updateAcceptTask(acceptTask);
+		//更改稿件的完成度
+//		Iterator<ReceiveTask> re = reList.iterator();
+//		while (re.hasNext()) {
+//			ReceiveTask reT = re.next();
+//			List<ReceiveTask> childList = retaskService.selectChildTaskByParentTaskId(reT.getTaskId());
+//			if(childList.size()>0){
+//				int num = 0;
+//				Iterator<ReceiveTask> child = childList.iterator();
+//				while(child.hasNext()){
+//					ReceiveTask ChildTask = child.next();
+//					List<AcceptTask> acL = acceptTaskService.selectcheckAcceptByTaskId(ChildTask.getTaskId());
+//					if(acL.size()>0){
+//						Iterator<AcceptTask> acChild = acL.iterator();
+//						while(acChild.hasNext()){
+//							if(acChild.next().getScore()>=60){
+//								num++;
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			reT.setState((num/childList.size())*100);
+//			}
+//		}
+		
 		User user = userService.selectUserById(userId);
 
 		user.setTransNum(user.getTransNum() + 1);
@@ -736,6 +721,7 @@ public class TaskController {
 		ModelAndView mv = new ModelAndView();
 		List<AcceptTask> acList = new ArrayList<>();
 		List<ReceiveTask> reList = new ArrayList<>();
+		HashMap<String, List<Comment>> commentMap =  new HashMap<>();
 		String taskId = request.getParameter("taskId");
 		// 获取发布任务的信息
 		taskId = new String(taskId.getBytes("ISO-8859-1"), "utf-8");
@@ -837,6 +823,13 @@ public class TaskController {
 
 				});
 			}
+			//查看评论
+			Iterator<AcceptTask> ac =acList.iterator();
+			while(ac.hasNext()){
+				AcceptTask acTask = ac.next();
+				List<Comment> commentList = acceptTaskService.showComment(acTask.getAcceptId());
+				commentMap.put(acTask.getAcceptId(), commentList);
+			}
 			// System.out.println("排序后："+acList);
 			String error = request.getParameter("error");
 			if (error != null) {
@@ -851,10 +844,10 @@ public class TaskController {
 			}
 			mv.addObject("acList", acList);
 			mv.addObject("reTask", reTask);
+			mv.addObject("commentMap", commentMap);
 			mv.setViewName("taskDetail");
 			return mv;
 		} else {
-
 			System.out.println(reList);
 			mv.addObject("reList", reList);
 			// model.addAttribute("reTask", reTask);
@@ -1044,7 +1037,7 @@ public class TaskController {
 	// 翻译评分
 	@RequestMapping("gradeTask")
 	public String gradeTask(Model model, int score, HttpSession session,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws Exception {
 
 		String account = (String) session.getAttribute("account");
 		String userId = userService.getUserIdByAccount(account);
@@ -1076,6 +1069,45 @@ public class TaskController {
 				grade.setScore(score);
 				grade.setUserId(userId);
 				acceptTaskService.insertScore(grade);
+				if(score>=60){
+					reTask.setSchedule(100);
+					retaskService.updateSchedule(reTask);
+				}
+				if(reTask.getParentId()!=null){
+					ReceiveTask parentTask = retaskService.selectTaskByTaskId(reTask.getParentId());
+//				List<ReceiveTask> reList = retaskService.selectChildTaskByParentTaskId(reTask.getParentId());
+//				//更改稿件的完成度
+//				Iterator<ReceiveTask> re = reList.iterator();
+//				while (re.hasNext()) {
+//					ReceiveTask reT = re.next();
+					List<ReceiveTask> childList = retaskService.selectChildTaskByParentTaskId(parentTask.getTaskId());
+					if(childList.size()>0){
+						double num = 0;
+						Iterator<ReceiveTask> child = childList.iterator();
+						while(child.hasNext()){
+							ReceiveTask ChildTask = child.next();
+							List<AcceptTask> acL = acceptTaskService.selectcheckAcceptByTaskId(ChildTask.getTaskId());
+							if(acL.size()>0){
+								Iterator<AcceptTask> acChild = acL.iterator();
+								while(acChild.hasNext()){
+									if(acChild.next().getScore()>=60){
+										num++;
+										break;
+									}
+								}
+							}
+						}
+						System.out.println(num);
+						System.out.println(childList.size());
+						System.out.println(num/childList.size());
+						parentTask.setSchedule((num/childList.size())*100);
+						System.out.println((num/childList.size())*100);
+						retaskService.updateSchedule(parentTask);
+					}
+				}
+				
+					
+				
 			} else {
 				model.addAttribute("gradeError", "您不能参与评论");
 			}
@@ -1083,431 +1115,69 @@ public class TaskController {
 		model.addAttribute("taskId", reTask.getTaskId());
 		return "redirect:/task/taskDetail";
 	}
-	// 上传任务
-	// @RequestMapping(value = "uploadTask", method = RequestMethod.POST)
-	// public String InsertTask(ReceiveTask receiveTask, HttpSession session,
-	// HttpServletRequest request,@RequestParam("file") MultipartFile myfile)
-	// throws IllegalStateException,
-	// IOException {
-	// SplitFile spiltFile = new SplitFile();
-	// String taskId = UUID.randomUUID().toString();
-	// receiveTask.setTaskId(taskId);
-	// String account = (String) session.getAttribute("account");
-	// String publishId = userService.getUserIdByAccount(account);
-	// receiveTask.setPublishId(publishId);
-	// String publisher = userService.selectUserById(publishId).getUsername();
-	// receiveTask.setPublisher(publisher);
-	// byte[] bs= myfile.getBytes();
-	// System.out.println(new String(bs));
-	// receiveTask.setTaskText(new String(bs));
-	// retaskService.insertTask(receiveTask);
-	// return "redirect:/index.jsp";
-	// System.out.println("fileName："+file.getOriginalFilename());
-	// String path="E:/"+new Date().getTime()+file.getOriginalFilename();
-	//
-	// File newFile=new File(path);
-	// //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-	// file.transferTo(newFile);
-	//
-
-	// try {
-	// // 获取解析器
-	// CommonsMultipartResolver multipartResolver = new
-	// CommonsMultipartResolver(
-	// request.getSession().getServletContext());
-	//
-	// // 解析请求
-	// // 检查form中是否有enctype="multipart/form-data"
-	// if (multipartResolver.isMultipart(request)) {
-	// // 将request变成多部分request
-	// MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)
-	// request;
-	// // 附件实体类
-	// List<FileInfo> fileInfos = new ArrayList<FileInfo>();
-	// // 获取multiRequest 中所有的文件名
-	// Iterator<String> iter = multiRequest.getFileNames();
-	// while (iter.hasNext()) {
-	// MultipartFile multipartFile = multiRequest.getFile(iter
-	// .next());
-	// InputStream in = multipartFile.getInputStream();
-	// try {
-	//
-	// if (null != in) {
-	// // 获取附件名
-	//
-	// String fileName = multipartFile
-	// .getOriginalFilename();
-	//
-	//
-	// if (null != fileName && !"".equals(fileName)) {
-	//
-	// FileInfo fileInfo = new FileInfo();
-	// // 附件id
-	// String fileId = UUID.randomUUID().toString();
-	// fileInfo.setFileId(fileId);
-	// receiveTask.setFileId(fileId);
-	// String fileCode = UUID.randomUUID().toString();
-	// fileInfo.setFileCode(fileCode);
-	// receiveTask.setFileCode(fileCode);
-	// // 附件名：带后缀
-	// fileInfo.setFileName(fileName);
-	// // 附件大小
-	// fileInfo.setFileSize(String
-	// .valueOf(multipartFile.getSize()));
-	// // 附件类型
-	// fileInfo.setFileType(fileName
-	// .substring(fileName.lastIndexOf(".") + 1));
-	// // 附件地址
-	// String path = ToolUtils
-	// .getPath(Constant.SOURCE_FILE_PATH)
-	// + separator
-	// + fileInfo.getFileId()
-	// + "." + Constant.SUFFIX;
-	// System.out.println(path);
-	// fileInfo.setFilePath(path);
-	// boolean isSuccess = fileService.insertFile(
-	// fileInfo, in);
-	//
-	// if (isSuccess) {
-	// fileInfos.add(fileInfo);
-	// retaskService.insertTask(receiveTask);
-	// if (receiveTask.getTotalNum() > 1) {
-	// FileInfo file = fileService
-	// .selectFileById(receiveTask
-	// .getFileId());
-	// String parentFilePath = file
-	// .getFilePath();
-	// System.out.println(parentFilePath);
-	// ParentFile parentFile = spiltFile
-	// .getFileCountByFilePath(parentFilePath);
-	// System.out.println(parentFile);
-	// Map<String, Object> map =
-	// spiltFile.sqlitFile(parentFile,receiveTask.getTotalNum());
-	// System.out.println("人数："
-	// + receiveTask.getTotalNum());
-	// List<ChildFile> childList =
-	// spiltFile.sqlitFile1(parentFile,receiveTask.getTotalNum());
-	// List<ChildFile> childList = (List<ChildFile>) map.get("childFileList");
-	// FileInfo childFileInfo = new FileInfo();
-	// Iterator<ChildFile> cl = childList
-	// .iterator();
-
-	// while (cl.hasNext()) {
-	// ChildTask childTask = new ChildTask();
-	// ChildFile childFile = cl.next();
-	// System.out.println(childFile);
-	// childFileInfo.setFileCode(fileCode);
-	// childFileInfo.setFileId(childFile
-	// .getFileId());
-	// childFileInfo.setFilePath(childFile
-	// .getFilePath());
-	// childFileInfo
-	// .setChildFile(childFile
-	// .getSort());
-	// childFileInfo
-	// .setFileName(fileName
-	// + "[卷"
-	// + childFile
-	// .getSort()
-	// + "]");
-	// childFileInfo.setFileType("txt");
-	// boolean isS = fileService
-	// .insertFile(childFileInfo,
-	// in);
-	// if (isS) {
-	// ReceiveTask childReTask = new ReceiveTask();
-	// String childTaskId = UUID
-	// .randomUUID()
-	// .toString();
-	// childReTask
-	// .setTaskId(childTaskId);
-	// childReTask
-	// .setTaskName(receiveTask
-	// .getTaskName()
-	// + "[卷"
-	// + childFile
-	// .getSort()
-	// + "]");
-	// childReTask
-	// .setDescription(receiveTask
-	// .getDescription());
-	// childReTask
-	// .setFileCode(fileCode);
-	// childReTask
-	// .setFileId(childFileInfo
-	// .getFileId());
-	// childReTask
-	// .setFinishTime(receiveTask
-	// .getFinishTime());
-	// childReTask
-	// .setPublisher(receiveTask
-	// .getPublisher());
-	// childReTask
-	// .setPublishId(receiveTask
-	// .getPublishId());
-	// childReTask
-	// .setTaskMoney(receiveTask
-	// .getTaskMoney());
-	// childReTask.setIsChild(1);
-	// retaskService
-	// .insertTask(childReTask);
-	// childTask
-	// .setChildTaskId(childTaskId);
-	// childTask
-	// .setParentTaskId(receiveTask
-	// .getTaskId());
-	// childTask.setPart(childFile
-	// .getSort());
-	// retaskService
-	// .insertChildTask(childTask);
-	// }
-	// }
-	// }
-	// }
-	// }
-	// } else {
-	// mv.addObject("error", "上传的文件不能为空");
-	// return "uploadTask";
-	// }
-	//
-	// } catch (Exception e) {
-	// System.out.println("读取文件时操作由于异常失败");
-	// System.out.println(e.getMessage());
-	// } finally {
-	// if (in != null) {
-	// in.close();
-	// }
-	// }
-	// }
-	// // 检查是否有成功上传文件
-	// if (fileInfos.size() > 0) {
-	// mv.addObject("success", "上传成功");
-	//
-	// } else {
-	// mv.addObject("error", "文件上传失败");
-	// return "uploadTask";
-	// }
-	// } else {
-	// mv.addObject("error", "当前表单不是文件上传表单");
-	// return "uploadTask";
-	// }
-	// } catch (Exception e) {
-	// System.out.println("操作由于异常失败");
-	// e.getMessage();
-	//
-	// }
-	// return "redirect:/index.jsp";
-
-	// }
-	// // 提交任务
-	// @RequestMapping("submitTask")
-	// public String submitTask(Model model, HttpServletRequest request,
-	// HttpSession session) {
-	// String taskId = request.getParameter("taskId");
-	// String userId = userService.getUserIdByAccount((String) session
-	// .getAttribute("account"));
-	// String acceptId = acceptTaskService
-	// .selectAcceptIdByUTID(userId, taskId);
-	// AcceptTask acceptTask = acceptTaskService
-	// .selectAccepTaskByATID(acceptId);
-	//
-	// try {
-	// // 获取解析器
-	// CommonsMultipartResolver multipartResolver = new
-	// CommonsMultipartResolver(
-	// request.getSession().getServletContext());
-	//
-	// // 解析请求
-	// // 检查form中是否有enctype="multipart/form-data"
-	// if (multipartResolver.isMultipart(request)) {
-	// // 将request变成多部分request
-	// MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)
-	// request;
-	// // 附件实体类
-	// List<FileInfo> fileInfos = new ArrayList<FileInfo>();
-	// // 获取multiRequest 中所有的文件名
-	// Iterator<String> iter = multiRequest.getFileNames();
-	// while (iter.hasNext()) {
-	// MultipartFile multipartFile = multiRequest.getFile(iter
-	// .next());
-	// InputStream in = multipartFile.getInputStream();
-	// try {
-	//
-	// if (null != in) {
-	// // 获取附件名
-	// String fileName = multipartFile
-	// .getOriginalFilename();
-	// if (null != fileName && !"".equals(fileName)) {
-	// FileInfo fileInfo = new FileInfo();
-	// // 附件id
-	// String fileId = UUID.randomUUID().toString();
-	// fileInfo.setFileId(fileId);
-	// acceptTask.setSubmitFileId(fileId);
-	// String fileCode = UUID.randomUUID().toString();
-	// fileInfo.setFileCode(fileCode);
-	//
-	// // 附件名：带后缀
-	// fileInfo.setFileName(fileName);
-	// // 附件大小
-	// fileInfo.setFileSize(String
-	// .valueOf(multipartFile.getSize()));
-	// // 附件类型
-	// fileInfo.setFileType(fileName
-	// .substring(fileName.lastIndexOf(".") + 1));
-	// // 附件地址
-	// String path = ToolUtils
-	// .getPath(Constant.SOURCE_FILE_PATH)
-	// + separator + fileInfo.getFileId();
-	// System.out.println(path);
-	// fileInfo.setFilePath(path);
-	// boolean isSuccess = fileService.insertFile(
-	// fileInfo, in);
-	//
-	// if (isSuccess) {
-	// fileInfos.add(fileInfo);
-	// acceptTask.setIsSubmit(1);
-	// acceptTaskService
-	// .updateAcceptTask(acceptTask);
-	// }
-	// }
-	// } else {
-	// model.addAttribute("msg", "上传的文件不能为空");
-	// }
-	//
-	// } catch (Exception e) {
-	// System.out.println("读取文件时操作由于异常失败");
-	// System.out.println(e.getMessage());
-	// } finally {
-	// if (in != null) {
-	// in.close();
-	// }
-	// }
-	// }
-	// // 检查是否有成功上传文件
-	// if (fileInfos.size() > 0) {
-	// model.addAttribute("msg", "任务已提交");
-	// } else {
-	// model.addAttribute("msg", "文件上传失败");
-	// }
-	// } else {
-	// model.addAttribute("msg", "当前表单不是文件上传表单");
-	// }
-	// } catch (Exception e) {
-	// System.out.println("操作由于异常失败");
-	// e.getMessage();
-	//
-	// }
-	// return "unfinish";
-	// }
-
-	// @RequestMapping("checkAccept")
-	// public String checkAccept(String taskId, Model model) throws IOException
-	// {
-	// SplitFile spiltFile = new SplitFile();
-	// SortTask sortTask = new SortTask();
-	// List<ParentFile> fileList = new ArrayList<>();
-	// System.out.println(taskId);
-	// List<AcceptTask> acList = new ArrayList<>();
-	// acList = acceptTaskService.selectcheckAcceptByTaskId(taskId);
-	// acList = sortTask.sortAccept(acList);
-	// System.out.println(acList);
-	// // // acList =
-	// //
-	// acceptTaskService.selectAccpetTaskByTaskId("9bb057ca-f7f3-4f6b-ae56-400ef0c63364");
-	// // Iterator<AcceptTask> ac=acList.iterator();
-	// // while(ac.hasNext()){
-	// // acceptTask = ac.next();
-	// // String level =
-	// // userService.selectUserById(acceptTask.getUserId()).getRoleId();
-	// // if(level == "3"){
-	// // pList.add(acceptTask);
-	// // }
-	// // else if(level =="2"){
-	// // vList.add(acceptTask);
-	// // }
-	// // else{
-	// // cList.add(acceptTask);
-	// // }
-	// // }
-	// // map.put("专家级", pList);
-	// // map.put("超级用户", vList);
-	// // map.put("普通用户", cList);
-	// // model.addAttribute("map", map);
-	// Iterator<AcceptTask> ac = acList.iterator();
-	// System.out.println(ac);
-	// while (ac.hasNext()) {
-	// AcceptTask acTask = ac.next();
-	// String fileId = acTask.getSubmitFileId();
-	// System.out.println(fileId);
-	// FileInfo file = fileService.selectFileById(fileId);
-	// System.out.println(file);
-	// if (file.getFilePath() != null) {
-	// String filePath = file.getFilePath();
-	// System.out.println(filePath);
-	// ParentFile parentFile = spiltFile
-	// .getFileCountByFilePath(filePath);
-	// fileList.add(parentFile);
-	// }
-	// }
-	// System.out.println(fileList.size());
-	// model.addAttribute("file", fileList);
-	// model.addAttribute("acList", acList);
-	// return "checkAccept";
-	// }
-
-	// // 查看任务信息情况，并根据角色等级对翻译作品的排序
-	// @RequestMapping("taskDetail")
-	// public String taskDetail(Model model, HttpServletRequest request)
-	// throws IOException {
-	// SortTask sortTask = new SortTask();
-	// SplitFile spiltFile = new SplitFile();
-	// List<ParentFile> fileList = new ArrayList<>();
-	// List<AcceptTask> acList = new ArrayList<>();
-	// String taskId = request.getParameter("taskId");
-	// // 获取发布任务的信息
-	// taskId = new String(taskId.getBytes("ISO-8859-1"), "utf-8");
-	// System.out.println(taskId);
-	// ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
-	// String fileId = reTask.getFileId();
-	// System.out.println(fileId);
-	// FileInfo file = fileService.selectFileById(fileId);
-	// System.out.println(file);
-	// if (file.getFilePath() != null) {
-	// String filePath = file.getFilePath();
-	// System.out.println(filePath);
-	// ParentFile parentFile = spiltFile.getFileCountByFilePath(filePath);
-	// model.addAttribute("pfile", parentFile);
-	// }
-	// // 获取提交的任务
-	// acList = acceptTaskService.selectcheckAcceptByTaskId(taskId);
-	// System.out.println("排序前：" + acList);
-	// acList = sortTask.sortAccept(acList);
-	// Iterator<AcceptTask> ac = acList.iterator();
-	// System.out.println(ac);
-	// while (ac.hasNext()) {
-	// AcceptTask acTask = ac.next();
-	// String fileId1 = acTask.getSubmitFileId();
-	// System.out.println(fileId1);
-	// FileInfo fileInfo = fileService.selectFileById(fileId1);
-	// System.out.println(fileInfo);
-	// if (fileInfo.getFilePath() != null) {
-	// String filePath = fileInfo.getFilePath();
-	// System.out.println(filePath);
-	// ParentFile parentFile = spiltFile
-	// .getFileCountByFilePath(filePath);
-	// fileList.add(parentFile);
-	// }
-	// }
-	// System.out.println(fileList.size());
-	// model.addAttribute("file", fileList);
-	// model.addAttribute("acList", acList);
-	// model.addAttribute("reTask", reTask);
-	// return "taskDetail";
-	// }
-	//
-	// }
-	//
-
-	// 采纳大型任务
-
+	
+	//任务推送
+	@RequestMapping("pushTask")
+	public String pushTask(Model model,HttpSession session){
+		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
+		List<ReceiveTask> reList = new ArrayList<>();
+		List<ReceiveTask> pushList = new ArrayList<>();
+		System.out.println(lists.size());
+		if (lists != null && lists.size() > 0) {
+			Iterator<ReceiveTask> ac = lists.iterator();
+			System.out.println(ac);
+			while (ac.hasNext()) {
+				ReceiveTask reTask = ac.next();
+				if (reTask.getState() == 0) {
+					if (reTask.getIsChild() == 0) {
+						reList.add(reTask);
+					}
+				}
+			}
+			String account = (String) session.getAttribute("account");
+			String userId = userService.getUserIdByAccount(account);
+			User user = userService.selectUserById(userId);
+			String historyTrans = user.getHistoryTrans();
+			String hobby = user.getHobby();
+			Iterator<ReceiveTask> re = reList.iterator();
+			if(historyTrans != null||hobby != null){
+			while (re.hasNext()) {
+				ReceiveTask retask = re.next();
+				String describe = retask.getDescription();
+			if (historyTrans != null) {
+				if (historyTrans.contains(describe)|| hobby.contains(describe)) {
+					pushList.add(retask);
+				}
+			} else if (hobby != null && hobby.contains(describe)) {
+				pushList.add(retask);
+				}
+			}
+		}else{
+			model.addAttribute("pushList", reList);
+			return "userTask";
+		}
+			model.addAttribute("pushList", pushList);
+			return "userTask";
+		} else {
+			return "redirect:/index.jsp";
+		}
+	}
+	
+	//评论翻译
+	@RequestMapping("comment")
+	public String Comment(Model model,HttpSession session,HttpServletRequest request){
+		String acceptId = request.getParameter("acceptId");
+		AcceptTask acceptTask = acceptTaskService.selectAccepTaskByATID(acceptId);
+		Comment comment = new Comment();
+		String account = (String) session.getAttribute("account");
+		String userId = userService.getUserIdByAccount(account);
+		User user = userService.selectUserById(userId);
+		comment.setUserId(userId);
+		comment.setUsername(user.getUsername());
+		comment.setComment(request.getParameter("comment"));
+		comment.setAcceptId(acceptId);
+		acceptTaskService.userComment(comment);
+		model.addAttribute("taskId", acceptTask.getTaskId());
+		return "redirect:/task/taskDetail";
+	}
 }

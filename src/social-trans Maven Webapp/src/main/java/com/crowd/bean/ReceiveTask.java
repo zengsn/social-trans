@@ -44,6 +44,16 @@ public class ReceiveTask {
 	 private String parentId;
 	 
 	 private String tranText;
+	 
+	 private double schedule;
+
+	public double getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(double schedule) {
+		this.schedule = schedule;
+	}
 
 	public String getTranText() {
 		return tranText;

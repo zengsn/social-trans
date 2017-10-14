@@ -102,4 +102,12 @@
 		insert into p_score(acceptId,userId,score) 
         VALUES (#{acceptId},#{userId},#{score})
 	</insert>
+	
+	<insert id="userComment" parameterType="com.crowd.bean.Comment">
+		insert into p_comment(userId,username,comment,acceptId) 
+        VALUES (#{userId},#{username},#{comment},#{acceptId})
+	</insert>
+	<select id="showComment"  parameterType="String" resultType="com.crowd.bean.Comment">
+        SELECT * FROM p_comment WHERE acceptId = #{acceptId}
+    </select>
 </mapper>
