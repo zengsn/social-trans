@@ -75,7 +75,7 @@ function a(){
     	<div>
     		<label></label>
     		<textarea cols="30" rows="10" id="zf" onkeyup="a()" name="taskText"  placeholder="输入翻译内容"></textarea><br>
-		<span id="le"></span>
+			<span id="le"></span>
     	</div>
     	<div class="button">
     		<input type="submit" value="提交"></input>

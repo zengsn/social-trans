@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.crowd.bean.AcceptTask;
+import com.crowd.bean.Comment;
 import com.crowd.bean.Good;
 import com.crowd.bean.Score;
 
@@ -40,4 +41,9 @@ public interface AcceptTaskDao {
     List<Score> selectScore(@Param("acceptId")String acceptId,@Param("userId")String userId);
     //添加评分到Score表
     int insertScore(Score score);
+    //评论
+    int userComment(Comment comment);
+    //查看评论
+    List<Comment> showComment(@Param("acceptId")String acceptId);
+
 }

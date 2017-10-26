@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.crowd.bean.AcceptTask;
+import com.crowd.bean.Comment;
 import com.crowd.bean.Good;
 import com.crowd.bean.Score;
 import com.crowd.dao.AcceptTaskDao;
@@ -74,5 +75,11 @@ public class AcceptTaskService {
     }
     public int insertScore(Score score){
     	return acceptTaskDao.insertScore(score);
+    }
+    public int userComment(Comment comment){
+    	return acceptTaskDao.userComment(comment);
+    }
+    public List<Comment> showComment(@Param("acceptId")String acceptId){
+    	return acceptTaskDao.showComment(acceptId);
     }
 }

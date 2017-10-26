@@ -29,9 +29,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="sysFeature">
                 <p class="title">任务</p>
                 <ul>
+               		 <li><a href="<%=basePath %>/task/pushTask" target="showTask">用户推送任务</a></li>
                     <li><a href="<%=basePath %>/task/unfinish" target="showTask">未完成任务</a></li>
                     <li><a href="<%=basePath %>/task/finish" target="showTask">已提交任务</a></li>
                     <li><a href="<%=basePath %>/task/release" target="showTask">发布任务</a></li>
+                     
                 </ul>
             </div>
             <div class="norFeature"><a href="<%=basePath %>/user/updateUser" target="showTask">用户资料</a></div>

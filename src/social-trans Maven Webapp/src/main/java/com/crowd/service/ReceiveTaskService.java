@@ -61,25 +61,10 @@ public class ReceiveTaskService {
     public  boolean updateReTaskState(ReceiveTask receiveTask) throws Exception{
     	return receiveTaskDao.updateReTaskState(receiveTask);
     }
-//
-//    /**
-//     * 切割任务
-//     * @param sourceFilePath
-//     * @return
-//     * @throws Exception
-//     */
-//   // public Map<String,Object> splitTask(String fileId,String sourceFilePath,int receivePeopleNum) throws Exception;
-//
-//    /**
-//     * 领取任务，即更新任务
-//     * @param task
-//     * @return
-//     */
-//    public Boolean updateReTask(ReceiveTask task) throws Exception{
-//    	return receiveTaskDao.updateReTask(task);
-//    }
-//
-//    public Page selectTaskByUerId(String userId,RowBounds rowBounds)throws Exception{
-//    	return receiveTaskDao.selectTaskByUerId(userId, rowBounds);
-//    }
+    
+    public boolean updateSchedule(ReceiveTask receiveTask) throws Exception{
+    	return receiveTaskDao.updateSchedule(receiveTask);
+    }
+
+
 }
