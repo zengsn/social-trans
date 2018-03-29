@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.crowd.bean.Message;
 import com.crowd.dao.MessageDao;
 @Service
-public class MessageService {
+public class MessageService implements MessageDao{
 	@Autowired
 	private MessageDao messageDao;
 	public int insertMessage(Message message){
@@ -22,5 +22,9 @@ public class MessageService {
 	
 	public void updateState(@Param("taskId")String taskId,@Param("userId")String userId){
 		 messageDao.updateState(taskId, userId);
+	}
+
+	public void deleteMessageByTaskId(String taskId) {
+		messageDao.deleteMessageByTaskId(taskId);
 	}
 }

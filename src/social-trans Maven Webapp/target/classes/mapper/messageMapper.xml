@@ -50,5 +50,8 @@
        		 UPDATE p_message SET state=1 WHERE userId = #{userId} AND taskId = #{taskId}
     </update>
     
+     <delete id="deleteMessageByTaskId" parameterType="String">
+    		DELETE FROM p_message WHERE taskId = #{taskId}
+    </delete>
     
 </mapper>

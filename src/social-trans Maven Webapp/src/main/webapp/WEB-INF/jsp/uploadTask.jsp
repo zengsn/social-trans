@@ -68,10 +68,12 @@ function a(){
     		<label>任务人数：</label>
     			<input type="number" name="totalNum">
     	</div>	
-    	<div>
-    		<label>选择文件：</label>
-    			<input type="file"  name="file">${upLoadError}
-    	</div>
+	    	<c:if test="${roleLevel >1 }">
+		    	<div>
+		    		<label>选择文件：</label>
+		    			<input type="file"  name="file">${upLoadError}
+		    	</div>
+	    	</c:if>
     	<div>
     		<label></label>
     		<textarea cols="30" rows="10" id="zf" onkeyup="a()" name="taskText"  placeholder="输入翻译内容"></textarea><br>

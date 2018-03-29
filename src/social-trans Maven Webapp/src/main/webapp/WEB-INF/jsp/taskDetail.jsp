@@ -123,8 +123,8 @@ function check(){
 			</form>
 			<c:forEach items="${commentMap[item.acceptId]}" var="map">
 				<ul class="header">
-					<li ><span></span><c:out value="${map.num}" />.</li>
-					<li ><span><c:out value="${map.username}" /></span></li><br>
+					<!--  <li ><span></span><c:out value="${map.num}" />.</li>-->
+					<li ><span><c:out value="${map.username}" /></span>.</li><br>
 					<li ><span class="context"> ${map.comment } </span></li>
 				</ul>
 				<div class="detail">

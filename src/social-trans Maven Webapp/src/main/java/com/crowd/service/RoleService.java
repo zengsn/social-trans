@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.crowd.bean.Role;
 import com.crowd.dao.RoleDao;
 @Service("RoleService")
-public class RoleService {
+public class RoleService implements RoleDao{
 	@Autowired
 	private RoleDao roleDao;
 	
@@ -59,4 +59,10 @@ public class RoleService {
    public int getLevelByRoleId(@Param("roleId")String roleId){
 	   return roleDao.getLevelByRoleId(roleId);
    }
+
+@Override
+public int deletePermissionByRoleId(String roleId) {
+	// TODO Auto-generated method stub
+	return 0;
+}
 }

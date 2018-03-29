@@ -12,7 +12,7 @@ import com.crowd.bean.Good;
 import com.crowd.bean.Score;
 import com.crowd.dao.AcceptTaskDao;
 @Service
-public class AcceptTaskService {
+public class AcceptTaskService implements AcceptTaskDao{
 	@Autowired
 	private AcceptTaskDao acceptTaskDao;
 	

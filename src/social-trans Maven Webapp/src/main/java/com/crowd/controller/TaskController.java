@@ -1,22 +1,17 @@
 package com.crowd.controller;
 
 import java.io.*;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,21 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.crowd.bean.*;
 import com.crowd.service.AcceptTaskService;
-import com.crowd.service.ChildTextService;
-import com.crowd.service.FileService;
 import com.crowd.service.MessageService;
 import com.crowd.service.ReceiveTaskService;
 import com.crowd.service.RoleService;
 import com.crowd.service.UserService;
-import com.crowd.trans.HttpTool;
 import com.crowd.trans.Simicalcu;
-import com.crowd.trans.SortTask;
 import com.crowd.trans.SplitFile;
 import com.crowd.utils.Constant;
 import com.crowd.utils.ToolUtils;
@@ -49,21 +38,17 @@ import com.crowd.utils.ToolUtils;
 @RequestMapping("task")
 public class TaskController {
 
-	private String separator = File.separator;
 	@Autowired
 	private ReceiveTaskService retaskService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private FileService fileService;
 	@Autowired
 	private AcceptTaskService acceptTaskService;
 	@Autowired
 	private RoleService roleService;
 	@Autowired
 	private MessageService messageService;
-	@Autowired
-	private ChildTextService childTextService;
+	
 	String encoding = Constant.FILE_ENCODING;
 
 	/**
@@ -72,8 +57,15 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "uploadTask", method = RequestMethod.GET)
-	public ModelAndView insertTask1(ReceiveTask receiveTask) throws Exception {
+	public ModelAndView insertTask1(ReceiveTask receiveTask,HttpSession session) throws Exception {
 		ModelAndView mv = new ModelAndView();
+		String account = (String) session.getAttribute("account");
+		String publishId = userService.getUserIdByAccount(account);
+		User publisher = userService.selectUserById(publishId);
+		String role = publisher.getRole();
+		String roleId = roleService.getRoleIdByRolename(role);
+		int roleLevel = roleService.getLevelByRoleId(roleId);
+		mv.addObject("roleLevel",roleLevel);
 		mv.setViewName("uploadTask");
 		return mv;
 	}
@@ -563,6 +555,7 @@ public class TaskController {
 	}
 
 	// 查看别人提交的翻译
+	@SuppressWarnings("unchecked")
 	@RequestMapping("checkAccept")
 	public String checkAccept(String taskId, Model model) throws IOException {
 		// SortTask sortTask = new SortTask();
@@ -672,7 +665,7 @@ public class TaskController {
 	public String deleteTask(HttpServletRequest request) {
 		String taskId = request.getParameter("taskId");
 		int isSuccess = retaskService.deleteTaskById(taskId);
-
+		messageService.deleteMessageByTaskId(taskId);
 		if (isSuccess > 0) {
 			int is = acceptTaskService.deleteAcceptTaskById(taskId);
 			if (is > 0)
@@ -714,10 +707,10 @@ public class TaskController {
 	}
 
 	// 查看任务信息情况，并根据角色等级对翻译作品的排序
+	@SuppressWarnings("unchecked")
 	@RequestMapping("taskDetail")
 	public @ResponseBody
 	ModelAndView taskDetail(HttpServletRequest request) throws IOException {
-		SortTask sortTask = new SortTask();
 		ModelAndView mv = new ModelAndView();
 		List<AcceptTask> acList = new ArrayList<>();
 		List<ReceiveTask> reList = new ArrayList<>();
@@ -890,6 +883,7 @@ public class TaskController {
 	}
 
 	// 大型翻译采纳
+	@SuppressWarnings("unchecked")
 	@RequestMapping("adoptBigTrans")
 	public String adoptBigTrans(String taskId) throws Exception {
 

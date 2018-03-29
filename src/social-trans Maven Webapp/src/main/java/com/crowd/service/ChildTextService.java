@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.crowd.bean.ChildText;
 import com.crowd.dao.ChildTextDao;
 @Service
-public class ChildTextService {
+public class ChildTextService implements ChildTextDao{
 	@Autowired
 	private ChildTextDao childTextDao;
 	public int insertChildText(ChildText childText){

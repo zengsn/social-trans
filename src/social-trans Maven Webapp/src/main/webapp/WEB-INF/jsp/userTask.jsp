@@ -46,6 +46,7 @@
 			
 			<hr>
 		</c:forEach>
+		<div style="text-align: center; "><a href="<%=basePath%>/task/getReceiveTaskList" style="color: gray;">查看更多任务</a></div>
 	</div>
 </body>
 </html>

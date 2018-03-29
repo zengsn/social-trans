@@ -2,6 +2,7 @@ package com.crowd.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import com.crowd.bean.ChildTask;
 import com.crowd.bean.ReceiveTask;
 import com.crowd.dao.ReceiveTaskDao;
 @Service
-public class ReceiveTaskService {
+public class ReceiveTaskService implements ReceiveTaskDao{
 	@Autowired
 	private ReceiveTaskDao receiveTaskDao;
 	/**
@@ -65,6 +66,12 @@ public class ReceiveTaskService {
     public boolean updateSchedule(ReceiveTask receiveTask) throws Exception{
     	return receiveTaskDao.updateSchedule(receiveTask);
     }
+	@Override
+	public Map<String, Object> splitTask(String fileId, String sourceFilePath,
+			int receivePeopleNum) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

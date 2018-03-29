@@ -14,4 +14,6 @@ public interface MessageDao {
 	List<Message> selectMessageByUserId(@Param("userId")String userId);
 	
 	void updateState(@Param("taskId")String taskId,@Param("userId")String userId);
+
+	void deleteMessageByTaskId(@Param("taskId")String taskId);
 }

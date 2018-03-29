@@ -118,27 +118,54 @@ ul li a {
 	<script type="text/javascript" src="<%=path%>/js/jquery-1.12.2.min.js"></script>
 	<script type="text/javascript" src="<%=path%>/js/sockjs.min.js"></script>
 	<div class="logo">Social-trans</div>
-	<div class="signin-up">
-		<ul>
-			<li><a href="user/login">登录</a></li>
-			<li><a href="user/register">注册</a></li>
-		</ul>
-	</div>
-	
-	<div class="user">
-		<h3>
-			欢迎您，<span class="accountCookie"><a href="user/userData">${cookie.accountCookie.value }</a></span>
-		</h3>
-		<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
-	</div>
+	 <c:choose>
+		<c:when test="${sessionScope.account != null }">
+			<div class="user">
+				<h3>
+					欢迎您，<span class="accountCookie"><a href="user/userData">${sessionScope.account}</a></span>
+				</h3>
+				<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="signin-up">
+				<ul>
+					<li><a href="user/login">登录</a></li>
+					<li><a href="user/register">注册</a></li>
+				</ul>
+			</div>
+		</c:otherwise>
+	</c:choose>
+<%-- 	<c:if test="${sessionScope.account != '' }">
+		<div class="user">
+			<h3>
+				欢迎您，<span class="accountCookie"><a href="user/userData">${sessionScope.account}</a></span>
+			</h3>
+			<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
+		</div>
+	</c:if>
+	<c:if test="${sessionScope.account == '' }">
+		<div class="signin-up">
+			<ul>
+				<li><a href="user/login">登录</a></li>
+				<li><a href="user/register">注册</a></li>
+			</ul>
+		</div>
+	</c:if> --%>
 	<div class="task">
 		<ul>
 			<li><a href="task/uploadTask">发布任务</a></li>
+	<c:choose>
+		<c:when test="${sessionScope.account != null }">
+			<li><a href="task/pushTask">我要接任务</a></li>
+		</c:when>
+		<c:otherwise>
 			<li><a href="task/getReceiveTaskList">我要接任务</a></li>
-			
+		</c:otherwise>
+	</c:choose>
 		</ul>
 	</div>
-	<script>
+	<%-- <script>
 	var userName = null;
 	function getCookie(accountCookie){
 	var cookieName = accountCookie;
@@ -201,6 +228,6 @@ ul li a {
   });
   
 
-	</script>
+	</script> --%>
 </body>
 </html>

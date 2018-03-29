@@ -207,12 +207,12 @@ public class UserController {
 //			return "redirect:/index.jsp";
 	    }
 	@RequestMapping(value="login",method=RequestMethod.POST)
-	public String Login(String account,String password,HttpServletRequest request,HttpServletResponse response){
-		HttpSession session = request.getSession(); 
+	public String Login(String account,String password,HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		System.out.println(account);
 		boolean isSuccess = userService.Userlogin(account, password);
 		if(isSuccess){
 		Cookie cookieAccount = new Cookie("accountCookie",account);
+		session.setAttribute("account", account);
 		cookieAccount.setMaxAge(3600); //Cookie保存时间
 		cookieAccount.setPath(request.getContextPath());
 		//创建用户密码Cookie对象
