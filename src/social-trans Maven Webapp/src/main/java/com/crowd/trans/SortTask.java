@@ -80,7 +80,7 @@ public class SortTask {
 
 	public List<AcceptTask> sortAccept(List<AcceptTask> acList){
 		// 排序
-		Collections.sort(acList, new Comparator() {
+		Collections.sort(acList, new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
 				AcceptTask actask1 = (AcceptTask) o1;

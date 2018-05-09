@@ -45,5 +45,7 @@ public interface AcceptTaskDao {
     int userComment(Comment comment);
     //查看评论
     List<Comment> showComment(@Param("acceptId")String acceptId);
+    //删除已领取的任务
+	boolean cancelAccept(String acceptId);
 
 }

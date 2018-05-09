@@ -6,6 +6,14 @@ public class Comment {
 	private String comment;
 	private String num;
 	private String acceptId;
+	private String createTime;
+	
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
 	public String getUserId() {
 		return userId;
 	}

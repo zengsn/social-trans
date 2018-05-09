@@ -14,27 +14,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>  
 	<div class="content">
+	<form id="userInfo" action="<%=basePath %>user/updateUser" method="post"  enctype="multipart/form-data">
 		<div class="img">
-			<img class="headImage" src="<%=path %>/img/aaa.PNG" alt=""/>
+		<c:choose>
+			<c:when test="${ empty user.headImage}">
+				<div data-trigger="fileinput" style="width: 200px; height: 150px;">
+					<img class="headImage" src="<%=path %>/img/aaa.PNG" alt=""/>
+					<input type="file" name="headImage" />
+				</div>
+			</c:when>
+			<c:otherwise>
+				<img class="headImage" src="${user.headImage }" alt=""/>
+			</c:otherwise>
+		</c:choose>
 		</div>
 		<div class="line"></div>
 		
 		<div class="personal-info">
 			<h4 class="personal-title">用户信息</h4>
 
-                <form id="userInfo" action="<%=basePath %>user/updateUser" method="post">
+                <tr>
+                <td>
                 <div>
                     <label>用户帐号:</label>
                     <input type="text" value="${user.account}" name="account" disabled/>
                 </div>
-                <div>
-                    <label>密码:</label>
-                    <input type="password" name="password" value="${user.password}" />
-                </div>
+                </td>
+                <td>
                 <div>
                     <label>用户名:</label>
                     <input type="text" name="username" value="${user.username}" />
                 </div>
+                </td>
+                </tr>
                 <div>
                     <label>邮箱:</label>
                     <input type="text" name="email" value="${user.email}"/>

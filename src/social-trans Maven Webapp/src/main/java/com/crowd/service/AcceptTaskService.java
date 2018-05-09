@@ -82,4 +82,9 @@ public class AcceptTaskService implements AcceptTaskDao{
     public List<Comment> showComment(@Param("acceptId")String acceptId){
     	return acceptTaskDao.showComment(acceptId);
     }
+
+	public boolean cancelAccept(String acceptId) {
+		// TODO Auto-generated method stub
+		return acceptTaskDao.cancelAccept(acceptId);
+	}
 }

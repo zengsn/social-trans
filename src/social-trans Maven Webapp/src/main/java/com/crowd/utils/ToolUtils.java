@@ -50,7 +50,8 @@ public class ToolUtils {
 //	\r 换行(\u000d)*/
     
     public static String exchange(String str){ 
-    	return str.replaceAll("\\ ","%20")
+    	String newStr = str.trim();
+    	return newStr.replaceAll("\\ ","%20")
     			.replaceAll("\\+","%2B")
     			.replaceAll("\\/","%2F")
     			.replaceAll("\\?","%3F")
@@ -60,7 +61,11 @@ public class ToolUtils {
     			.replaceAll("\\r", "%0D")
     			.replaceAll("\\n", "%0A")
     			.replaceAll("\\t", "%09")
-    			.replaceAll("\\s", "%08");
+    			.replaceAll("\\s", "%08")
+    			.replaceAll("》", "%e3%80%8b")
+    			.replaceAll("《", "%e3%80%8a")
+    			.replaceAll("？", "%ef%bc%9f");
+    	
     }
    
 }

@@ -100,21 +100,19 @@ public class SplitFile {
 		  }
 		return textMap;
 	}
-	
+	//文件拆分
 	public Map<Integer,String> spiltText(String text) {
 		HashMap<Integer,String> textMap = new HashMap<Integer, String>();
-		text.replaceAll("((\r\n)|\n)[\\s\t ]*(\\1)+", "$1").replaceAll("^((\r\n)|\n)", "");
+		text.replaceAll("((\r\n)|\n)[\\s\t ]*(\\1)+", "$1").replaceAll("^((\r\n)|\n)", ""); 
 		String s[] = text.split("\n");
-		
 		 System.out.println(text);
 		int tmp = 0;
 		int i =1;
 			StringBuilder sb = new StringBuilder();
 			for (int j = tmp; j < s.length; j++) {
-				if(new String(sb).length()<140){
+				if(new String(sb).length()<250){
 		                	sb.append(s[j]);
 		                	sb.append("\n");
-		                	
 				}
 				 else{
 					 	tmp = ++j;
@@ -128,9 +126,7 @@ public class SplitFile {
 		for(Iterator iter = set.iterator(); iter.hasNext();)
 		  {
 		   int key = (int)iter.next();
-		   System.out.println("第"+key +"段：");
 		   String value = (String)textMap.get(key);
-		   System.out.println(value);
 		  }
 		return textMap;
 	}

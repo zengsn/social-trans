@@ -12,6 +12,7 @@
   <properties>  
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  
+    <jackson.version>2.6.0</jackson.version>
   </properties>  
   
   <!--Maven依赖 需要更换可以到http://mvnrepository.com进行查询-->  
@@ -79,6 +80,46 @@
       <version>4.3.5.RELEASE</version>  
     </dependency>  
   
+  <!-- Spring WebSocket -->
+  <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+	<dependency>
+   		 <groupId>org.springframework</groupId>
+   		 <artifactId>spring-websocket</artifactId>
+    	<version>4.3.4.RELEASE</version>
+	</dependency>
+  
+   <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+	<dependency>
+   		 <groupId>org.springframework</groupId>
+   		 <artifactId>spring-messaging</artifactId>
+   		 <version>4.3.4.RELEASE</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket -->
+<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket -->
+	<dependency>
+   		 <groupId>org.apache.tomcat.embed</groupId>
+  		  <artifactId>tomcat-embed-websocket</artifactId>
+   		 <version>8.0.12</version>
+	</dependency>
+
+
+	 <!-- jackson -->
+ <dependency>
+   <groupId>com.fasterxml.jackson.core</groupId>
+   <artifactId>jackson-core</artifactId>
+   <version>${jackson.version}</version>
+ </dependency>
+ <dependency>
+   <groupId>com.fasterxml.jackson.core</groupId>
+   <artifactId>jackson-databind</artifactId>
+   <version>${jackson.version}</version>
+ </dependency>
+ <dependency>
+   <groupId>com.fasterxml.jackson.core</groupId>
+   <artifactId>jackson-annotations</artifactId>
+   <version>${jackson.version}</version>
+ </dependency>
+	
     <!-- mybatis-spring -->  
     <dependency>  
       <groupId>org.mybatis</groupId>  
@@ -160,6 +201,15 @@
       <artifactId>fastjson</artifactId>  
       <version>1.2.23</version>  
     </dependency>  
+   <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+	<dependency>
+   		 <groupId>net.sf.json-lib</groupId>
+   		 <artifactId>json-lib</artifactId>
+   		  <classifier>jdk15</classifier>    
+   		 <version>2.4</version>
+	</dependency>
+
+    
     <dependency>  
       <groupId>xml-apis</groupId>  
       <artifactId>xml-apis</artifactId>  
@@ -229,6 +279,29 @@
 			<artifactId>protostuff-runtime</artifactId>
 			<version>1.0.10</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+		<dependency>
+  	 		 <groupId>commons-httpclient</groupId>
+  	 		 <artifactId>commons-httpclient</artifactId>
+    		<version>3.0.1</version>
+		</dependency>
+		<dependency>
+             <groupId>org.apache.httpcomponents</groupId>
+              <artifactId>httpclient</artifactId>
+              <version>4.5</version>
+          </dependency>
+ 
+          <dependency>
+              <groupId>org.apache.httpcomponents</groupId>
+              <artifactId>httpcore</artifactId>
+             <version>4.4.4</version>
+         </dependency>
+ 
+         <dependency>
+             <groupId>org.apache.httpcomponents</groupId>
+             <artifactId>httpmime</artifactId>
+             <version>4.5</version>
+         </dependency>
 		
   </dependencies>  
   

@@ -104,10 +104,14 @@
 	</insert>
 	
 	<insert id="userComment" parameterType="com.crowd.bean.Comment">
-		insert into p_comment(userId,username,comment,acceptId) 
-        VALUES (#{userId},#{username},#{comment},#{acceptId})
+		insert into p_comment(userId,username,comment,acceptId,createTime) 
+        VALUES (#{userId},#{username},#{comment},#{acceptId},NOW())
 	</insert>
 	<select id="showComment"  parameterType="String" resultType="com.crowd.bean.Comment">
         SELECT * FROM p_comment WHERE acceptId = #{acceptId}
     </select>
+    
+    <delete id="cancelAccept"  parameterType="String">
+    		DELETE FROM p_accept WHERE acceptId = #{acceptId}
+    </delete>
 </mapper>

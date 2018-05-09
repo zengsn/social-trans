@@ -33,12 +33,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 	<div class="main">
 		<div class="signup">
-			<p>SIGN UP</p>
+			<p>注册</p>
 			<form action="" method="post">
-				<input type="text" placeholder="Your account" id="user" name="account"><br/>
-				<input type="password" placeholder="Your password" id="pw" name="password"><br/>
-				<input type="password" placeholder="Confirm your password" id="cpw" ><br/>
-				<input type="submit" value="Sign Up" class="sub" onclick="check()">
+				<input type="text" placeholder="输入您的账号" id="user" name="account"><br/>
+				<input type="password" placeholder="密码" id="pw" name="password"><br/>
+				<input type="password" placeholder="再次输入密码" id="cpw" ><br/>
+				<input type="submit" value="注册" class="sub" onclick="check()">
 			</form>
 		</div>
 	</div>

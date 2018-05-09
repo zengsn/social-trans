@@ -56,6 +56,9 @@ public interface ReceiveTaskDao {
 	    List<ReceiveTask> selectChildTaskByParentTaskId(@Param("parentId")String parentId);
 	    
 	    boolean updateReTaskState(ReceiveTask receiveTask) throws Exception;
-	    
+
+		List<ReceiveTask> getNewsReceiveTaskList();
+
+		List<ReceiveTask> getTaskByDesc(String desc);
 	    
 }

@@ -1,9 +1,11 @@
 package com.crowd.controller;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.crowd.bean.*;
 import com.crowd.service.AcceptTaskService;
 import com.crowd.service.MessageService;
@@ -33,6 +36,8 @@ import com.crowd.trans.Simicalcu;
 import com.crowd.trans.SplitFile;
 import com.crowd.utils.Constant;
 import com.crowd.utils.ToolUtils;
+
+import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("task")
@@ -60,6 +65,7 @@ public class TaskController {
 	public ModelAndView insertTask1(ReceiveTask receiveTask,HttpSession session) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		String account = (String) session.getAttribute("account");
+		if(account!=null) {
 		String publishId = userService.getUserIdByAccount(account);
 		User publisher = userService.selectUserById(publishId);
 		String role = publisher.getRole();
@@ -68,6 +74,11 @@ public class TaskController {
 		mv.addObject("roleLevel",roleLevel);
 		mv.setViewName("uploadTask");
 		return mv;
+		}else {
+			mv.addObject("error", "您未登陆 ，请登陆后再发布任务");
+			mv.setViewName("error");
+			return mv;
+		}
 	}
 
 	// 上传任务
@@ -100,7 +111,7 @@ public class TaskController {
 					// System.out.println(new String(bs));
 					String Text = new String(bs);
 					receiveTask.setTaskText(Text);
-					if (Text.length() > 200) {
+					if (Text.length() > 250) { //判断翻译内容是否大于250
 						HashMap<Integer, String> textMap = (HashMap<Integer, String>) spiltFile
 								.spiltText(Text);
 						Set set = textMap.keySet();
@@ -191,7 +202,7 @@ public class TaskController {
 //					messageService.insertMessage(message);
 //				}
 //			}
-			return "redirect:/index.jsp";
+			return "redirect:/task/toIndex";
 		} else {
 			model.addAttribute("error", "您未登陆 ，请登陆后再发布任务");
 			return "error";
@@ -201,7 +212,8 @@ public class TaskController {
 	// 查看所有接收任务
 	@RequestMapping("getReceiveTaskList")
 	public String getTaskList(Model model) throws IOException {
-		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
+		List<ReceiveTask> lists = retaskService.getNewsReceiveTaskList();
+		
 		List<ReceiveTask> reList = new ArrayList<>();
 		System.out.println(lists.size());
 //		List<String> text = new ArrayList<>();
@@ -218,25 +230,38 @@ public class TaskController {
 					}
 				}
 			}
+			List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+			List<ReceiveTask> newList = new ArrayList<>();
 //			model.addAttribute("textList", text);
+			
+			
+			if(nList != null && nList.size() > 0) {
+				for(int i = 0;i<nList.size();i++) {
+					ReceiveTask re = nList.get(i);
+					if (re.getIsChild() == 0) {
+						newList.add(re);
+					}
+					if(newList.size()>4)
+						break;
+				}
+			}
+			model.addAttribute("newList", newList);
 			model.addAttribute("reList", reList);
 			return "taskList";
 		} else {
-			return "redirect:/index.jsp";
+			return "redirect:/task/toIndex";
 		}
 	}
-
+	
 	// 领取任务
-	@RequestMapping(value = "acceptTask", method = RequestMethod.POST)
-	public String acceptTask(Model model, HttpServletRequest request,
+	@RequestMapping(value = { "/acceptTask" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public String acceptTask(@RequestParam("taskId") String taskId,Model model, HttpServletRequest request,
 			HttpSession session) throws Exception {
-
 		String account = (String) session.getAttribute("account");
-
 		if (account != null && account != "") {
 			String userId = userService.getUserIdByAccount(account);
 			System.out.println(userId);
-			String taskId = request.getParameter("taskId");
 			ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
 			List<AcceptTask> List = acceptTaskService.selectAccpetTaskByTaskId(taskId);
 			AcceptTask acd = acceptTaskService
@@ -244,9 +269,12 @@ public class TaskController {
 			List<AcceptTask> acList = acceptTaskService
 					.selectAccpetTaskByuserId(userId);
 			if (acd != null) {
-				model.addAttribute("error", "您已领取了此任务！");
+				model.addAttribute("ReError", "您已领取了此任务！");
+				return "ReError";
 			}else if(List.size()>=reTask.getTotalNum()){
-				model.addAttribute("error", "此任务已经被领完了");
+				
+				model.addAttribute("Over", "此任务已经被领完了");
+				return "Over";
 			}else if (reTask.getParentId() != null&&acList.size() > 0) {
 					String parentId = reTask.getParentId();
 					System.out.println(parentId);
@@ -262,7 +290,8 @@ public class TaskController {
 					}
 					System.out.println(num);
 					if (num >= 3) {
-						model.addAttribute("error", "此任务最多领取3个，请完成后再领取新的任务！");
+						model.addAttribute("Max", "此任务最多领取3个，请完成后再领取新的任务！");
+						return "Max";
 					}
 					else {
 					 AcceptTask acceptTask = new AcceptTask();
@@ -290,11 +319,11 @@ public class TaskController {
 					 return "success";
 					 } else {
 					 model.addAttribute("error", "领取任务失败，任务已下架");
-					 return "redirect:taskList";
+					 return "error";
 					 }
 					 } else {
 					 model.addAttribute("error", "领取任务失败，任务已下架");
-					 return "redirect:taskList";
+					 return "error";
 					 }
 				}
 
@@ -322,18 +351,16 @@ public class TaskController {
 						return "success";
 					} else {
 						model.addAttribute("error", "领取任务失败，任务已下架");
-						return "redirect:taskList";
+						return "error";
 					}
 				} else {
 					model.addAttribute("error", "领取任务失败，任务已下架");
-					return "redirect:taskList";
+					return "error";
 				}
 			}
-			model.addAttribute("taskId", taskId);
-			return "redirect:/task/taskDetail";
 		} else {
-			model.addAttribute("error", "您未登陆 ，请登陆后再领取任务");
-			return "error";
+			model.addAttribute("login", "您未登陆 ，请登陆后再领取任务");
+			return "login";
 		}
 	}
 
@@ -472,7 +499,7 @@ public class TaskController {
 		 if(result*100>Constant.HIGH_SIMILAR||result*100<Constant.LOW_SIMILAR){
 		 model.addAttribute("subError", "您提交的内容与机器翻译相似度太高或太低！");
 		 System.out.println("return");
-		 return "redirect:/task/unfinish";
+		 return "redirect:/user/toIndex";
 		 }
 		 }
 		// 比较文本内容
@@ -503,7 +530,7 @@ public class TaskController {
 				if (result * 100 > Constant.SIMILAR_CONTEXT) {
 					model.addAttribute("subError", "您提交的内容与其他提交者相似度太高！");
 					System.out.println("return");
-					return "redirect:/task/unfinish";
+					return "redirect:/user/toIndex";
 				}
 			}
 		}
@@ -551,7 +578,7 @@ public class TaskController {
 			user.setHistoryTrans(historyTrans);
 		}
 		userService.UpdateUserByUserId(user);
-		return "redirect:/task/unfinish";
+		return "redirect:/user/toIndex";
 	}
 
 	// 查看别人提交的翻译
@@ -661,19 +688,33 @@ public class TaskController {
 	}
 
 	// 删除任务
-	@RequestMapping("deleteTask")
-	public String deleteTask(HttpServletRequest request) {
-		String taskId = request.getParameter("taskId");
+	@RequestMapping(value = { "/deleteTask" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteTask(@RequestParam("taskId") String taskId,HttpServletRequest request) {
 		int isSuccess = retaskService.deleteTaskById(taskId);
 		messageService.deleteMessageByTaskId(taskId);
 		if (isSuccess > 0) {
-			int is = acceptTaskService.deleteAcceptTaskById(taskId);
-			if (is > 0)
-				return "redirect:showMyTask";
+			acceptTaskService.deleteAcceptTaskById(taskId);
+			return "success";
 		}
-		return "redirect:/task/release";
+		return "false";
 	}
-
+	
+	@RequestMapping(value = { "/cancelAccept" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public String cancelAccept(@RequestParam("taskId") String taskId,
+			HttpServletRequest request,HttpSession session) {
+		String account = (String) session.getAttribute("account");
+		String userId = userService.getUserIdByAccount(account);
+		AcceptTask ac = acceptTaskService.selectStateByUTID(userId, taskId);
+		boolean isSuccess = acceptTaskService.cancelAccept(ac.getAcceptId());
+		if(isSuccess) {
+			return "success";
+		}else {
+			return "false";
+		}
+	}
+	
 	// 点赞
 	@RequestMapping("goods")
 	public String Goods(Model model, HttpSession session,
@@ -826,21 +867,51 @@ public class TaskController {
 			// System.out.println("排序后："+acList);
 			String error = request.getParameter("error");
 			if (error != null) {
-				error = new String(error.getBytes("ISO-8859-1"), "utf-8");
+				System.out.println(error);
+				/*error = new String(error.getBytes("ISO-8859-1"), "utf-8");
+				System.out.println(error);*/
 				mv.addObject("error", error);
 			}
 			String gradeError = request.getParameter("gradeError");
 			if (gradeError != null) {
-				gradeError = new String(gradeError.getBytes("ISO-8859-1"),
-						"utf-8");
+				
 				mv.addObject("gradeError", gradeError);
 			}
+			List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+			List<ReceiveTask> newList = new ArrayList<>();
+//			model.addAttribute("textList", text);
+			
+			
+			if(nList != null && nList.size() > 0) {
+				for(int i = 0;i<nList.size();i++) {
+					ReceiveTask re = nList.get(i);
+					if (re.getIsChild() == 0) {
+						newList.add(re);
+					}
+					if(newList.size()>4)
+						break;
+				}
+			}
+			mv.addObject("newList", newList);
 			mv.addObject("acList", acList);
 			mv.addObject("reTask", reTask);
 			mv.addObject("commentMap", commentMap);
 			mv.setViewName("taskDetail");
 			return mv;
 		} else {
+			List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+			List<ReceiveTask> newList = new ArrayList<>();
+			if(nList != null && nList.size() > 0) {
+				for(int i = 0;i<nList.size();i++) {
+					ReceiveTask re = nList.get(i);
+					if (re.getIsChild() == 0) {
+						newList.add(re);
+					}
+					if(newList.size()>4)
+						break;
+				}
+			}
+			mv.addObject("newList", newList);
 			System.out.println(reList);
 			mv.addObject("reList", reList);
 			// model.addAttribute("reTask", reTask);
@@ -879,7 +950,7 @@ public class TaskController {
 		User user = userService.selectUserById(userId);
 		user.setAdoptNum(user.getAdoptNum() + 1);
 		userService.UpdateUserByUserId(user);
-		return "redirect:/task/release";
+		return "redirect:/user/toIndex";
 	}
 
 	// 大型翻译采纳
@@ -1025,7 +1096,7 @@ public class TaskController {
 
 		reTask.setState(1);
 		retaskService.updateReTaskState(reTask);
-		return "redirect:/task/release";
+		return "redirect:/user/toIndex";
 	}
 
 	// 翻译评分
@@ -1034,6 +1105,7 @@ public class TaskController {
 			HttpServletRequest request) throws Exception {
 
 		String account = (String) session.getAttribute("account");
+		
 		String userId = userService.getUserIdByAccount(account);
 		User user = userService.selectUserById(userId);
 		String acceptId = request.getParameter("acceptId");
@@ -1041,6 +1113,7 @@ public class TaskController {
 				.selectAccepTaskByATID(acceptId);
 		ReceiveTask reTask = retaskService.selectTaskByTaskId(acceptTask
 				.getTaskId());
+		if(account!=null&&account!="") {
 		List<Score> scoreList = acceptTaskService.selectScore(acceptId, userId);
 		if (scoreList.size() > 0) {
 			model.addAttribute("gradeError", "您已经评论了此翻译");
@@ -1106,6 +1179,9 @@ public class TaskController {
 				model.addAttribute("gradeError", "您不能参与评论");
 			}
 		}
+	}else {
+		model.addAttribute("gradeError", "请登陆后在操作！");
+	}
 		model.addAttribute("taskId", reTask.getTaskId());
 		return "redirect:/task/taskDetail";
 	}
@@ -1116,8 +1192,22 @@ public class TaskController {
 		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
 		List<ReceiveTask> reList = new ArrayList<>();
 		List<ReceiveTask> pushList = new ArrayList<>();
+		List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+		List<ReceiveTask> newList = new ArrayList<>();
+		if(nList != null && nList.size() > 0) {
+			for(int i = 0;i<nList.size();i++) {
+				ReceiveTask re = nList.get(i);
+				if (re.getIsChild() == 0) {
+					newList.add(re);
+				}
+				if(newList.size()>4)
+					break;
+			}
+		}
+		model.addAttribute("newList", newList);
+		String account = (String) session.getAttribute("account");
 		System.out.println(lists.size());
-		if (lists != null && lists.size() > 0) {
+		if (lists != null && lists.size() > 0&& account != null && account != "") {
 			Iterator<ReceiveTask> ac = lists.iterator();
 			System.out.println(ac);
 			while (ac.hasNext()) {
@@ -1128,7 +1218,7 @@ public class TaskController {
 					}
 				}
 			}
-			String account = (String) session.getAttribute("account");
+			
 			String userId = userService.getUserIdByAccount(account);
 			User user = userService.selectUserById(userId);
 			String historyTrans = user.getHistoryTrans();
@@ -1147,13 +1237,13 @@ public class TaskController {
 				}
 			}
 		}else{
-			model.addAttribute("pushList", reList);
+			model.addAttribute("pushList", lists);
 			return "userTask";
 		}
 			model.addAttribute("pushList", pushList);
 			return "userTask";
 		} else {
-			return "redirect:/index.jsp";
+			return "redirect:/task/toIndex";
 		}
 	}
 	
@@ -1161,11 +1251,17 @@ public class TaskController {
 	@RequestMapping("comment")
 	public String Comment(Model model,HttpSession session,HttpServletRequest request){
 		String acceptId = request.getParameter("acceptId");
+		System.out.println(acceptId+"acc");
 		AcceptTask acceptTask = acceptTaskService.selectAccepTaskByATID(acceptId);
 		Comment comment = new Comment();
 		String account = (String) session.getAttribute("account");
+		System.out.println(account);
 		String userId = userService.getUserIdByAccount(account);
 		User user = userService.selectUserById(userId);
+		Date day=new Date();    
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		System.out.println(df.format(day));   
+		comment.setCreateTime(df.format(day));
 		comment.setUserId(userId);
 		comment.setUsername(user.getUsername());
 		comment.setComment(request.getParameter("comment"));
@@ -1174,4 +1270,165 @@ public class TaskController {
 		model.addAttribute("taskId", acceptTask.getTaskId());
 		return "redirect:/task/taskDetail";
 	}
+	@RequestMapping("getTaskByDesc")
+	public String getTaskByDesc(Model model,HttpServletRequest request){
+		String desc = request.getParameter("desc");
+		List<ReceiveTask> dList = retaskService.getTaskByDesc(desc);
+		List<ReceiveTask> pushList = new ArrayList<>();
+		if(dList != null && dList.size() > 0) {
+			for(int i = 0;i<dList.size();i++) {
+				ReceiveTask reTask = dList.get(i);
+				if (reTask.getState() == 0) {
+					if (reTask.getIsChild() == 0) {
+						pushList.add(reTask);
+					}
+				}
+			}
+		}
+		List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+		List<ReceiveTask> newList = new ArrayList<>();
+		if(nList != null && nList.size() > 0) {
+			for(int i = 0;i<nList.size()&&i<4;i++) {
+				newList.add(nList.get(i));
+			}
+		}
+		model.addAttribute("newList", newList);
+		model.addAttribute("pushList", pushList);
+		return "userTask";
+	}
+	
+	@RequestMapping("toIndex")
+	public String toIndex(Model model,HttpServletRequest request,HttpSession session) {
+		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
+		List<ReceiveTask> reList = new ArrayList<>();
+		List<ReceiveTask> pushList = new ArrayList<>();
+		List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+		List<ReceiveTask> newList = new ArrayList<>();
+		if(nList != null && nList.size() > 0) {
+			for(int i = 0;i<nList.size();i++) {
+				ReceiveTask rt = nList.get(i);
+				if(rt.getParentId()==null||rt.getParentId()=="")
+					newList.add(rt);
+				if(newList.size()==6)
+					break;
+			}
+		}
+		model.addAttribute("newList", newList);
+		System.out.println(lists.size());
+		String account = (String) session.getAttribute("account");
+		if (lists != null && lists.size() > 0 && account != null && account != "") {
+			Iterator<ReceiveTask> ac = lists.iterator();
+			System.out.println(ac);
+			while (ac.hasNext()) {
+				ReceiveTask reTask = ac.next();
+				if (reTask.getState() == 0) {
+					if (reTask.getIsChild() == 0) {
+						reList.add(reTask);
+					}
+				}
+			}
+			/* if(account!=null&&account!="") { */
+			String userId = userService.getUserIdByAccount(account);
+			User user = userService.selectUserById(userId);
+			String historyTrans = user.getHistoryTrans();
+			String hobby = user.getHobby();
+			Iterator<ReceiveTask> re = reList.iterator();
+			if (historyTrans != null || hobby != null) {
+				while (re.hasNext()) {
+					ReceiveTask retask = re.next();
+					String parent = retask.getParentId();
+					String describe = retask.getDescription();
+					if (historyTrans != null && pushList.size() < 6&&(parent==null||parent=="")) {
+						if (historyTrans.contains(describe) || hobby.contains(describe)) {
+							pushList.add(retask);
+						}
+					} else if (hobby != null && hobby.contains(describe)
+							&& pushList.size() < 6&&(parent==null||parent=="")) {
+						pushList.add(retask);
+					}
+				}
+				model.addAttribute("pushList", pushList);
+			} else {
+				model.addAttribute("pushList", newList);
+			}
+
+		} else {
+			model.addAttribute("pushList", newList);
+		}
+		List<ReceiveTask> hisList = retaskService.getTaskByDesc("历史");
+		List<ReceiveTask> historyList = new ArrayList<>();
+		for(int i =0; i<hisList.size();i++) {
+			ReceiveTask rt = hisList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+			historyList.add(rt);
+			if(historyList.size()==4)
+				break;
+		}
+		List<ReceiveTask> polList = retaskService.getTaskByDesc("政治");
+		List<ReceiveTask> politicalList = new ArrayList<>();
+		for(int i =0;i<polList.size();i++) {
+			ReceiveTask rt = polList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+				politicalList.add(rt);
+			if(politicalList.size()==4)
+				break;
+		}
+		List<ReceiveTask> humList = retaskService.getTaskByDesc("人文");
+		List<ReceiveTask> humanitiesList = new ArrayList<>();
+		for(int i =0; i<humList.size();i++) {
+			ReceiveTask rt = humList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+				humanitiesList.add(rt);
+			if(humanitiesList.size()==4)
+				break;
+		}
+		List<ReceiveTask> busList = retaskService.getTaskByDesc("商业");
+		List<ReceiveTask> businessList = new ArrayList<>();
+		for(int i =0; i<busList.size();i++) {
+			ReceiveTask rt = busList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+				businessList.add(rt);
+			if(businessList.size()==4)
+				break;
+		}
+		List<ReceiveTask> schList = retaskService.getTaskByDesc("校园");
+		List<ReceiveTask> schoolyList = new ArrayList<>();
+		for(int i =0; i<schList.size();i++) {
+			ReceiveTask rt = schList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+				schoolyList.add(rt);
+			if(schoolyList.size()==4)
+				break;
+		}
+		List<ReceiveTask> novList = retaskService.getTaskByDesc("小说");
+		List<ReceiveTask> novelList = new ArrayList<>();
+		for(int i =0; i<novList.size();i++) {
+			ReceiveTask rt = novList.get(i);
+			if(rt.getParentId()==null||rt.getParentId()=="")
+				novelList.add(rt);
+			if(novelList.size()==4)
+				break;
+		}
+		model.addAttribute("novelList", novelList);
+		model.addAttribute("schoolyList", schoolyList);
+		model.addAttribute("businessList", businessList);
+		model.addAttribute("humanitiesList", humanitiesList);
+		model.addAttribute("politicalList", politicalList);
+		model.addAttribute("historyList", historyList);
+		return "index";
+	}
+	
+	@RequestMapping(value = { "/getComment" },produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public Object getComment(HttpServletRequest request){
+		String acceptId = request.getParameter("acceptId");
+		System.out.println(acceptId);
+		List<Comment> commentList = acceptTaskService.showComment(acceptId);
+		System.out.println(commentList.size());
+		System.out.println(JSONArray.fromObject(commentList));
+		return JSONArray.fromObject(commentList);
+		//JSONArray.toJSONString(commentList);
+		//return JSON.toJSON(commentList).toString();
+	}
+	
 }

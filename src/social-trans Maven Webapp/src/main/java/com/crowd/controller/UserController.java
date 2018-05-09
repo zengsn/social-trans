@@ -1,5 +1,6 @@
 package com.crowd.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -19,15 +20,21 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.crowd.bean.AcceptTask;
 import com.crowd.bean.Message;
+import com.crowd.bean.ReceiveTask;
 import com.crowd.bean.Role;
 import com.crowd.bean.User;
+import com.crowd.service.AcceptTaskService;
 import com.crowd.service.MessageService;
+import com.crowd.service.ReceiveTaskService;
 import com.crowd.service.RoleService;
 import com.crowd.service.UserService;
 @Controller  
@@ -40,6 +47,11 @@ public class UserController {
 	    private RoleService roleService;
 	    @Autowired
 		private MessageService messageService;
+	    @Autowired
+		private ReceiveTaskService retaskService;
+		@Autowired
+		private AcceptTaskService acceptTaskService;
+
 //	    @RequestMapping(value="query", method=RequestMethod.POST)
 //	public ModelAndView selectUserById(@RequestParam("userId") String userId) {
 //		User user = new User();
@@ -121,15 +133,10 @@ public class UserController {
 	    }
 	    
 	    @RequestMapping(value="updateUser", method=RequestMethod.POST)
-	    public String UpdateUser(User user, Model model,HttpSession session) throws Exception{
+	    public String UpdateUser(@ModelAttribute("user")User user, Model model,HttpSession session/*,@RequestParam(value = "headImage", required = false) MultipartFile headImage*/) throws Exception{
 		// 验证密码
 		System.out.println(user);
 		
-		if (user.getUsername() == "" || user.getUsername().equals("")) {
-			model.addAttribute("Usernameerror", "用户名不能为空");
-		} else if (user.getPassword() == "" || user.getPassword().equals("")) {
-			model.addAttribute("Passworderror", "用户密码不能为空！");
-		} else {
 			String account = (String) session.getAttribute("account");
 			String userId = userService.getUserIdByAccount(account);
 			user.setUserId(userId);
@@ -139,8 +146,8 @@ public class UserController {
 			} else {
 				model.addAttribute("error", "更新失败");
 			}
-		}
-		return "redirect:updateUser";
+		
+		return "redirect:toIndex";
 	}
 	//查询用户
 //	@RequestMapping("selectUser")
@@ -168,14 +175,14 @@ public class UserController {
 		
 		if(account.equals("")||account==""){
 			model.addAttribute("error", "查询ID不能为空");
-			return "redirect:/index.jsp";
+			return "redirect:/task/toIndex";
 		}
 		else{
 			String userId = userService.getUserIdByAccount(account);
 			User user = userService.selectUserById(userId);
 			if(user==null){
 				model.addAttribute("error", "查询用户不存在");
-				return "redirect:/index.jsp";
+				return "redirect:/task/toIndex";
 			}else{
 				model.addAttribute("user",user);
 				return "Userindex";
@@ -204,7 +211,7 @@ public class UserController {
 //			cookieAccount.setMaxAge(3600); //Cookie保存时间
 //			cookieAccount.setPath(request.getContextPath());
 //			response.addCookie(cookieAccount);
-//			return "redirect:/index.jsp";
+//			return "redirect:/task/toIndex";
 	    }
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	public String Login(String account,String password,HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -224,6 +231,10 @@ public class UserController {
 		response.addCookie(cookiePassword);
 		session.setAttribute("account", account);
 		String userId = userService.getUserIdByAccount(account);
+		User user = userService.selectUserById(userId);
+		session.setAttribute("userId", userId);
+		session.setAttribute("role", user.getRole());
+		session.setAttribute("username",user.getUsername());	
 		System.out.println(userId);
 		List<Message> messageList = messageService.selectMessageByUserId(userId);
 		List<Message> mList = new ArrayList<>();
@@ -239,13 +250,130 @@ public class UserController {
 		//创建用户密码Cookie对象
 		System.out.println(isSuccess);
 		
-			return  "redirect:/index.jsp";
+			return  "redirect:/task/toIndex";
 		}else{
 			return "login";
 		}
 		
 	}
-	
+	//用户主页
+		@RequestMapping("toIndex")
+		public ModelAndView userIndex(HttpSession session,Model model,HttpServletRequest request){
+			ModelAndView mv= new ModelAndView();
+			String account= (String) session.getAttribute("account");
+			String userId = userService.getUserIdByAccount(account);
+			User user = userService.selectUserById(userId);
+			mv.addObject("user", user);
+			List<ReceiveTask> unfinishList = new ArrayList<>();
+			List<ReceiveTask> finishList = new ArrayList<>();
+			List<ReceiveTask> uploadList = new ArrayList<>();
+			List<ReceiveTask> exitList = new ArrayList<>();
+			List<ReceiveTask> pushList = new ArrayList<>();
+			List<ReceiveTask> reList = new ArrayList<>();
+			List<String> taskIdList = acceptTaskService
+					.selectTaskIdByuserId(userId);
+			if (taskIdList.size() != 0) {
+				Iterator<String> ac = taskIdList.iterator();
+				// hasNext是取值取的是当前值.他的运算过程是判断下个是否有值如果有继续.
+				 
+				while (ac.hasNext()) {
+					String taskId = ac.next().toString();
+					System.out.println(taskId);
+					AcceptTask acd = acceptTaskService.selectStateByUTID(userId,
+							taskId);
+					ReceiveTask receiveTask = retaskService.selectTaskByTaskId(taskId);
+					if (acd.getIsSubmit() != 1) {
+						unfinishList.add(receiveTask);
+					}else {
+						finishList.add(receiveTask);
+					}
+					
+				}
+			}
+			List<ReceiveTask> lists = retaskService
+					.selectReceiveTaskByuserId(userId);
+			if (lists != null && lists.size() > 0) {
+				Iterator<ReceiveTask> ac = lists.iterator();
+				System.out.println(ac);
+				while (ac.hasNext()) {
+					ReceiveTask reTask = ac.next();
+					if (reTask.getIsChild() == 0&&reTask.getState()==0) {
+						uploadList.add(reTask);
+					}else if(reTask.getIsChild() == 0&&reTask.getState()==1){
+						exitList.add(reTask);
+					}
+				}
+			}else {
+				model.addAttribute("uploadmsg", "您暂时未发布任何任务");
+			}
+			if (unfinishList.size() == 0) {
+				model.addAttribute("unfinishmsg", "您暂时未接收任何任务!");
+			}
+			if (finishList.size() == 0) {
+				model.addAttribute("finishmsg", "您暂时未提交任何任务!");
+			}
+			List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+			List<ReceiveTask> newList = new ArrayList<>();
+//			model.addAttribute("textList", text);
+			
+			
+			if(nList != null && nList.size() > 0) {
+				for(int i = 0;i<nList.size();i++) {
+					ReceiveTask re = nList.get(i);
+					if (re.getIsChild() == 0) {
+						newList.add(re);
+					}
+					if(newList.size()>4)
+						break;
+				}
+			}
+			if (lists != null && lists.size() > 0 && account != null && account != "") {
+				Iterator<ReceiveTask> ac = lists.iterator();
+				System.out.println(ac);
+				while (ac.hasNext()) {
+					ReceiveTask reTask = ac.next();
+					if (reTask.getState() == 0) {
+						if (reTask.getIsChild() == 0) {
+							reList.add(reTask);
+						}
+					}
+				}
+				String historyTrans = user.getHistoryTrans();
+				String hobby = user.getHobby();
+				Iterator<ReceiveTask> re = reList.iterator();
+				if (historyTrans != null || hobby != null) {
+					while (re.hasNext()) {
+						ReceiveTask retask = re.next();
+						String parent = retask.getParentId();
+						String describe = retask.getDescription();
+						if (historyTrans != null && pushList.size() < 5&&(parent==null||parent=="")) {
+							if (historyTrans.contains(describe) || hobby.contains(describe)) {
+								pushList.add(retask);
+							}
+						} else if (hobby != null && hobby.contains(describe)
+								&& pushList.size() < 5&&(parent==null||parent=="")) {
+							pushList.add(retask);
+						}
+					}
+					model.addAttribute("pushList", pushList);
+				} else {
+					model.addAttribute("pushList", newList);
+				}
+
+			} else {
+				model.addAttribute("pushList", newList);
+			}
+			String subError = (String) request.getParameter("subError");
+			System.out.println(subError);
+			model.addAttribute("subError", subError);
+			model.addAttribute("newList", newList);
+			mv.addObject("uploadList", uploadList);
+			mv.addObject("exitList", exitList);
+			mv.addObject("unfinishList", unfinishList);
+			mv.addObject("finishList", finishList);
+			mv.setViewName("userToIndex");
+			return mv;
+		}
 	
 	
 	

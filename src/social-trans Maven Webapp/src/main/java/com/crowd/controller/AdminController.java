@@ -37,7 +37,7 @@ public class AdminController {
 	  @RequestMapping(value="/",method=RequestMethod.GET)
 	    public ModelAndView admin()throws Exception{
 	    	ModelAndView mv =new ModelAndView();
-	    	mv.setViewName("admin");
+	    	mv.setViewName("/manage/admin");
 	    	return mv;
 	    }
 	  
@@ -47,7 +47,7 @@ public class AdminController {
 		System.out.println(list);
 		if(list.size()>0)
 		model.addAttribute("UserList", list);
-		return "userManage";
+		return "manage/userManage";
 	}
 	
 	@RequestMapping("selectAllRole")
@@ -55,7 +55,7 @@ public class AdminController {
 		List<Role> list = roleService.selectAllRole();
 		if(list.size()>0)
 			model.addAttribute("roleList", list);
-			return "roleManage";
+			return "manage/roleManage";
 	}
 	
 	@RequestMapping("deleteRole")
@@ -92,7 +92,7 @@ public class AdminController {
 		List<ReceiveTask> list = retaskService.getReceiveTaskList();
 		if(list.size()>0)
 			model.addAttribute("taskList", list);
-			return "taskManage";
+			return "manage/taskManage";
 	}
 	
 	@RequestMapping("deleteTask")

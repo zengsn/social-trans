@@ -16,218 +16,409 @@
 <head>
 <meta charset="UTF-8">
 <title>首页</title>
-<style>
-* {
-	padding: 0;
-	margin: 0;
-}
 
-body {
-	background: url(img/userbg.jpg) center center fixed;
-	opacity: .7;
-}
-
-.logo {
-	margin-left: 130px;
-	margin-top: 35px;
-	width: 400px;
-	height: 50px;
-	text-align: center;
-	font-size: 40px;
-	font-weight: 700;
-	text-shadow: 0px -1px 2px #408AC7;
-}
-
-ul {
-	list-style: none;
-}
-
-li {
-	display: inline-block;
-	text-align: center;
-}
-
-ul li a {
-	text-decoration: none;
-}
-
-.signin-up {
-	position: absolute;
-	top: 55px;
-	right: 100px;
-}
-
-.signin-up ul li {
-	margin-left: 20px;
-	width: 100px;
-	height: 30px;
-	line-height: 30px;
-	border-radius: 10px;
-	background: rgba(255, 255, 255, .6);
-}
-
-.signin-up ul li a {
-	color: #434343;
-}
-
-.user {
-	margin: 70px 0 0 283px;
-	width: 400px;
-	height: 80px;
-}
-
-.user h3 {
-	color: #7D7979;
-}
-
-.task {
-	margin-left: 300px;
-	width: 500px;
-	height: 80px;
-}
-
-.task ul li {
-	margin-left: 30px;
-}
-
-.task ul li a {
-	font-size: 20px;
-	font-weight: 500;
-	color: #55C1F0;
-}
-#cancle{
-	text-decoration:none;
-	display:block;
-	position:absolute;
-	right:40px;
-	top:40px;
-	margin-left: 20px;
-	width: 100px;
-	height: 30px;
-	line-height: 30px;
-	border-radius: 10px;
-	background: rgba(255, 255, 255, .6);
-	color: #434343;
-	font-size:1em;
-	text-align:center;
-}
-</style>
-
-</head>
-<body onload="checkCookie()">
-	<script type="text/javascript" src="<%=path%>/js/jquery-1.12.2.min.js"></script>
-	<script type="text/javascript" src="<%=path%>/js/sockjs.min.js"></script>
-	<div class="logo">Social-trans</div>
-	 <c:choose>
-		<c:when test="${sessionScope.account != null }">
-			<div class="user">
-				<h3>
-					欢迎您，<span class="accountCookie"><a href="user/userData">${sessionScope.account}</a></span>
-				</h3>
-				<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="signin-up">
-				<ul>
-					<li><a href="user/login">登录</a></li>
-					<li><a href="user/register">注册</a></li>
-				</ul>
-			</div>
-		</c:otherwise>
-	</c:choose>
-<%-- 	<c:if test="${sessionScope.account != '' }">
-		<div class="user">
-			<h3>
-				欢迎您，<span class="accountCookie"><a href="user/userData">${sessionScope.account}</a></span>
-			</h3>
-			<span class="accountCookie"><a id="cancle" href="user/login">注销</a></span>
-		</div>
-	</c:if>
-	<c:if test="${sessionScope.account == '' }">
-		<div class="signin-up">
-			<ul>
-				<li><a href="user/login">登录</a></li>
-				<li><a href="user/register">注册</a></li>
-			</ul>
-		</div>
-	</c:if> --%>
-	<div class="task">
-		<ul>
-			<li><a href="task/uploadTask">发布任务</a></li>
-	<c:choose>
-		<c:when test="${sessionScope.account != null }">
-			<li><a href="task/pushTask">我要接任务</a></li>
-		</c:when>
-		<c:otherwise>
-			<li><a href="task/getReceiveTaskList">我要接任务</a></li>
-		</c:otherwise>
-	</c:choose>
-		</ul>
-	</div>
-	<%-- <script>
-	var userName = null;
-	function getCookie(accountCookie){
-	var cookieName = accountCookie;
-	var cookies = document.cookie.split(";");
-	for (var i = 0; i < cookies.length; i++) { 
-		var cookie = cookies[i];//得到某下标的cookies数组 
-		if (cookie.substring(0, cookieName.length + 2).trim() == cookieName.trim() + "=") {//如果存在该cookie的话就将cookie的值拿出来 
-			cookieValue = cookie.substring(cookieName.length + 2, cookie.length); 
-			if(cookieValue!=null||cookieValue!=""){
-				userName=cookieValue;
-				console.log(userName);
-				return true;
-			}else{
-				return false;
-			}
-
-		}
-	}
-	}
-		function checkCookie(){
-			if(!getCookie('accountCookie')){
-				var ss = document.querySelector('.user');
-				ss.style.visibility = "hidden";
-			}
-			else{
-				var ss = document.querySelector('.signin-up');
-				ss.style.display = "none";
-			}
-		
-		}
-
-		
+	<script type='text/javascript' src='<%=path%>/js/jquery-1.8.3.min.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/jquery.easing.1.3.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/prettyphoto/jquery.prettyPhoto.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/jflickrfeed.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/jquery.liveSearch.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/jquery.form.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/jquery.validate.min.js'></script>
+	<script type='text/javascript' src='<%=path%>/js/custom.js'></script>
+    <link type="image/x-icon" rel="shortcut icon" href="<%=path%>/images/favicon.png"/>
+    <!-- Style Sheet-->
+    <link rel="stylesheet" href="<%=path%>/css/style.css"  type="text/css"/>
+    <link rel='stylesheet' id='bootstrap-css-css'  href='<%=path%>/css/bootstrap5152.css?ver=1.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='responsive-css-css'  href='<%=path%>/css/responsive5152.css?ver=1.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='pretty-photo-css-css'  href='<%=path%>/js/prettyphoto/prettyPhotoaeb9.css?ver=3.1.4' type='text/css' media='all' />
+    <link rel='stylesheet' id='main-css-css'  href='<%=path%>/css/main5152.css?ver=1.0' type='text/css' media='all' />
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+<body>
+  </head>
+  		 <!-- Start of Header -->
+                <div class="header-wrapper">
+                        <header>
+                                <div class="container">
 
 
+                                        <div class="logo-container">
+                                                <!-- Website Logo -->
+                                                <a href="#"  title="social-trans">
+                                                        <img src="<%=path %>/images/logo.png" alt="social-trans">
+                                                </a>
+                                                <span class="tag-line">翻译与译者社交平台</span>
+                                        </div>
 
-  
-  $(function(){
-    //建立socket连接
-    var sock;
-    if ('WebSocket' in window) {
-      sock = new WebSocket("<%=wsPath%>socketServer");
-      } else if ('MozWebSocket' in window) {
-        sock = new MozWebSocket("<%=wsPath%>socketServer");
-      } else {
-        sock = new SockJS("<%=basePath%>sockjs/socketServer");
-      }
-    sock.onopen = function (e) {
-      console.log(e);
-      };
-      sock.onmessage = function (e) {
-        console.log(e)
-          $("#message").append("<p><font color='red'>"+e.data+"</font>")
-      };
-      sock.onerror = function (e) {
-        console.log(e);
-      };
-      sock.onclose = function (e) {
-        console.log(e);
-      }
-  });
-  
 
-	</script> --%>
+                                        <!-- Start of Main Navigation -->
+                                        <nav class="main-nav">
+                                                <div class="menu-top-menu-container">
+                                                        <ul id="menu-top-menu" class="clearfix">
+                                                                <li class="current-menu-item"><a href="/social-trans">主页</a></li>
+                                                                <li><a href="task/getReceiveTaskList">任务列表</a></li>
+                                                                
+                                                                <li><a href="#">分类</a>
+                                                                        <ul class="sub-menu">
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=历史">历史</a></li>
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=政治">政治</a></li>
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=小说">小说</a></li>
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=商业">商业</a></li>
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=人文">人文</a></li>
+                                                                                <li><a href="<%=basePath%>task/getTaskByDesc?desc=校园">校园</a></li>
+                                                                        </ul>
+                                                                </li>
+                                                                <li><a href="#">More</a>
+                                                                        <ul class="sub-menu">
+                                                                                <li><a href="full-width.html">Full Width</a></li>
+                                                                                <li><a href="elements.html">Elements</a></li>
+                                                                                <li><a href="page.html">Sample Page</a></li>
+                                                                        </ul>
+                                                                </li>
+                                                                <c:choose>
+                                                                <c:when test="${empty sessionScope.account }">
+	                                                                <li><a href="user/login">登录</a></li>
+	                                                                <li><a href="user/register">注册</a></li>
+                                                        		</c:when>
+                                                        		<c:otherwise>
+                                                        			<li><a href="user/userData">${sessionScope.account }</a>
+                                                                        <ul class="sub-menu">
+                                                                                <li><a href="user/userData">用户主页</a></li>
+                                                                                <li><a href="user/login">注销</a></li>
+                                                                        </ul>
+                                                                </li>
+                                                        		</c:otherwise>
+                                                        		</c:choose>
+                                                        </ul>
+                                                </div>
+                                        </nav>
+                                        <!-- End of Main Navigation -->
+
+                                </div>
+                        </header>
+                </div>
+	
+
+                
+                <!-- End of Header -->
+
+                <!-- Start of Search Wrapper -->
+                <div class="search-area-wrapper">
+                        <div class="search-area container">
+                                <h3 class="search-header">Have a Question?</h3>
+                                <p class="search-tag-line">If you have any question you can ask below or enter what you are looking for!</p>
+
+                                <form id="search-form" class="search-form clearfix" method="get" action="#" autocomplete="off">
+                                        <input class="search-term required" type="text" id="s" name="s" placeholder="Type your search terms here" title="* Please enter a search term!" />
+                                        <input class="search-btn" type="submit" value="Search" />
+                                        <div id="search-error-container"></div>
+                                </form>
+                        </div>
+                </div>
+                <!-- End of Search Wrapper -->
+ 				<!-- Start of Page Container -->
+                <div class="page-container">
+                        <div class="container">
+                                <div class="row">
+
+                                        <!-- start of page content -->
+                                        <div class="span8 page-content">
+
+                                                <!-- Basic Home Page Template -->
+                                                <div class="row separator">
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/pushTask">推荐任务</a></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Integrating WordPress with Your Website</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Server &amp; Database">Server &amp; Database</a></span>
+                                                                                <span class="like-count">66</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">WordPress Site Maintenance</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">15</span>
+                                                                        </li>
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Meta Tags in WordPress</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">8</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">WordPress in Your Language</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">6</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Know Your Sources</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">2</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Validating a Website</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">3</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getReceiveTaskList">新发布任务</a></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Integrating WordPress with Your Website</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Server &amp; Database">Server &amp; Database</a></span>
+                                                                                <span class="like-count">66</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Using Javascript</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">18</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">Using Images</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
+                                                                                <span class="like-count">7</span>
+                                                                        </li>
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Using Video</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
+                                                                                <span class="like-count">7</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">WordPress Site Maintenance</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">15</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">WordPress CSS Information and Techniques</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Theme Development">Theme Development</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+                                                </div>
+
+                                                <div class="row home-listing-area">
+                                                        <div class="span8">
+                                                                <h2>分类</h2>
+                                                        </div>
+                                                </div>
+
+                                                <div class="row separator">
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=历史">历史</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">New To WordPress &#8211; Where to Start</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in WordPress for Beginners">WordPress for Beginners</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Introduction to Blogging</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in WordPress for Beginners">WordPress for Beginners</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">First Steps With WordPress</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in WordPress for Beginners">WordPress for Beginners</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Installing WordPress</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in WordPress for Beginners">WordPress for Beginners</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=政治">政治</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">Using Images</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
+                                                                                <span class="like-count">7</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Designing Headers</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Formatting Date and Time</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Developing a Colour Scheme</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                </div>
+
+                                                <div class="row separator">
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=小说">小说</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">WordPress CSS Information and Techniques</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Theme Development">Theme Development</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">Stepping Into Templates</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in Theme Development">Theme Development</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Creating Individual Pages</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Theme Development">Theme Development</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">Uploading Files</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in Theme Development">Theme Development</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                        <section class="span4 articles-list">
+
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=人文">人文</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">WordPress Site Maintenance</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">15</span>
+                                                                        </li>
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Meta Tags in WordPress</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">8</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Know Your Sources</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">2</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Validating a Website</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in Website Dev">Website Dev</a></span>
+                                                                                <span class="like-count">3</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                </div>
+
+                                                <div class="row separator">
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=商业">商业</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Using Video</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
+                                                                                <span class="like-count">7</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Photoblogs and Galleries</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
+                                                                                <span class="like-count">2</span>
+                                                                        </li>
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Plugin Resources</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Managing Plugins</a></h4>
+                                                                                <span class="article-meta">21 Feb, 2013 in <a href="single.html" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+
+                                                        <section class="span4 articles-list">
+                                                                <h3><a href="<%=basePath%>task/getTaskByDesc?desc=校园">校园</a> <span>(4)</span></h3>
+                                                                <ul class="articles">
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Using Javascript</a></h4>
+                                                                                <span class="article-meta">25 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">18</span>
+                                                                        </li>
+                                                                        <li class="article-entry video">
+                                                                                <h4><a href="single.html">Editing Files</a></h4>
+                                                                                <span class="article-meta">24 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">1</span>
+                                                                        </li>
+                                                                        <li class="article-entry standard">
+                                                                                <h4><a href="single.html">Importing Content</a></h4>
+                                                                                <span class="article-meta">23 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">0</span>
+                                                                        </li>
+                                                                        <li class="article-entry image">
+                                                                                <h4><a href="single.html">WordPress in Your Language</a></h4>
+                                                                                <span class="article-meta">22 Feb, 2013 in <a href="single.html" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
+                                                                                <span class="like-count">6</span>
+                                                                        </li>
+                                                                </ul>
+                                                        </section>
+                                                </div>
+
+                                        </div>
+                                        <!-- end of page content -->
+
+
+                                        <!-- start of sidebar -->
+                                        <aside class="span4 page-sidebar">
+
+                                                <section class="widget">
+                                                        <div class="support-widget">
+                                                                <h3 class="title" style="text-align: center;"><a href="<%=basePath %>task/uploadTask" style="color: red;font-size: x-large;font-weight: bolder;;">发布任务</a></h3>
+                                                                <p class="intro" style="text-align: center;color: black;font-size: larger;">Click and publish the task.</p>
+                                                        </div>
+                                                </section>
+
+                                                <section class="widget">
+                                                        <div class="quick-links-widget">
+                                                                <h3 class="title">Links</h3>
+                                                                <ul id="menu-quick-links" class="menu clearfix">
+                                                                        <li><a href="/social-trans">主页</a></li>
+                                                                        <li><a href="<%=basePath %>task/getReceiveTaskList">任务列表</a></li>
+                                                                        <li><a href="<%=basePath %>task/pushTask">推荐任务</a></li>
+                                                                        <li><a href="<%=basePath %>/user/userData">用户中心</a></li>
+                                                                </ul>
+                                                        </div>
+                                                </section>
+
+                                                <section class="widget">
+                                                        <h3 class="title">Tags</h3>
+                                                        <div class="tagcloud">
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=政治" class="btn btn-mini">政治</a>
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=历史" class="btn btn-mini">历史</a>
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=人文" class="btn btn-mini">人文</a>
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=商业" class="btn btn-mini">商业</a>
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=校园" class="btn btn-mini">校园</a>
+                                                                <a href="<%=basePath%>task/getTaskByDesc?desc=小说" class="btn btn-mini">小说</a>
+                                                                
+                                                        </div>
+                                                </section>
+
+                                        </aside>
+                                        <!-- end of sidebar -->
+                                </div>
+                        </div>
+                </div>
+                <!-- End of Page Container -->
+	 <a href="#top" id="scroll-top"></a>
 </body>
 </html>

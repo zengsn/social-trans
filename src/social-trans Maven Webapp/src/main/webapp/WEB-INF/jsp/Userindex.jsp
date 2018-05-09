@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
     <header>
-        <nav><a class= "logo" href="">用户主页</a></nav>
+        <nav><a class= "logo" href="userData">用户主页</a></nav>
         <ul>
       		<li><a href="<%=path%>/index.jsp">Home</a></li>
            <li><a href="<%=basePath%>/message/showMessage">消息(${sessionScope.messageNum })</a></li>

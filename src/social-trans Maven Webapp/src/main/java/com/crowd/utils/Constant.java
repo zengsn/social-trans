@@ -39,9 +39,9 @@ public class Constant {
 	// 根据行数手动设置章节
 	public final static int CHAPTER_LINE = 2;
 	//  与其他用户相似度比较
-	public final static int SIMILAR_CONTEXT = 85;
+	public final static int SIMILAR_CONTEXT = 90;
 	//机器翻译的最高相似度
-	public final static int HIGH_SIMILAR = 80;
+	public final static int HIGH_SIMILAR = 90;
 	//机器翻译最低相似度
 	public final static int LOW_SIMILAR = 50;
 }

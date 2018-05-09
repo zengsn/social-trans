@@ -5,13 +5,12 @@ import org.apache.ibatis.type.Alias;
 public class User {
 		
 		   @Override
-	public String toString() {
-		return "User [roleId=" + roleId + ", headImage=" + headImage
-				+ ", account=" + account + ", userId=" + userId + ", password="
-				+ password + ", username=" + username + ", email=" + email
-				+ ", phoneNumber=" + phoneNumber + ", role=" + role
-				+ ", hobby=" + hobby + "]";
-	}
+		public String toString() {
+			return "User [roleId=" + roleId + ", headImage=" + headImage + ", account=" + account + ", userId=" + userId
+					+ ", password=" + password + ", username=" + username + ", email=" + email + ", phoneNumber="
+					+ phoneNumber + ", role=" + role + ", hobby=" + hobby + ", transNum=" + transNum + ", wordNum="
+					+ wordNum + ", historyTrans=" + historyTrans + ", adoptNum=" + adoptNum + ", img=" + img + "]";
+		}
 
 		   private String roleId;//角色ID
 		   
@@ -71,6 +70,9 @@ public class User {
 		     */
 		    private int adoptNum;
 		    
+		    private String img;
+		    
+			
 			public int getAdoptNum() {
 				return adoptNum;
 			}
@@ -184,14 +186,6 @@ public class User {
 				public void setEmail(String email) {
 					this.email = email;
 				}
-			public User() {
-				super();
-				// TODO Auto-generated constructor stub
-			}
-
-			public User(String username,String password) {
-				super();
-				// TODO Auto-generated constructor stub
-			}
+		
 		  
 }
