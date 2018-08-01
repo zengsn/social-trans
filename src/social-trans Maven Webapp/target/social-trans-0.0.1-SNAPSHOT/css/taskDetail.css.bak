@@ -1,0 +1,124 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+}
+body div{
+	height: ;
+	width: 50%;
+	margin: 3% auto;
+}
+.section{
+	width: 759px;
+	height: 154px;
+	margin: 1% 0 0 0;
+	
+}
+.section img{
+	max-width: 100%;
+	float: left;
+	margin-right: 2%;
+	padding: 1%;
+	background-color: white;
+	border: 1px solid #EAEAEA;
+}
+.header{
+	display: block;
+	width: 80%;
+	margin-left: 20%;
+}
+.header li{
+	list-style: none;
+	display: inline-block;
+	margin-top: 1%;
+}
+
+.taskName{
+	width: 60%;
+}
+.taskName a{
+	color: black;
+	font-weight: bold; 
+	text-decoration: none;
+}
+.taskName a:hover{
+	color: #960303;
+}
+.reward{
+	width: 10%;
+	font-size: 0.8em;
+	color: #845105;
+	display: inline-block;
+}
+.reward:before{
+	content: url(gold.jpg);
+}
+.number{
+
+	float: right;
+	margin-right: 2%;
+}
+.number span{
+	font-size: 0.8em;
+	color: #025E18;
+} 
+
+.number a{
+	text-decoration: none;
+	color: red;
+	font-size: 0.8em;
+}
+
+
+.detail a{
+	text-decoration: none;
+	color: #666666;
+}
+.detail a:hover{
+	color: blue;
+	text-decoration: underline;
+}
+.footer{
+	display: block;
+	margin-left: 20%;
+}
+.footer li{
+	display: inline-block;
+}
+.tab span{
+	color: #777777;
+	font-size: 0.8em;
+}
+.tab a{
+	text-decoration: none;
+	font-size: 0.8em;
+	color: #666666;
+}
+.tab a:hover{
+	text-decoration: underline;
+	color: red;
+}
+.time{
+	float: right;
+	color: #666666;
+	font-size: 0.8em;
+	margin-right: 2%;
+	margin-top: 1%;
+}
+hr{
+	width: 759px;
+	color: #666666;
+
+}
+
+body{
+	background-image: url(2.jpg);
+	background-repeat: round;
+	background-attachment: fixed;
+}
+body div{
+	background-color: white;
+}

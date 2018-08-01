@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.crowd.dao.AcceptTaskDao">
+	<insert id="insertAcceptTask" parameterType="com.crowd.bean.AcceptTask">
+		insert into p_accept(AcceptId,userId,Accepter,taskId) 
+        VALUES (#{acceptId},#{userId},#{accepter},#{taskId})
+	</insert>
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <select id="selectAccpetTaskByuserId" parameterType="String" resultType="com.crowd.bean.AcceptTask">
+        SELECT * FROM p_accept WHERE userId = #{userId}
+    </select>
+    
+    <select id="selectTaskIdByuserId" parameterType="String" resultType="String" >
+        SELECT taskId FROM p_accept WHERE userId = #{userId}
+    </select>
+    
+    <select id="selectAcceptIdByUTID"  resultType="String" >
+        SELECT acceptId FROM p_accept WHERE userId = #{userId} AND taskId = #{taskId}
+    </select>
+    
+     <select id="selectAccepTaskByATID"  resultType="com.crowd.bean.AcceptTask" >
+        SELECT * FROM p_accept WHERE acceptId = #{acceptId}
+    </select>
+    
+    <select id="selectStateByUTID"  resultType="com.crowd.bean.AcceptTask" >
+        SELECT * FROM p_accept WHERE userId = #{userId} AND taskId = #{taskId}
+    </select>
+    
+    <update id="updateAcceptTask" parameterType="com.crowd.bean.AcceptTask">
+       		 update p_accept
+        <trim prefix="SET" suffixOverrides=",">
+
+			<if test="isSubmit != null and isSubmit != ''">
+               `isSubmit` = #{isSubmit},
+            </if>
+            
+            <if test="submitText !='' and submitText !=null">
+                `submitText` = #{submitText},
+            </if>
+ 
+        </trim>
+        where AcceptId=#{acceptId}
+    </update>
+    
+     <delete id="deleteAcceptTaskById" parameterType="String">
+    		DELETE FROM p_accept WHERE taskId = #{taskId}
+    </delete>
+    
+    <select id="selectAccpetTaskByTaskId" parameterType="String" resultType="com.crowd.bean.AcceptTask">
+        SELECT * FROM p_accept WHERE taskId = #{taskId}
+    </select>
+    <select id="selectcheckAcceptByTaskId" parameterType="String" resultType="com.crowd.bean.AcceptTask">
+        SELECT * FROM p_accept WHERE taskId = #{taskId} AND isSubmit = 1 
+    </select>
+    
+     <select id="isGoods"  resultType="com.crowd.bean.Good">
+        SELECT * FROM p_goods WHERE acceptId = #{acceptId} AND userId = #{userId}
+    </select>
+    
+    <delete id="deleteGoods">
+    		DELETE FROM p_goods WHERE acceptId = #{acceptId} AND userId = #{userId}
+    </delete>
+    
+    <insert id="addGoods" >
+        insert into p_goods(acceptId,userId) 
+        VALUES (#{acceptId},#{userId});
+    </insert>
+    
+    
+    <update id="updateGoods" >
+       		 update p_accept
+        <trim prefix="SET" suffixOverrides=",">
+
+			<if test="acceptId != null and acceptId != ''">
+               `acceptId` = #{acceptId},
+            </if>
+            
+            <if test="goods !='' and goods !=null">
+                `goods` = #{goods},
+            </if>
+ 
+        </trim>
+        where AcceptId=#{acceptId}
+    </update>
+    
+    <update id="updateScore" >
+       		 update p_accept
+        <trim prefix="SET" suffixOverrides=",">
+
+            <if test="score !='' and score !=null">
+                `score` = #{score},
+            </if>
+ 
+        </trim>
+        where AcceptId=#{acceptId}
+    </update>
+     <select id="selectScore"  resultType="com.crowd.bean.Score">
+        SELECT * FROM p_score WHERE acceptId = #{acceptId} AND userId = #{userId}
+    </select>
+    <insert id="insertScore" parameterType="com.crowd.bean.Score">
+		insert into p_score(acceptId,userId,score) 
+        VALUES (#{acceptId},#{userId},#{score})
+	</insert>
+	
+	<insert id="userComment" parameterType="com.crowd.bean.Comment">
+		insert into p_comment(userId,username,comment,acceptId,createTime) 
+        VALUES (#{userId},#{username},#{comment},#{acceptId},NOW())
+	</insert>
+	<select id="showComment"  parameterType="String" resultType="com.crowd.bean.Comment">
+        SELECT * FROM p_comment WHERE acceptId = #{acceptId}
+    </select>
+    
+    <delete id="cancelAccept"  parameterType="String">
+    		DELETE FROM p_accept WHERE acceptId = #{acceptId}
+    </delete>
+</mapper>

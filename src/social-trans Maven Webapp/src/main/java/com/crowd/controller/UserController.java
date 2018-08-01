@@ -1,11 +1,7 @@
 package com.crowd.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -14,30 +10,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
+import com.crowd.bean.*;
+import com.crowd.utils.GetOpenIdFromWX;
+import com.crowd.utils.RedisUtils;
+import com.crowd.utils.ResultUtil;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.crowd.bean.AcceptTask;
-import com.crowd.bean.Message;
-import com.crowd.bean.ReceiveTask;
-import com.crowd.bean.Role;
-import com.crowd.bean.User;
 import com.crowd.service.AcceptTaskService;
 import com.crowd.service.MessageService;
 import com.crowd.service.ReceiveTaskService;
 import com.crowd.service.RoleService;
 import com.crowd.service.UserService;
-@Controller  
+import redis.clients.jedis.Jedis;
+
+@Controller
 @RequestMapping(value = "user")  
 public class UserController {
 	
@@ -374,7 +368,108 @@ public class UserController {
 			mv.setViewName("userToIndex");
 			return mv;
 		}
-	
-	
+
+	/**
+	 * 处理来自小程序的登陆请求
+	 * @author ZhengWeizhi
+	 * @time  2018年5月5日 下午4:00:03
+	 *prijectName social-trans Maven Webapp
+	 * @param code
+	 * @return
+	 */
+	@RequestMapping("loginFromMiniprogram")
+	@ResponseBody
+	public Map<String, String> loginFromMiniprogram(@RequestParam (value="code",required=false)String code){
+		System.out.println("处理小程序登陆请求1:"+code);
+		GetOpenIdFromWX getOpenIdFromWX=new GetOpenIdFromWX();
+		net.sf.json.JSONObject result=getOpenIdFromWX.getOpenIdAndSessionkeyFromWX(code);
+		System.out.println("result:"+result);
+		String openId=result.getString("openid");
+		String sessionKey=result.getString("session_key");
+		//System.out.println("openid:"+openId);
+		//userSessionKey返回给前端
+		String userSessionKey=UUID.randomUUID().toString();
+		Jedis jedis= RedisUtils.getJedis();
+		jedis.set(userSessionKey,openId);
+		RedisUtils.returnResource(jedis);
+		System.out.println("openId:"+jedis.get(userSessionKey));
+		//以openid为用户id判断用户是否存在,若不存在，以openid为用户id并随即生成账号密码新建用户
+		if(userService.selectUserById(openId) == null){
+			User user=new User();
+			user.setUserId(openId);
+			String username=UUID.randomUUID().toString();
+			user.setUsername(username.substring(6));
+			user.setAccount(UUID.randomUUID().toString());
+			user.setPassword(UUID.randomUUID().toString());
+			user.setHobby("政治,小说,商业,人文,历史，地理");
+			userService.insertUser(user);
+		}
+		System.out.println("sessionKey:"+userSessionKey);
+		Map<String, String> userSessionMap = new HashMap<String, String>();
+		userSessionMap.put("sessionKey", userSessionKey);
+		return userSessionMap;
+	}
+
+	/**
+	 * 小程序端修改用户信息
+	 * @author ZhengWeizhi
+	 * @time  2018年5月15日 下午1:44:09
+	 *
+	 * @param session
+	 * @param account
+	 * @param password
+	 * @param hobby
+	 * @param phone
+	 * @param email
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "updateUserFromMiniprogram", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<Object> UpdateUserFromMiniprogram(@RequestParam(value="session")String session,
+													@RequestParam(value="account",required = false)String account, @RequestParam(value="password",required = false)String password,
+													@RequestParam(value="hobby",required = false)String hobby, @RequestParam(value="phone",required = false)String phone,
+													@RequestParam(value ="email",required = false)String email)
+			throws Exception {
+		System.out.println("session"+session);
+		ResultUtil resultUtil=new ResultUtil();
+		Result<Object>  result=new Result<Object>();
+		Jedis jedis=RedisUtils.getJedis();
+		String userId= jedis.get(session);
+		System.out.println("userID:"+userId);
+		RedisUtils.returnResource(jedis);
+		User user = userService.selectUserById(userId);
+		System.out.println("账号："+account+"爱好："+hobby+"密码："+password+"手机："+phone);
+		//System.out.println("账号："+user.getAccount()+"爱好："+user.getHobby()+"密码："+user.getPassword()+"手机："+user.getPhoneNumber());
+		if(account!=null){
+			user.setAccount(account);
+			System.out.println("账号："+user.getAccount());
+		}
+		if(password!=null){
+			user.setPassword(password);
+			System.out.println("密码："+user.getPassword());
+		}
+		if(hobby!=null){
+			user.setHobby(hobby);
+			System.out.println("hobby："+user.getHobby());
+		}
+		if(phone!=null){
+			user.setPhoneNumber(phone);
+			System.out.println("phone："+user.getPhoneNumber());
+		}
+		if(email!=null){
+			user.setEmail(email);
+		}
+		int isSuccess = userService.UpdateUserByUserId(user);
+
+
+		if (isSuccess > 0) {
+			resultUtil.success(result);
+		} else {
+			resultUtil.error(result, false, "修改用户信息失败",1000);
+		}
+		//userService.UpdateUserByUserId(user);
+		return result;
+	}
 	
 }

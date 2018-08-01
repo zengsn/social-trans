@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.crowd.dao.FileDao">
+
+    <insert id="insertFile" parameterType="com.crowd.bean.FileInfo">
+        insert into p_file(fileCode,fileId,fileName,fileType,fileSize,filePath,childFile,createTime) VALUES (#{fileCode},#{fileId},#{fileName},#{fileType},#{fileSize},#{filePath},#{childFile},NOW());
+    </insert>
+     <!-- 批量添加任务 -->
+    <insert id="insertFileBatch" parameterType="java.util.List">
+        insert p_file(fileCode,fileId,fileName,fileType,filePath,createTime,childFile)
+        values
+        <foreach collection="list" item="item"  separator="," >
+            (#{item.fileCode},#{item.fileId},#{item.fileName},#{item.fileType},#{item.filePath},NOW(),#{item.childFile})
+        </foreach>
+    </insert>
+    
+    <select id="selectFileById" parameterType="String" resultType="com.crowd.bean.FileInfo">
+        SELECT * FROM p_file WHERE fileId = #{fileId}
+    </select>
+ </mapper>

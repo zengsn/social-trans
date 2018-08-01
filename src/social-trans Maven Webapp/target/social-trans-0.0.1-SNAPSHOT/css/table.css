@@ -1,0 +1,48 @@
+.errormsg {
+    width: 200px;
+    margin: 30px auto;
+    font-size: 1.5em;
+    color: #341442;
+}
+
+table {
+    margin: 30px auto;
+    min-width: 600px;
+    border-collapse: collapse;
+    border-bottom: 2px solid #D9D0DD;
+}
+
+thead, tr {
+    border-top: 2px solid #D9D0DD;
+}
+
+th {
+    background: #E6E3E8;
+}
+
+td, th {
+    padding: 8px 12px;
+    font-size: 0.875em;
+    font-family: Verdana;
+    color: #341442;
+}
+
+tr:nth-child(even) {
+    background: #E6E3E8;
+}
+
+tr:nth-child(odd) {
+    background: #FFF;
+}
+input[type="submit"]{
+    border: none;
+    padding: 3px 8px;
+    color: #FFF;
+    background-color: #74667A;
+    border-radius: 1em;
+    cursor: pointer;
+}
+input[type="file"]{
+	width:200px;
+	margin-left:20px;
+}

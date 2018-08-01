@@ -75,6 +75,8 @@ public class ReceiveTaskService implements ReceiveTaskDao{
 	public List<ReceiveTask> getNewsReceiveTaskList() {
 		return receiveTaskDao.getNewsReceiveTaskList(); 
 	}
+
+
 	public List<ReceiveTask> getTaskByDesc(String desc) {
 		// TODO Auto-generated method stub
 		return receiveTaskDao.getTaskByDesc(desc);

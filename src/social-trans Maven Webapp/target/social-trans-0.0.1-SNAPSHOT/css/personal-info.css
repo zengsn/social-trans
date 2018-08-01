@@ -1,0 +1,101 @@
+*{
+	margin: 0;
+	padding: 0;
+
+}
+html,body{
+	height: 100%;
+	background-image: url(/social-trans/img/userinfo.png);
+	background-repeat: repeat;
+}
+.content{
+	height: 100%;
+	margin-top: 3%;
+}
+.content .img{
+	float: left;
+	margin-left: 10%;
+	margin-top: 3%;
+	width: 250px;
+	height: 250px;
+}
+.content .img .headImage{
+	border: 3px solid #BFC1C1;
+	width: 100%;
+	border-radius: 8em;
+	margin-bottom: 10%;
+}
+.content .img p{
+	font-size: 0.875em;
+}
+.line{
+	float: left;
+	width: 4px;
+	height: 80%;
+	background-color: #BFC1C1;
+	margin: 0 5%;
+}
+.content .personal-info{
+	float: left;
+	margin-top: 3%;
+}
+.content .personal-info h4{
+	display: block;
+	font-style: italic;
+	color: #7F8281;
+	margin-bottom: 8%;
+}
+#userInfo div{
+	margin-bottom: 8%;
+}
+#userInfo div label{
+	display: inline-block;
+	text-align: justify;
+	font-size: 0.7em;
+	font-weight: bold;
+	color: #4D4B51;
+	width: 100px;
+	margin-right: 30px;
+}
+#userInfo div input[type="text"]{
+	background-color: inherit;
+	border-width: 0 0 1px 0;
+	border-color: #4D4B51;
+	width: 400px;
+	height: 27px;
+}
+#userInfo div input[type="password"]{
+	background-color: inherit;
+	border-width: 0 0 1px 0;
+	border-color: #4D4B51;
+	width: 400px;
+	height: 27px;
+}
+input[type="checkbox"]{
+	width: auto;
+	height: 25px;
+	border: 1px solid #999;
+	margin: 0 15px;
+	padding: 0;
+	vertical-align: middle;
+}
+#userInfo div span{
+	display: inline-block;
+	margin: 0 5px;
+	font-size: 0.7em;
+	color: #4D4B51;;
+}
+.personal-info .button{
+	float: right;
+} 
+input[type="submit"]{
+	background-image: url(/social-trans/img/button1.jpg);
+	background-repeat: repeat-x;
+	padding: 5px 10px;
+	border: 0;
+	border-radius: 8px;
+}
+#userInfo div input:hover{
+	border-radius: 2em;
+	border: 1px solid #1B32FC;
+}

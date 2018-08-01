@@ -285,16 +285,12 @@
   	 		 <artifactId>commons-httpclient</artifactId>
     		<version>3.0.1</version>
 		</dependency>
-		<dependency>
-             <groupId>org.apache.httpcomponents</groupId>
-              <artifactId>httpclient</artifactId>
-              <version>4.5</version>
-          </dependency>
+
  
           <dependency>
               <groupId>org.apache.httpcomponents</groupId>
               <artifactId>httpcore</artifactId>
-             <version>4.4.4</version>
+             <version>4.4.6</version>
          </dependency>
  
          <dependency>
@@ -302,7 +298,20 @@
              <artifactId>httpmime</artifactId>
              <version>4.5</version>
          </dependency>
-		
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+          <version>4.5.3</version>
+      </dependency>
+      <dependency>
+          <groupId>redis.clients</groupId>
+          <artifactId>jedis</artifactId>
+          <version>2.9.0</version>
+      </dependency>
+
+
+
+
   </dependencies>  
   
   <!--项目编译及其构建-->  
@@ -327,7 +336,11 @@
       </plugin>  
       <plugin>  
         <groupId>org.apache.maven.plugins</groupId>  
-        <artifactId>maven-compiler-plugin</artifactId>  
+        <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+              <source>1.7</source>
+              <target>1.7</target>
+          </configuration>
       </plugin>  
       <plugin>  
         <groupId>org.apache.felix</groupId>  

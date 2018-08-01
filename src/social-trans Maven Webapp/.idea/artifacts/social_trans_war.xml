@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="social-trans:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="social-trans-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="social-trans:war exploded" />
+    </root>
+  </artifact>
+</component>

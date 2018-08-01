@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.crowd.dao.ReceiveTaskDao">
+
+	<insert id="insertTask" parameterType="com.crowd.bean.ReceiveTask">
+        insert into p_task(taskId,taskName,description,publisher,publishId,startTime,finishTime,isReceive,taskMoney,totalNum,isChild,taskText,parentId,tranText) 
+        VALUES (#{taskId},#{taskName},#{description},#{publisher},#{publishId},NOW(),#{finishTime},#{isReceive},#{taskMoney},#{totalNum},#{isChild},#{taskText},#{parentId},#{tranText});
+    </insert>
+    <!-- 模板 慎用 会导致没有where 项时 查出全部数据，要用的话要在业务逻辑中增加查询验证标准-->
+    <!-- 批量添加任务 -->
+   <!-- <insert id="insertTaskBatch" parameterType="java.util.List">
+        insert p_task(taskId,taskName,describe,publisher,publishId,startTime,finishTime,isReceive,taskMoney,receiveNum)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.taskId},#{item.isReceive},#{item.submitter},#{item.submitterId},#{item.fileId},#{item.chilefileId},#{item.taskMoney})
+        </foreach>
+    </insert>
+     --> 
+    
+    <select id="getReceiveTaskList" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where state = 0;
+    </select>
+    
+    <select id="getNewsReceiveTaskList" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where state = 0 order by startTime DESC;
+    </select>
+    
+    <select id="selectTaskByTaskId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where taskId = #{taskId}
+    </select>
+    
+    <select id="selectChildTaskByParentTaskId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where parentId = #{parentId}
+    </select>
+ 
+  	<select id="selectReceiveTaskByuserId" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task WHERE publishId = #{userId}
+    </select>
+ 
+    <update id="updateReTask" parameterType="com.crowd.bean.ReceiveTask">
+        UPDATE p_task SET isReceive = #{isReceive},receiveNum = #{receiveNum} WHERE taskId = #{taskId}
+    </update>
+    
+    <update id="updateReTaskState" parameterType="com.crowd.bean.ReceiveTask">
+        UPDATE p_task SET state=#{state} WHERE taskId = #{taskId}
+    </update>
+    
+     <update id="updateSchedule" parameterType="com.crowd.bean.ReceiveTask">
+        UPDATE p_task SET schedule=#{schedule} WHERE taskId = #{taskId}
+    </update>
+    
+    <delete id="deleteTaskById" parameterType="String">
+    		DELETE FROM p_task WHERE taskId = #{taskId}
+    </delete>
+    
+   <insert id="insertChildTask" parameterType="com.crowd.bean.ChildTask">
+        insert into p_childtask(parentTaskId,childTaskId,part) 
+        VALUES (#{parentTaskId},#{childTaskId},#{part});
+    </insert>
+    
+     <select id="getTaskByDesc" parameterType="String" resultType="com.crowd.bean.ReceiveTask">
+        SELECT * FROM p_task where description = #{description} order by startTime DESC;
+    </select>
+
+</mapper>

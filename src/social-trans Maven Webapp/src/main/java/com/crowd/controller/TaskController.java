@@ -2,19 +2,15 @@ package com.crowd.controller;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.crowd.baidutrans.TransApi;
+import com.crowd.utils.RedisUtils;
+import com.crowd.utils.ResultUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +34,7 @@ import com.crowd.utils.Constant;
 import com.crowd.utils.ToolUtils;
 
 import net.sf.json.JSONArray;
+import redis.clients.jedis.Jedis;
 
 @Controller
 @RequestMapping("task")
@@ -1189,10 +1186,10 @@ public class TaskController {
 	//任务推送
 	@RequestMapping("pushTask")
 	public String pushTask(Model model,HttpSession session){
-		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
+		List<ReceiveTask> lists = retaskService.getReceiveTaskList();  //这是未按照时间排序的全部任务列表
 		List<ReceiveTask> reList = new ArrayList<>();
 		List<ReceiveTask> pushList = new ArrayList<>();
-		List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();
+		List<ReceiveTask> nList = retaskService.getNewsReceiveTaskList();  //这是俺=按时间排序的全部任务
 		List<ReceiveTask> newList = new ArrayList<>();
 		if(nList != null && nList.size() > 0) {
 			for(int i = 0;i<nList.size();i++) {
@@ -1430,5 +1427,613 @@ public class TaskController {
 		//JSONArray.toJSONString(commentList);
 		//return JSON.toJSON(commentList).toString();
 	}
-	
+
+
+	/**
+	 * 登陆状态下根据用户爱好向用户推送1或者3条任务
+	 * 程序初始化时推荐3条，之后当用户点击“换一个”按钮时，只推送1条
+	 */
+	@RequestMapping("pushTaskListInJsonWithSessionKey")
+	@ResponseBody
+	public List<ReceiveTask> pushTaskListInJsonWithSessionKey(@RequestParam (value="session",required=true)String userSessionKey,@RequestParam(value="num",required=true)int num){
+		System.out.println("userSessionKey:"+userSessionKey);
+		//从redis中取出session对应的openid即用户ID
+		Jedis jedis=RedisUtils.getJedis();
+		RedisUtils.returnResource(jedis);
+		String userId=jedis.get(userSessionKey);
+		System.out.println("userId:"+userId);
+		User user = userService.selectUserById(userId);
+		String historyTrans = user.getHistoryTrans();
+		String hobby = user.getHobby();
+		List<ReceiveTask> lists = retaskService.getReceiveTaskList();
+		List<ReceiveTask> reList = new ArrayList<>();
+		Iterator<ReceiveTask> re = lists.iterator();
+		if (historyTrans != null || hobby != null) {
+			while (re.hasNext()) {
+				ReceiveTask retask = re.next();
+				String describe = retask.getDescription();
+				if (historyTrans != null) {
+					if (historyTrans.contains(describe)
+							|| hobby.contains(describe)) {
+						reList.add(retask);
+					}
+				} else if (hobby != null && hobby.contains(describe)) {
+					reList.add(retask);
+				}
+			}
+		}
+		//挑选出子任务以及原文长度小于200的任务
+		ArrayList<ReceiveTask> resultList=new ArrayList<>();
+		if (reList != null &&reList.size() > 0) {
+			Iterator<ReceiveTask> reListIterator = reList.iterator();
+			while (reListIterator.hasNext()) {
+				ReceiveTask reTask = reListIterator.next();
+				if (reTask.getState() == 0) {
+					if ((reTask.getParentId()!= null&&reTask.getTranText()!=null) ||(reTask.getParentId()==null&&reTask.getTaskText().length()<200)) {
+						resultList.add(reTask);
+					}
+				}
+			}
+		}
+		//随机取出1或3条返回
+		int listSize=resultList.size();
+		List<ReceiveTask> result=new ArrayList<>();
+		Random random=new Random();
+		for (int i = 0; i < num; i++) {
+			int a=(Math.abs(random.nextInt(listSize-1)));
+			result.add(resultList.get(a));
+		}
+		return result;
+	}
+
+	/**
+	 * 向小程序返回自己未完成的任务
+	 * @author ZhengWeizhi
+	 * @time  2018年5月11日 下午10:38:57
+	 *
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("getUnFinishFromMiniprogram")
+	@ResponseBody
+	public Result<Object> getUnFinishFromMiniprogram(@RequestParam (value="session",required=true)String session){
+		Result<Object> result=new Result<Object>();
+		ResultUtil resultUtil=new ResultUtil();
+		Jedis jedis= RedisUtils.getJedis();
+		String userId = jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		System.out.println(userId);
+		// 查看接收任务
+		List<ReceiveTask> acList = new ArrayList<>();
+		List<String> taskIdList = acceptTaskService
+				.selectTaskIdByuserId(userId);
+		if (taskIdList.size() != 0) {
+			Iterator<String> ac = taskIdList.iterator();
+			ReceiveTask receiveTask = new ReceiveTask();
+			while (ac.hasNext()) {
+				String taskId = ac.next().toString();
+				System.out.println(taskId);
+				AcceptTask acd = acceptTaskService.selectStateByUTID(userId,
+						taskId);
+				receiveTask = retaskService.selectTaskByTaskId(taskId);
+				if (acd.getIsSubmit() != 1) {
+					acList.add(receiveTask);
+				}
+			}
+			if(acList.size()!=0){
+				resultUtil.success(result, acList);
+			}else {
+				resultUtil.error(result, false, "您暂时未完成任何任务!", 800);
+			}
+		}else{
+			resultUtil.error(result, false, "您暂时未完成任何任务!", 800);
+		}
+		return result;
+	}
+
+
+	/**
+	 * 处理小程序端的接受任务功能
+	 * @throws Exception
+	 */
+	@RequestMapping(value="acceptTaskFromMiniprogram",method=RequestMethod.POST)
+	@ResponseBody
+	public Result<Object> acceptTaskFromMiniprogram(@RequestParam (value="session",required=true)String session,@RequestParam (value="id",required=true)String taskId) throws Exception{
+		Jedis jedis=RedisUtils.getJedis();
+		String userId =jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		ResultUtil resultUtil=new ResultUtil();
+		Result<Object> result=new Result<Object>();
+		System.out.println(userId);
+		ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
+		List<AcceptTask> List = acceptTaskService
+				.selectAccpetTaskByTaskId(taskId);
+		AcceptTask acd = acceptTaskService
+				.selectStateByUTID(userId, taskId);
+		List<AcceptTask> acList = acceptTaskService
+				.selectAccpetTaskByuserId(userId);
+		System.out.println("acd:"+acd);
+		if (acd != null) {
+			resultUtil.error(result,false, "已领取过此任务", 100);
+		} else if (List.size() >= reTask.getTotalNum()) {
+			resultUtil.error(result,false, "此任务已被领完", 400);
+		} else if (reTask.getParentId() != null && acList.size() > 0) {
+			String parentId = reTask.getParentId();
+			System.out.println(parentId);
+			Iterator<AcceptTask> ac = acList.iterator();
+			int num = 0;
+			while (ac.hasNext()) {
+				AcceptTask acceptTask = ac.next();
+				if (parentId.equals(retaskService.selectTaskByTaskId(
+						acceptTask.getTaskId()).getParentId())
+						&& (acceptTask.getIsSubmit() != 1)) {
+					num++;
+				}
+			}
+			System.out.println(num);
+			if (num >= 3) {
+				resultUtil.error(result,false, "此任务已被领完", 300);
+			} else {
+				AcceptTask acceptTask = new AcceptTask();
+				acceptTask.setUserId(userId);
+				String accepter = userService.selectUserById(userId)
+						.getUsername();
+				acceptTask.setAccepter(accepter);
+				String acceptId = UUID.randomUUID().toString();
+				acceptTask.setAcceptId(acceptId);
+
+				acceptTask.setTaskId(taskId);
+				int isSuccess = acceptTaskService
+						.insertAcceptTask(acceptTask);
+
+				if (isSuccess > 0) {
+					ReceiveTask receiveTask = retaskService
+							.selectTaskByTaskId(taskId);
+					receiveTask.setIsReceive(1);
+					receiveTask
+							.setReceiveNum(receiveTask.getReceiveNum() + 1);
+					boolean update = retaskService.updateReTask(receiveTask);
+					if (update) {
+						resultUtil.success(result,true);
+						return result;
+					} else {
+						resultUtil.error(result,false, "领取失败，任务已下架", 600);
+						return result;
+					}
+				} else {
+					resultUtil.error(result,false, "领取失败，任务已下架", 600);
+					return result;
+				}
+			}
+
+		} else {
+			AcceptTask acceptTask = new AcceptTask();
+			acceptTask.setUserId(userId);
+			String accepter = userService.selectUserById(userId)
+					.getUsername();
+			acceptTask.setAccepter(accepter);
+			String acceptId = UUID.randomUUID().toString();
+			acceptTask.setAcceptId(acceptId);
+			acceptTask.setTaskId(taskId);
+			int isSuccess = acceptTaskService.insertAcceptTask(acceptTask);
+			if (isSuccess > 0) {
+				ReceiveTask receiveTask = retaskService
+						.selectTaskByTaskId(taskId);
+				receiveTask.setIsReceive(1);
+				receiveTask.setReceiveNum(receiveTask.getReceiveNum() + 1);
+				boolean update = retaskService.updateReTask(receiveTask);
+				if (update) {
+					resultUtil.success(result,true);
+					return result;
+				} else {
+					resultUtil.error(result,false, "领取失败，任务已下架", 600);
+					return result;
+				}
+			} else {
+				resultUtil.error(result,false, "领取失败，任务已下架", 600);
+				return result;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 处理小程序放弃任务的请求
+	 * @author ZhengWeizhi
+	 * @time  2018年5月13日 下午8:41:03
+	 *prijectName social-trans Maven Webapp
+	 * @param session
+	 * @param taskId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="giveupTaskFromMiniprogram",method=RequestMethod.POST)
+	@ResponseBody
+	public Result<Object> giveupTaskFromMiniprogram(@RequestParam (value="session",required=true)String session,@RequestParam (value="id",required=true)String taskId) throws Exception{
+		Jedis jedis=RedisUtils.getJedis();
+		String userId =jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		ResultUtil resultUtil=new ResultUtil();
+		Result<Object> result=new Result<Object>();
+		AcceptTask ac = acceptTaskService.selectStateByUTID(userId, taskId);
+		boolean isSuccess = acceptTaskService.cancelAccept(ac.getAcceptId());
+		if(isSuccess){
+			resultUtil.success(result);
+		}else{
+			resultUtil.error(result, false, "删除任务失败", 900);
+		}
+		/*System.out.println(userId);
+		ReceiveTask reTask = retaskService.selectTaskByTaskId(taskId);
+		List<AcceptTask> List = acceptTaskService
+				.selectAccpetTaskByTaskId(taskId);
+		AcceptTask acd = acceptTaskService
+				.selectStateByUTID(userId, taskId);
+		List<AcceptTask> acList = acceptTaskService
+				.selectAccpetTaskByuserId(userId);
+		System.out.println("acd:"+acd);
+
+		Boolean isDelete=acceptTaskService.deleteAcceptTaskByTaskIdandUserId(taskId, userId);
+		if(isDelete){
+			resultUtil.success(result);
+			//reTask.setTotalNum(reTask.getTotalNum()-1);
+			reTask.setReceiveNum(reTask.getReceiveNum()-1);
+
+			String parentId = reTask.getParentId();
+			Iterator<AcceptTask> ac = acList.iterator();
+			int num = 0;
+			while (ac.hasNext()) {
+				AcceptTask acceptTask = ac.next();
+				if (parentId.equals(retaskService.selectTaskByTaskId(
+						acceptTask.getTaskId()).getParentId())
+						&& (acceptTask.getIsSubmit() != 1)) {
+					num++;
+				}
+			}
+			//如果该任务只被接受过一次
+			if(num==1){
+				reTask.setIsReceive(0);
+			}
+			retaskService.updateReTask(reTask);
+		}else{
+			resultUtil.error(result, false, "删除任务失败", 900);
+		};*/
+		return result;
+	}
+
+	/**
+	 * 处理小程序端的提交功能
+	 * @author ZhengWeizhi
+	 * @time  2018年5月10日 上午9:14:41
+	 *prijectName social-trans Maven Webapp
+	 * @param session
+	 * @param taskId
+	 * @param transText
+	 * @return
+	 */
+	@RequestMapping(value="submitTaskFromMiniprogram",method=RequestMethod.POST)
+	@ResponseBody
+	public Result<Object> submitTaskFromMiniprogram(@RequestParam(value="session",required=true) String session,
+													@RequestParam (value="id",required=true)String taskId,
+													@RequestParam(value="transText",required=true)String transText){
+	/*public Result<Object> submitTaskFromMiniprogram(@RequestBody String session,
+            @RequestBody String taskId,
+            @RequestBody String transText){*/
+		Result<Object> result=new Result<Object>();
+		ResultUtil resultUtil=new ResultUtil();
+		Jedis jedis=RedisUtils.getJedis();
+		String userId=jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		String acceptId = acceptTaskService
+				.selectAcceptIdByUTID(userId, taskId);
+		AcceptTask acceptTask = acceptTaskService
+				.selectAccepTaskByATID(acceptId);
+		//byte[] bs = myfile.getBytes();
+		//System.out.println(new String(bs));
+		String strA, strB;
+		String text1 = new String(transText);//transText为客户端提交的译文
+		String tranText = retaskService.selectTaskByTaskId(taskId)
+				.getTranText();               //tranText为机器翻译结果
+		System.out.println(tranText);
+		if (!(Simicalcu.removeSign(text1).length() == 0 && Simicalcu
+				.removeSign(tranText).length() == 0)) {
+			if (text1.length() >= tranText.length()) {
+				strA = text1;
+				strB = tranText;
+			} else {
+				strA = tranText;
+				strB = text1;
+			}
+			double SimiResult = Simicalcu.SimilarDegree(strA, strB);
+			System.out.println(SimiResult);
+			System.out.println("相似的内容为："
+					+ Simicalcu.longestCommonSubstring(strA, strB));
+			String smilar = Simicalcu.similarityResult(SimiResult);
+			System.out.println("相似度为：" + smilar);
+			// String tempA = smilar.substring(0,3);
+			// int num = Integer.parseInt(tempA);
+			// System.out.println(num);
+			if (SimiResult * 100 > Constant.HIGH_SIMILAR
+					|| SimiResult * 100 < Constant.LOW_SIMILAR) {
+				resultUtil.error(result, false, "您提交的内容与机器翻译相似度太高或太低！", 700);
+				System.out.println("return");
+				return result;
+			}
+		}
+		// 比较文本内容
+		List<AcceptTask> acList = acceptTaskService
+				.selectcheckAcceptByTaskId(taskId);
+		Iterator<AcceptTask> ac = acList.iterator();
+		while (ac.hasNext()) {
+
+			String text2 = ac.next().getSubmitText();
+			if (!(Simicalcu.removeSign(text1).length() == 0 && Simicalcu
+					.removeSign(text2).length() == 0)) {
+				if (text1.length() >= text2.length()) {
+					strA = text1;
+					strB = text2;
+				} else {
+					strA = text2;
+					strB = text1;
+				}
+				double SimiResult = Simicalcu.SimilarDegree(strA, strB);
+				System.out.println(result);
+				System.out.println("相似的内容为："
+						+ Simicalcu.longestCommonSubstring(strA, strB));
+				String smilar = Simicalcu.similarityResult(SimiResult);
+				System.out.println("相似度为：" + smilar);
+				// String tempA = smilar.substring(0,3);
+				// int num = Integer.parseInt(tempA);
+				// System.out.println(num);
+				if (SimiResult * 100 > Constant.SIMILAR_CONTEXT) {
+					resultUtil.error(result, false, "您提交的内容与其他提交者相似度太高！", 600);
+					System.out.println("return");
+					return result;
+				}
+			}
+		}
+
+		acceptTask.setSubmitText(new String(transText));
+		acceptTask.setIsSubmit(1);
+		acceptTaskService.updateAcceptTask(acceptTask);
+		User user = userService.selectUserById(userId);
+
+		user.setTransNum(user.getTransNum() + 1);
+		user.setWordNum(acceptTask.getSubmitText().length() + user.getWordNum());
+		String historyTrans = user.getHistoryTrans();
+		String describe = retaskService.selectTaskByTaskId(taskId)
+				.getDescription();
+		if (historyTrans == null || historyTrans.equals("")) {
+			user.setHistoryTrans(describe);
+		} else if (!historyTrans.contains(describe)) {
+			historyTrans = historyTrans + ","
+					+ retaskService.selectTaskByTaskId(taskId).getDescription();
+			user.setHistoryTrans(historyTrans);
+		}
+		userService.UpdateUserByUserId(user);
+
+		return result;
+
+	}
+
+	/**
+	 * 小程序端查询已完成任务
+	 * @author ZhengWeizhi
+	 * @time  2018年5月10日 下午6:03:10
+	 *prijectName social-trans Maven Webapp
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("getFinishTaskFromMiniprogram")
+	@ResponseBody
+	public Result<Object> getFinishTaskFromMiniprogram(@RequestParam(value="session",required=true)String session) {
+		Result<Object> result=new Result<Object>();
+		ResultUtil resultUtil=new ResultUtil();
+		Jedis jedis=RedisUtils.getJedis();
+		String userId = jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		List<ReceiveTask> finishList = new ArrayList<>();
+		List<String> taskIdList = acceptTaskService
+				.selectTaskIdByuserId(userId);
+		if (taskIdList.size() != 0) {
+			Iterator<String> ac = taskIdList.iterator();
+
+			// hasNext是取值取的是当前值.他的运算过程是判断下个是否有值如果有继续.
+			ReceiveTask receiveTask = new ReceiveTask();
+			while (ac.hasNext()) {
+				String taskId = ac.next().toString();
+				System.out.println(taskId);
+				AcceptTask acd = acceptTaskService.selectStateByUTID(userId,
+						taskId);
+				receiveTask = retaskService.selectTaskByTaskId(taskId);
+				if (acd.getIsSubmit() == 1) {
+					finishList.add(receiveTask);
+				}
+			}
+			if(finishList.size()!=0){
+				System.out.println(finishList);
+				resultUtil.success(result, finishList);
+			}else {
+				resultUtil.error(result, false, "您暂时没有已完成任务", 600);
+			}
+		} else {
+			resultUtil.error(result, false, "您暂时没有已完成任务", 600);
+		}
+		return result;
+	}
+
+
+	/**
+	 * 小程序端查看已经发布的任务
+	 * @author ZhengWeizhi
+	 * @time  2018年5月10日 下午6:08:49
+	 *prijectName social-trans Maven Webapp
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("showReleaseFromMiniprogram")
+	@ResponseBody
+	public Result<Object> showReleaseFromMiniprogram(@RequestParam(value="session",required=true)String session) {
+		Result<Object> result=new Result<Object>();
+		ResultUtil resultUtil=new ResultUtil();
+		Jedis jedis=RedisUtils.getJedis();
+		String userId = jedis.get(session);
+		System.out.println("userId:"+userId);
+		RedisUtils.returnResource(jedis);
+		List<ReceiveTask> reList = new ArrayList<>();
+		List<ReceiveTask> lists = retaskService
+				.selectReceiveTaskByuserId(userId);
+		if (lists != null && lists.size() > 0) {
+			Iterator<ReceiveTask> ac = lists.iterator();
+			System.out.println(ac);
+			while (ac.hasNext()) {
+				ReceiveTask reTask = ac.next();
+				if (reTask.getIsChild() == 0) {        //将子任务过滤
+					reList.add(reTask);
+				}
+			}
+			if(reList.size()!=0){
+				resultUtil.success(result, reList);
+			}else{
+				resultUtil.error(result, false, "暂时未发布任何任务", 500);
+			}
+		} else {
+			resultUtil.error(result, false, "暂时未发布任何任务", 500);
+		}
+		return result;
+	}
+
+	/**
+	 * 从小程序发布任务
+	 * @author ZhengWeizhi
+	 * @time  2018年5月10日 下午6:19:14
+	 *prijectName social-trans Maven Webapp
+	 * @param description
+	 * @param session
+	 * @param checked
+	 * @param taskMoney
+	 * @param finishTime
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "addTaskFromMiniprogram", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<Object> addTaskFromMiniprogram(@RequestParam(value="session")String session,
+												 @RequestParam(value="taskName")String taskName,
+												 @RequestParam(value="description")String description,
+												 @RequestParam(value="finishTime")String finishTime,
+												 @RequestParam(value="taskMoney")int taskMoney,
+												 @RequestParam(value="taskText")String taskText,
+												 @RequestParam(value="checked")boolean checked) throws UnsupportedEncodingException{
+
+		//百度API参数
+		final String APP_ID = "20180511000157124";
+		final String SECURITY_KEY = "Zt8KElgcT5annMPcMp0B";
+
+		Result<Object> result=new Result<Object>();
+		ResultUtil resultUtil=new ResultUtil();
+		TransApi api = new TransApi(APP_ID, SECURITY_KEY);
+		ReceiveTask receiveTask=new ReceiveTask();
+		SplitFile spiltFile = new SplitFile();
+		Jedis jedis=RedisUtils.getJedis();
+		String userId=jedis.get(session);
+		RedisUtils.returnResource(jedis);
+		User user=userService.selectUserById(userId);
+		String taskId = UUID.randomUUID().toString();
+		receiveTask.setTaskId(taskId);
+		receiveTask.setTaskName(taskName);
+		receiveTask.setDescription(description);
+		receiveTask.setFinishTime(finishTime);
+		receiveTask.setTaskMoney(taskMoney);
+		receiveTask.setPublishId(userId);
+		receiveTask.setPublisher(user.getUsername());
+		receiveTask.setTotalNum(3);
+		System.out.println(taskText);
+		//JSONObject transJson=new JSONObject();
+		if (!taskText.equals("")) {
+			String role = user.getRole();
+			String roleId = roleService.getRoleIdByRolename(role);
+			System.out.println("roleId:" + roleId);
+			int level = roleService.getLevelByRoleId(roleId);
+			System.out.println(level);
+			//	if (level > 1) {
+			receiveTask.setTaskText(taskText);
+			if (taskText.length() > 200) {
+				HashMap<Integer, String> textMap = (HashMap<Integer, String>) spiltFile
+						.spiltText(taskText);
+				Set set = textMap.keySet();
+				Iterator t = set.iterator();
+				for (Iterator iter = set.iterator(); iter.hasNext();) {
+					int key = (int) iter.next();
+					System.out.println(key);
+					String value = (String) textMap.get(key);
+					ReceiveTask childReTask = new ReceiveTask();
+					String childTaskId = UUID.randomUUID().toString();
+					childReTask.setTaskId(childTaskId);
+					childReTask.setTaskName(receiveTask.getTaskName()
+							+ "[卷" + key + "]");
+					childReTask.setDescription(receiveTask
+							.getDescription());
+					childReTask.setFinishTime(receiveTask
+							.getFinishTime());
+					childReTask
+							.setPublisher(receiveTask.getPublisher());
+					childReTask
+							.setPublishId(receiveTask.getPublishId());
+					childReTask
+							.setTaskMoney(receiveTask.getTaskMoney());
+					childReTask.setIsChild(key);
+					childReTask.setTaskText(value);
+					taskText = ToolUtils.exchange(value);
+					String transResult=new String("null");
+					//String result = Simicalcu.translateGet(taskText);
+					//使用百度翻译API获得译文后保存
+					if(checked){
+						transResult=api.getTransResult(taskText, "auto", "en");
+					}else {
+						transResult=api.getTransResult(taskText, "auto", "zh");
+					}
+					//将百度翻译返回结果翻入json对象
+					JSONObject jsonObject=JSONObject.fromObject(transResult);
+					String data=jsonObject.getString("trans_result");
+					JSONArray jsonArray=JSONArray.fromObject(data);
+					JSONObject object=jsonArray.getJSONObject(0);
+					System.out.println("result" + object.getString("dst"));
+					receiveTask.setTranText(object.getString("dst"));
+					childReTask.setParentId(receiveTask.getTaskId());
+					childReTask.setTotalNum(1);
+					retaskService.insertTask(childReTask);
+				}
+			} else {
+				taskText = ToolUtils.exchange(taskText);
+				System.out.println(taskText);
+				//String result = Simicalcu.translateGet(taskText);
+				String transResult=new String("null");
+				if(checked){
+					transResult=api.getTransResult(taskText, "auto", "en");
+				}else {
+					transResult=api.getTransResult(taskText, "auto", "zh");
+				}
+				//将百度翻译返回结果翻入json对象
+				JSONObject jsonObject=JSONObject.fromObject(transResult);
+				String data=jsonObject.getString("trans_result");
+				JSONArray jsonArray=JSONArray.fromObject(data);
+				JSONObject object=jsonArray.getJSONObject(0);
+				System.out.println("result" + object.getString("dst"));
+				receiveTask.setTranText(object.getString("dst"));
+				resultUtil.success(result);
+				retaskService.insertTask(receiveTask);
+			}
+				/*	} else {
+						model.addAttribute("upLoadError", "升级为会员后可以文件上传！");
+						return Result<Object>;
+					}*/
+		} else {
+			resultUtil.error(result, false, "任务内容不能为空", 1200);
+		}
+
+		return result;
+
+	}
 }
