@@ -168,8 +168,8 @@ CREATE TABLE `p_message` (
 -- ----------------------------
 DROP TABLE IF EXISTS `p_role`;
 CREATE TABLE `p_role` (
-  `roleId` varchar(20) NOT NULL COMMENT '角色ID',
-  `rolename` varchar(20) NOT NULL COMMENT '角色名',
+  `roleId` varchar(36) NOT NULL COMMENT '角色ID',
+  `rolename` varchar(36) NOT NULL COMMENT '角色名',
   `description` varchar(100) DEFAULT NULL COMMENT '修饰',
   `rolelevel` int(11) NOT NULL DEFAULT '1' COMMENT '等级',
   PRIMARY KEY (`roleId`),
