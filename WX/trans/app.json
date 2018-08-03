@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/edit/edit",
+    "pages/about/about",
+    "pages/releaseTask/releaseTask",
+    "pages/finishTask/finishTask",
+    "pages/acceptTask/acceptTask",
+    "pages/setup/setup",
+    "pages/addTask/addTask"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#bfbfbf",
+    "selectedColor": "#1296db",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "/images/index1.png",
+        "selectedIconPath": "/images/index3.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "iconPath": "/images/discover1.png",
+        "selectedIconPath": "/images/discover3.png",
+        "text": "发现"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "iconPath": "/images/me2.png",
+        "selectedIconPath": "/images/me1.png",
+        "text": "设置"
+      }
+    ]
+  }
+}

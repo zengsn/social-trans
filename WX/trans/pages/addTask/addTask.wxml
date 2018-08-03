@@ -1,0 +1,62 @@
+<!--pages/addTask/addTask.wxml-->
+<form bindsubmit="formSubmit" >
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell weui-cell_switch">
+    <view class="weui-cell__bd">{{toEnglish}}</view>
+    <view class="weui-cell__ft">
+      <switch name="checked" checked='{{checked}}' bindchange='select' />
+    </view>
+  </view>
+</view>
+
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">任务名</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input name="taskName" class="weui-input" placeholder="请输入任务名称" value="{{taskName}}" />
+  </view>
+</view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">任务描述</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input name="description" class="weui-input" placeholder="请输入任务描述" value="{{taskName}}" />
+  </view>
+</view>
+
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell">
+    <view class="weui-cell__bd">
+      <textarea name="taskText" class="weui-textarea" placeholder="请输入任务内容" value="{{taskText}}" style="height: 6.3em" />
+      <view class="weui-textarea-counter">1000</view>
+    </view>
+  </view>
+</view>
+
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">完成日期</view>
+  </view>
+  <view class="weui-cell__bd">
+    <picker name="date" mode="date" value="{{endDate}}" start="{{date}}" end="{{endDate}}" bindchange="bindDateChange">
+      <view class="weui-input">{{date}}</view>
+    </picker>
+  </view>
+</view>
+
+
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">赏金</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input name="taskMoney" class="weui-input" placeholder="请输入任务赏金" value="{{taskMonney}}" />
+  </view>
+</view>
+
+<view class="weui-btn-area">
+  <button class="weui-btn" type="primary"  formType="submit">提交</button>
+</view>
+</form>

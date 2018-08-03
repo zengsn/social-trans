@@ -1,0 +1,65 @@
+<!--账号信息-->
+<view class="space"></view>
+<view class="first">
+  <view class="weui-cell">
+    <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+      <image src="{{avatarImag}}" style="width: 50px; height: 50px; display: block" />
+    </view>
+    <view class="weui-cell__bd">
+      <view>{{nickName}}</view>
+      <view style="font-size: 13px;color: #888888;">你好，欢迎使用！</view>
+    </view>
+  </view>
+  <view style="position: relative;height: 30px;">
+    <button class="weui-btn mini-btn" open-type='getUserInfo' wx:if="{{canIUse}}" bindgetuserinfo="bindGetUserInfo" type="primary" style="position: absolute;right: 30rpx;" size="mini" bindtap='authrization'>授权</button>
+  </view>
+</view>
+<view class="space"></view>
+
+
+<view class="wa-item wa-item-ava">
+  <image class="item-img-round" src="/images/finishTask.png">
+  </image>
+  <button type="default" bindtap='finish'>查看已提交任务</button>
+</view>
+<view class="space"></view>
+
+<view class="wa-item wa-item-ava">
+  <image class="item-img-round" src="/images/wait.png">
+  </image>
+  <button type="default" bindtap='release'>查看已发布任务</button>
+</view>
+<view class="space"></view>
+
+
+<view class="wa-item wa-item-ava">
+  <image class="item-img" src="/images/doing.png">
+  </image>
+  <button type="default" bindtap='unfinish'>查看未完成任务</button>
+</view>
+<view class="space"></view>
+
+<view class="wa-item wa-item-ava">
+  <image class="item-img" src="/images/add2.png">
+  </image>
+  <button type="default" bindtap='add'>发布任务</button>
+</view>
+<view class="space"></view>
+
+<view class="wa-item wa-item-ava">
+  <image class="item-img" src="/images/setup3.png">
+  </image>
+  <button type="default" bindtap='setup'>设置</button>
+</view>
+<view class="space"></view>
+
+
+<!--
+<button class="second" type="default" bindtap='unfinish'>查看未完成任务</button>
+<button class="weui-btn" type="default" bindtap='release'>查看已发布任务</button>
+<button class="weui-btn" type="default" bindtap='submit'>查看已提交任务</button>
+<button class="weui-btn" type="default" bindtap='upload'>发布任务</button>
+
+
+<button class="weui-btn-mystyle" type="default" bindtap='setup'>设置</button>
+-->

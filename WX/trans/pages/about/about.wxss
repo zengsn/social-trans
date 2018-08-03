@@ -1,0 +1,10 @@
+/* Pages/about/about.wxss */
+.weui-btn-mystyle{
+  margin-top:120px;
+}
+.first{
+  margin-top:20px;
+}
+.second{
+  margin-top:80px;
+}

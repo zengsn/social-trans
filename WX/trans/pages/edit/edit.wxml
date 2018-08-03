@@ -1,0 +1,30 @@
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell weui-cell_switch">
+    <view class="weui-cell__bd">{{edit}}</view>
+    <view class="weui-cell__ft">
+      <switch checked='{{checked}}' bindchange='select' />
+    </view>
+  </view>
+</view>
+
+
+
+<view class="weui-cell">
+  <view class="weui-cell__bd">
+    <textarea class="weui-textarea" value="{{value}}" style="height: 6.3em" />
+    <view class="weui-textarea-counter">0/200</view>
+  </view>
+</view>
+<button class="weui-btn" type="primary" plain="true" bindtap='acceptTask'>{{btn}}</button>
+
+
+
+<form bindsubmit="formSubmit" >
+<view class="weui-cell">
+    <view class="weui-cell__bd">
+      <textarea name="editText" class="weui-textarea" placeholder='这里是你编辑译文的地方' value="{{editText}}" style="height: 6.3em" />
+      <view class="weui-textarea-counter">0/200</view>
+    </view>
+</view>
+ <button class="weui-btn" type="primary"  formType="submit">提交</button>
+</form>

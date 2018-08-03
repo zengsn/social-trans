@@ -1,0 +1,57 @@
+<!--pages/setup/setup.wxml-->
+<form bindsubmit="formSubmit" >
+<view class="weui-cells__title">修改账号信息以便可以在web端登陆</view>
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell weui-cell_input">
+    <view class="weui-cell__hd">
+      <view class="weui-label">账号</view>
+    </view>
+    <view class="weui-cell__bd">
+      <input name="account" class="weui-input" placeholder="请输入账号" value='{{account}}' />
+    </view>
+  </view>
+</view>
+
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell weui-cell_input">
+    <view class="weui-cell__hd">
+      <view class="weui-label">密码</view>
+    </view>
+    <view class="weui-cell__bd">
+      <input name="password" class="weui-input" placeholder="请输入密码" value='{{password}}'/>
+    </view>
+  </view>
+</view>
+<view class="weui-cells__tips">web端登陆请访问www.example.com</view>
+
+
+<view class="weui-cells__title">手机号码</view>
+<view class="weui-cells weui-cells_after-title">
+  <view class="weui-cell weui-cell_select">
+    <view class="weui-cell__hd" style="width: 105px">
+      <picker bindchange="bindCountryCodeChange" value="{{countryCodeIndex}}" range="{{countryCodes}}">
+        <view class="weui-select">{{countryCodes[countryCodeIndex]}}</view>
+      </picker>
+    </view>
+    <view class="weui-cell__bd weui-cell__bd_in-select-before">
+      <input name="phone" class="weui-input" placeholder="请输入号码" value='{{phone}}'/>
+    </view>
+  </view>
+</view>
+
+<view class="weui-cells__title">选择爱好</view>
+<view class="weui-cells weui-cells_after-title">
+  <checkbox-group  name="hobby" bindchange="checkboxChange" >
+    <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value" data-index="{{index}}" >
+      <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}" />
+      <view class="weui-cell__hd weui-check__hd_in-checkbox" >
+        <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+        <icon  class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+      </view>
+      <view  class="weui-cell__bd">{{item.name}}</view>
+    </label>
+  </checkbox-group>
+</view>
+<view class="space"></view>
+<button class="weui-btn" type="primary"  formType="submit">提交</button>
+</form>

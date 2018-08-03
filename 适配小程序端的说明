@@ -1,0 +1,9 @@
+* 使用Redis数据库存储小程序用户的唯一标志openid（openid是微信官方给的,后台将其作为用户id存入数据库），
+openid为值，键为随机生成的UUID,作为返回给用户的session（详见userController里对小程序端登陆的处理逻辑）。小程序用户访问后台时需带上session。
+* 小程序端发布任务的翻译接口调用了百度翻译api，百度翻译相关的三个工具类放在baidutrans包下。老师原先给的翻译api的工具类在trans包下。
+但是小程序端暂时没有提供上传文档功能，日后如果要支持添加任务时上传文档则需要先调用trans包下的分割文档类
+* 后台提供了统一数据格式类Result用于返回给小程序端json数据，结合ResultUtils类使用。
+* 由于先前没有意识，项目中业务逻辑处理的代码基本都放在了controller层中，导致controller层代码长的有数千行，
+service层基本没起到业务处理的作用，这是一个失误，后续业务处理代码可以放到service中，controller层只负责处理请求调用service并返回数据更好
+
+

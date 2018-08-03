@@ -1,0 +1,48 @@
+<!--pages/taskList/taskList.wxml-->
+
+<!--<view wx:for="{{taskList}}">-->
+<!--<navigator url="/pages/news/detail?id={{ id }}&chid={{ chid }}&style={{ style }}&tag={{ tag }}">-->
+<!--<view class="article__item article__item__cover">
+    <view class="article__cover">
+      <view class="article__title">{{item.taskName}}</view>
+      <image class="article__ad" mode="aspectFill" src="/images/wait2.png"></image>
+      <text> {{item.taskText}}</text>
+    </view>
+    <view class="article__desc">-->
+<!-- <text class="article__source" wx:if="{{ tag }}">2</text>-->
+<!--<text class="article__time">{{item.description}}</text>
+      <view class="article__count">
+        <image class="article__icon" src="/images/comment.png"></image>
+        <text>18</text>
+        <image class="article__icon" src="/images/upvote.png"></image>
+        <text>3</text>
+      </view>
+    </view>
+  </view>-->
+<!-- </navigator>-->
+<!--</view>-->
+
+<view wx:for="{{taskList}}" wx:key="taskId">
+  <view class="weui-panel__bd">
+    <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+      <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+        <image class="weui-media-box__thumb" src="/images/wait2.png" />
+      </view>
+      <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+        <view class="weui-media-box__title">{{item.taskName}}</view>
+        <view class="weui-media-box__desc">{{item.taskText}}</view>
+      </view>
+    </navigator>
+    <view class="article__desc">
+      <text class="article__time">类别:</text>
+      <text class="article__time">{{item.description}}</text>
+
+      <view class="article__count">
+        <image class="article__icon" src="/images/comment.png"></image>
+        <text>18</text>
+        <image class="article__icon" src="/images/upvote.png"></image>
+        <text>3</text>
+      </view>
+    </view>
+  </view>
+</view>
