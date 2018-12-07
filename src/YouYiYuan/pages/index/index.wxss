@@ -1,0 +1,49 @@
+/**index.wxss**/
+.searchbar-result{
+    margin-top: 0;
+    font-size: 14px;
+}
+.searchbar-result:before{
+    display: none;
+}
+.weui-cell{
+    padding: 12px 15px 12px 35px;
+}
+.weui-panel {
+    margin-top: -1px;
+}
+.weui-cell__hd > .data {
+  text-align: center;
+  margin-left: -20px;
+  margin-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 0px solid #7292C7;
+}
+.data .num_l, .data .num_r, .data .sep {
+  font-size: 24px;
+  text-align: center;
+}
+.num_l {
+  color: #7292C7;
+}
+.num_r {
+  color: #DA4A3B;
+}
+.sep {
+  padding: 5px;
+}
+.date {
+  font-size: 16px;
+  padding-top: -20px;
+}
+.weui-media-box {
+  padding: 2px;
+}
+.weui-media-box__title {
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+.weui-media-box__desc {
+  font-size: 13px;
+}

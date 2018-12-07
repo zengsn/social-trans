@@ -1,0 +1,62 @@
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-cells__title">类型</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/explore/trans?type=fee" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">收费翻译</view>
+                    <view class="weui-badge" style="margin-left: 5px;">8</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">532</view>
+            </navigator>
+            <navigator url="/pages/explore/trans?type=free" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">免费练习</view>
+                    <view class="weui-badge" style="margin-left: 5px;">22</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">212</view>
+            </navigator>
+        </view>
+
+        <view class="weui-cells__title">精选</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/explore/trans?tag=计算机" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">计算机</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">24</view>
+                    <view class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></view>
+                </view>
+            </navigator>
+            <navigator url="/pages/explore/trans?tag=金融" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">金融</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">9</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/explore/trans?tag=体育" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">体育</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">33</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/explore/trans?tag=全部" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">全部</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">1987</view>
+                </view>
+            </navigator>
+        </view>
+
+        <view class="weui-cells__title">功能</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/explore/post" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">发布稿子</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </navigator>
+            <navigator url="/pages/explore/upgrade" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">升级付费帐号</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </navigator>
+        </view>
+    </view>
+</view>

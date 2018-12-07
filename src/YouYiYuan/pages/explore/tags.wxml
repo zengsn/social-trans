@@ -1,0 +1,12 @@
+<!--pages/explore/tags.wxml-->
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-cells__title">最热门的10个标签</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/index/popular?tag={{tag.text}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{tags}}" wx:for-item="tag" wx:key="text">
+                <view class="weui-cell__bd">{{tag.text}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">{{tag.index}}</view>
+            </navigator>
+        </view>
+    </view>
+</view>

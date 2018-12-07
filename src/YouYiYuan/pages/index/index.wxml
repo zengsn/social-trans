@@ -1,0 +1,38 @@
+<scroll-view class="page" scroll-y="true" style="height:{{windowHeight}}px;" bindscrolltoupper="onUpper" bindscrolltolower="onLower" bindscroll="onScroll">
+  <view class="page__bd">        
+    <view class="weui-panel weui-panel_access">
+      <view class="weui-panel__bd">
+        <view class="weui-media-box weui-media-box_small-appmsg">
+          <view class="weui-cells weui-cells_in-small-appmsg">
+            <!-- 循环显示会议 -->
+            <navigator url="/pages/index/translate?key={{conf.enName}}" wx:for="{{conferences}}" wx:for-item="conf" wx:key="enName" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+              <view class="weui-cell__hd">
+                <view class="data">
+                  <text class="num_l">{{conf.chars}}</text>
+                  <view style='margin-bottom:5px;'>
+                    <button class="weui-btn mini-btn" type="primary" size="mini">领取</button>
+                  </view>
+                  <view>
+                    <button class="weui-btn mini-btn" type="default" size="mini">关注</button>
+                  </view>
+                </view>
+              </view>
+              <view class="weui-cell__bd weui-cell_primary">
+                <view class="weui-media-box__title_in-text">{{conf.text}}</view>
+                <view class="weui-media-box__desc">{{conf.trans}}, 剩{{conf.expired}}, {{conf.fee}} 元/千字, +{{conf.awards}}经验
+                </view>
+              </view>
+            </navigator>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="weui-loadmore" wx:if="{{isLower}}">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">正在加载</view>
+    </view>
+    <view class="weui-loadmore weui-loadmore_line" wx:if="{{isEnd}}">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据  </view>
+    </view>
+  </view>
+</scroll-view>

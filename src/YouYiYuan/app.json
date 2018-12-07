@@ -1,0 +1,52 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/index/translate",
+    "pages/explore/explore",
+    "pages/explore/trans",
+    "pages/explore/post",
+    "pages/explore/upgrade",
+    "pages/mine/mine",
+    "pages/mine/trans",
+    "pages/mine/favourites",
+    "pages/mine/setting",
+    "pages/mine/aboutus",
+    "pages/mine/advice",
+    "pages/mine/sponsor",
+    "pages/logs/logs"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "幼译园",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#6F86A8",
+    "list": [
+      {
+        "iconPath": "images/home_grey_64.png",
+        "selectedIconPath": "images/home_64.png",
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "iconPath": "images/zoom_grey_64.png",
+        "selectedIconPath": "images/zoom_64.png",
+        "pagePath": "pages/explore/explore",
+        "text": "发现"
+      },
+      {
+        "iconPath": "images/user_grey_64.png",
+        "selectedIconPath": "images/user_64.png",
+        "pagePath": "pages/mine/mine",
+        "text": "我"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  }
+}

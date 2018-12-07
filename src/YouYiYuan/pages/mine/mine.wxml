@@ -1,0 +1,67 @@
+<view class="page">
+
+    <view class="page__bd">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="{{userInfo.avatarUrl}}" style="width: 50px; height: 50px; display: block"/>
+                    <view class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <view>{{userInfo.nickName}}</view>
+                    <view style="font-size: 13px;color: #888888;">欢迎您！</view>
+                </view>
+            </view>
+        </view>
+
+        <view class="weui-cells__title">我的</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/mine/trans" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">翻译</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">1240</view>
+                    <view class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></view>
+                </view>
+            </navigator>
+            <navigator url="/pages/mine/favourites" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">关注</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+                    <view style="display: inline-block;vertical-align:middle; font-size: 17px;">32</view>
+                    <view class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></view>
+                </view>
+            </navigator>
+        </view>
+
+        <view class="weui-cells__title">通用</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/mine/setting" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">设置</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">Email</view>
+            </navigator>
+        </view>
+
+        <view class="weui-cells__title">关于</view>
+        <view class="weui-cells weui-cells_after-title">
+            <navigator url="/pages/mine/aboutus" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">小程序作者</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">ScholarlyEngineer</view>
+            </navigator>
+            <navigator url="/pages/mine/advice" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">反馈</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">Welcome</view>
+            </navigator>
+            <navigator url="/pages/mine/sponsor" class="weui-cell weui-cell_access">
+                <view class="weui-cell__bd">
+                    <view style="display: inline-block; vertical-align: middle">赞助</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">Thank You</view>
+            </navigator>
+        </view>
+    </view>
+</view>

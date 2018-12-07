@@ -1,0 +1,50 @@
+/* pages/explore/tags.wxss */
+.placeholder{
+    margin: 5px;
+    padding: 0 10px;
+    text-align: center;
+    height: 2.3em;
+    line-height: 2.3em;
+    color: #f8f8f8;
+}
+
+.white {
+    color: #95a5a6;
+    background-color: #ecf0f1;
+}
+.blue {
+    color: #ffffff;
+    background-color: #3498db;
+}
+.silver {
+    color: #ffffff;
+    background-color: #bdc3c7;
+}
+.gray {
+    color: #ffffff;
+    background-color: #7f8c8d;
+}
+.red {
+    color: #ffffff;
+    background-color: #e74c3c;
+}
+.yellow {
+    color: #ffffff;
+    background-color: #f1c40f;
+}
+.green {
+    color: #ffffff;
+    background-color: #2ecc71;
+}
+.purple {
+    color: #ffffff;
+    background-color: #9b59b6;
+}
+.orange {
+    color: #ffffff;
+    background-color: #f39c12;
+}
+.dark {
+    color: #ffffff;
+    background-color: #34495e;
+}

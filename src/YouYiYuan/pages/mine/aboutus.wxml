@@ -1,0 +1,19 @@
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">公众号 Scholarly</view>
+        <view class="page__desc">请关注我的公众号，谢谢！</view>
+    </view>
+    <view class="page__bd">
+        <view class="icon-box">
+            <icon type="info" size="93"></icon>
+            <view class="icon-box__ctn">
+                <view class="icon-box__title">Scholarly</view>
+                <view class="icon-box__desc">邮件：conference@zsn.cc</view>
+            </view>
+        </view>
+        <view class="weui-cells__title">或者，直接在微信上联系我</view>
+        <view class="weui-cells weui-cells_after-title">
+            <image style="width:256px;height:256px;" src="../example/images/gh_3f30c746ba34.png"></image>
+        </view>
+    </view>    
+</view>
